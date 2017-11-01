@@ -6,7 +6,7 @@ import Features from '../components/Features';
 
 import logo from '../assets/images/logo.svg';
 
-import './HomePage.css';
+import '../assets/stylesheets/HomePage.css';
 
 export class HomePage extends Component {
   intro() {

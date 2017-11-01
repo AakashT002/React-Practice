@@ -1,0 +1,17 @@
+header.Header-toolbar {
+  height: 48px;
+
+  > h2.md-title {
+    line-height: 48px;
+    margin: 0 0 0 20px;
+  }
+}
+
+.header__username {
+  color: white;
+}
+
+.header__title-link {
+  text-decoration: none;
+  margin-top: -8px !important;
+}

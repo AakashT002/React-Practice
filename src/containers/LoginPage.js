@@ -6,7 +6,7 @@ import LoginForm from 'react-redux-modules/lib/components/LoginForm';
 
 import { authenticate } from '../store/user/action';
 
-import './LoginPage.css';
+import '../assets/stylesheets/LoginPage.css';
 
 class LoginPage extends Component {
   render() {

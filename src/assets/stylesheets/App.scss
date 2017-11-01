@@ -1,6 +1,11 @@
-@import '../variables';
+@import './variables';
 
-.HomePage-header {
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
   background-color: #222;
   height: 150px;
   padding: 20px;
@@ -12,12 +17,7 @@
   }
 }
 
-.HomePage-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.HomePage-intro {
+.App-intro {
   font-size: large;
 }
 

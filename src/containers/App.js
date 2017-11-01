@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
-import Header from './Header';
+import Header from '../components/Header';
 import DashboardPage from './DashboardPage';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RequireAuthentication from './RequireAuthentication';
 
-import './App.css';
+import '../assets/stylesheets/App.css';
 import 'material-design-icons/iconfont/material-icons.css';
 
 export class App extends Component {

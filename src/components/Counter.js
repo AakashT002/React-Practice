@@ -4,7 +4,7 @@ import TextField from 'react-md/lib/TextFields';
 import Button from 'react-md/lib/Buttons';
 import { Card, CardText, CardTitle } from 'react-md/lib/Cards';
 
-import './Counter.css';
+import '../assets/stylesheets/Counter.css';
 
 const Counter = ({
   count = 0,
