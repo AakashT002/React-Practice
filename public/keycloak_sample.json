@@ -2,6 +2,6 @@
   "realm": "master",
   "auth-server-url": "http://localhost:8080/auth",
   "ssl-required": "external",
-  "resource": "keyfob",
+  "resource": "keyfob-ui",
   "public-client": true
 }

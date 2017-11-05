@@ -13,19 +13,27 @@ import './assets/stylesheets/index.css';
 
 const history = createBrowserHistory();
 const store = configureStore(history);
-const keycloak = Keycloak('keycloak.json');
+const keycloak = Keycloak({
+  realm: process.env.REACT_APP_AUTH_REALM,
+  url: process.env.REACT_APP_AUTH_URL,
+  'ssl-required': 'external',
+  clientId: process.env.REACT_APP_AUTH_CLIENT_ID,
+  'public-client': true,
+});
 
 keycloak
   .init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 })
   .success(authenticated => {
     if (keycloak.authenticated) {
+      sessionStorage.setItem('kctoken', keycloak.token);
+      sessionStorage.setItem(
+        'username',
+        keycloak.tokenParsed.preferred_username
+      );
+
       setInterval(() => {
         keycloak.updateToken(10).error(() => keycloak.logout());
         sessionStorage.setItem('kctoken', keycloak.token);
-        sessionStorage.setItem(
-          'username',
-          keycloak.tokenParsed.preferred_username
-        );
       }, 10000);
     } else {
       keycloak.login();
