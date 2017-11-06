@@ -1,0 +1,86 @@
+@import './variables';
+
+.HomeForm-header {
+  background-color: $black;
+  height: 150px;
+  padding: 20px;
+  color: $white;
+  text-align: center;
+
+  & > h2 {
+    color: $white;
+  }
+}
+
+.HomeForm-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.HomeForm-intro {
+  font-size: large;
+}
+
+.HomeForm--featured {
+  margin-left: 29%;
+  margin-top: 5%;
+  padding: 2%;
+  height: 450px;
+  width: 550px;
+  box-shadow: 2px 2px 5px 2px $boxShadow;
+  background-color:$white;
+  border-radius: 5px;
+}
+
+.HomeForm__user-info {
+  text-align: center;
+}
+
+.HomeForm__user-options {
+  text-align: center;
+}
+
+.HomeForm__heading {
+  color: $black;
+}
+
+.HomeForm__create-domain {
+  float:left;
+  width: 45%;
+}
+
+.HomeForm__manage-domain {
+  float:right;
+  position: relative;
+  bottom: 168px;
+  width: 45%;
+}
+
+.HomeForm__separator {
+  border-left: 2px solid $lightgray;
+  height: 70px;
+  position: relative;
+  left: 50%;    
+}
+
+.HomeForm__or-separator {
+  position: relative;
+  right: 22%;
+  font-size: 18px;
+  color: $lightgray;
+}
+
+.btn-createDomain {
+  background-color: $lightgreen !important;
+}
+
+
+.btn-manageDomain {
+ background-color: $lightblue !important;
+ }
+
+.HomeForm_Img {
+  border-radius: 50%;
+  height:80px;
+   width:80px;
+}

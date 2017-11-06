@@ -5,6 +5,7 @@ const initialUserState = {
   id: null,
   isAuthenticated: false,
   name: null,
+  userName: null,
 };
 
 export const user = createReducer(initialUserState, {
@@ -14,6 +15,11 @@ export const user = createReducer(initialUserState, {
   },
   [ActionTypes.LOGOUT](state, action) {
     return { ...state, ...initialUserState };
+  },
+  [ActionTypes.SET_USERNAME](state = initialUserState, action) {
+    return Object.assign({}, state, {
+      userName: action.userName,
+    });
   },
 });
 

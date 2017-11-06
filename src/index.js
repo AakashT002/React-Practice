@@ -10,6 +10,7 @@ import App from './containers/App';
 import configureStore from './store/configureStore';
 
 import './assets/stylesheets/index.css';
+import { setUserName } from './store/user/action.js';
 
 const history = createBrowserHistory();
 const store = configureStore(history);
@@ -30,7 +31,9 @@ keycloak
         'username',
         keycloak.tokenParsed.preferred_username
       );
-
+      store.dispatch(
+        setUserName(keycloak.tokenParsed.preferred_username)
+      );
       setInterval(() => {
         keycloak.updateToken(10).error(() => keycloak.logout());
         sessionStorage.setItem('kctoken', keycloak.token);

@@ -1,57 +1,54 @@
 import React, { Component } from 'react';
-import { Card, CardText, CardTitle } from 'react-md/lib/Cards';
-import { Link } from 'react-router-dom';
-
-import Features from '../components/Features';
-
-import logo from '../assets/images/logo.svg';
-
+import PropTypes from 'prop-types';
+import 'font-awesome/css/font-awesome.min.css';
 import '../assets/stylesheets/HomePage.css';
+import HomeForm from '../components/HomeForm';
+import { connect } from 'react-redux';
 
 export class HomePage extends Component {
-  intro() {
-    return (
-      <Card className="HomePage-intro">
-        <CardTitle title="Redux Template" />
-        <CardText>
-          <p>
-            This project was created with the <Link to="">Redux template</Link>{' '}
-            using a forked version of{' '}
-            <Link to="https://github.com/reedsa/create-react-app">
-              create-react-app
-            </Link>. The motivation behind this template is to use the{' '}
-            <Link to="https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc">
-              recommended approach
-            </Link>{' '}
-            to integrate with Sass, a CSS Preprocessor.
-          </p>
-          <p>
-            Learn more about react-scripts and create-react-app{' '}
-            <Link to="https://github.com/facebookincubator/create-react-app">
-              here
-            </Link>.
-          </p>
-          <p>
-            To get started, edit <code>src/containers/App.js</code> and save to
-            reload.
-          </p>
-        </CardText>
-      </Card>
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      userName: '',
+    };
+  }
+  handleCreateDomain(e) {
+    e.preventDefault();
+    this.redirectToCreateDomain();
   }
 
+  handleManageDomain(e) {
+    e.preventDefault();
+    this.redirectToCreateDomain();
+  }
+
+  redirectToCreateDomain() {
+    this.props.history.push('/register-domian');
+  }
   render() {
+
     return (
-      <div className="HomePage">
-        <div className="HomePage-header">
-          <img src={logo} className="HomePage-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        {this.intro()}
-        <Features />
+      <div className="HomePage__background">
+        <HomeForm
+          userName={this.props.userName || 'User'}
+          handleCreateDomain={e => this.handleCreateDomain(e)}
+          handleManageDomain={e => this.handleManageDomain(e)}
+        />
       </div>
     );
   }
 }
 
-export default HomePage;
+HomePage.propTypes = {
+  history: PropTypes.object,
+  userName: PropTypes.string,
+};
+
+function mapStateToProps(state) {
+
+  return {
+    userName: state.user.userName,
+  };
+}
+
+export default connect(mapStateToProps)(HomePage);

@@ -1,12 +1,16 @@
 @import './variables';
 
+.App {
+  background: linear-gradient(90deg, $linearBlue -15%, $linearGreen 100%); 
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
 
 .App-header {
-  background-color: #222;
+  background-color: $black;
   height: 150px;
   padding: 20px;
   color: $white;

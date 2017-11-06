@@ -39,6 +39,7 @@ export class App extends Component {
               component={() => this.checkAuthenticated(LoginPage)}
             />
             <Route path="/home" component={HomePage} />
+            <Route path="/register-domain" component={DashboardPage} />
             <Route
               path="/dashboard"
               component={RequireAuthentication(DashboardPage)}
