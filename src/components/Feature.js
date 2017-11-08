@@ -22,6 +22,7 @@ Feature.propTypes = {
   columnWidths: PropTypes.arrayOf(PropTypes.number),
   description: PropTypes.string,
   label: PropTypes.string,
+  footer: PropTypes.string,
 };
 
 export default Feature;

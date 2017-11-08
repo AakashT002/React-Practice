@@ -20,5 +20,4 @@ describe('Component: HomePage', () => {
   it('renders without crashing', () => {
     expect(homePage.exists()).toBe(true);
   });
-
 });

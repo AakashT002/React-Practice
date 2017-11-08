@@ -30,7 +30,4 @@ rules:
     - 1
     - convention: hyphenatedbem
   property-sort-order: 0
-  quotes:
-    - 1
-    - style: double
   variable-name-format: 1

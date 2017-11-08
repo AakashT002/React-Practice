@@ -5,19 +5,19 @@ import Toolbar from 'react-md/lib/Toolbars';
 import '../assets/stylesheets/Header.scss';
 
 class Header extends Component {
-  renderUsername = () => {
+  renderUsername() {
     const username = sessionStorage.getItem('username');
 
     return <h4 className="header__username">{username}</h4>;
-  };
+  }
 
-  renderTitle = () => {
+  renderTitle() {
     return (
       <Link className="header__title-link" to={'/home'}>
         KeyFob
       </Link>
     );
-  };
+  }
 
   render() {
     return (

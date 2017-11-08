@@ -9,8 +9,8 @@ import '../assets/stylesheets/Counter.css';
 const Counter = ({
   count = 0,
   handleChange,
-  handleIncrement,
   handleDecrement,
+  handleIncrement,
 }) => (
   <Card className="Counter-card">
     <CardTitle
@@ -36,6 +36,7 @@ const Counter = ({
 
 Counter.propTypes = {
   count: PropTypes.number,
+  handleChange: PropTypes.func.isRequired,
   handleDecrement: PropTypes.func.isRequired,
   handleIncrement: PropTypes.func.isRequired,
 };

@@ -13,7 +13,7 @@ export const user = createReducer(initialUserState, {
     const { id, name } = action.user;
     return { ...state, isAuthenticated: true, id, name };
   },
-  [ActionTypes.LOGOUT](state, action) {
+  [ActionTypes.LOGOUT](state) {
     return { ...state, ...initialUserState };
   },
   [ActionTypes.SET_USERNAME](state = initialUserState, action) {

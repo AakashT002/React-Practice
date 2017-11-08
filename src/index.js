@@ -25,15 +25,13 @@ const keycloak = Keycloak({
 keycloak
   .init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 })
   .success(authenticated => {
-    if (keycloak.authenticated) {
+    if (authenticated) {
       sessionStorage.setItem('kctoken', keycloak.token);
       sessionStorage.setItem(
         'username',
         keycloak.tokenParsed.preferred_username
       );
-      store.dispatch(
-        setUserName(keycloak.tokenParsed.preferred_username)
-      );
+      store.dispatch(setUserName(keycloak.tokenParsed.preferred_username));
       setInterval(() => {
         keycloak.updateToken(10).error(() => keycloak.logout());
         sessionStorage.setItem('kctoken', keycloak.token);

@@ -112,6 +112,7 @@ class MenuDrawer extends Component {
 }
 
 MenuDrawer.propTypes = {
+  handleLogout: PropTypes.func,
   history: PropTypes.object,
   isAuthenticated: PropTypes.bool,
 };

@@ -9,11 +9,7 @@ const HomeForm = ({ userName, handleCreateDomain, handleManageDomain }) => {
   return (
     <div className="HomeForm HomeForm--featured">
       <div className="HomeForm__user-info">
-        <img
-          src={default_pic}
-          className="HomeForm_Img"
-          alt={userName}
-        />
+        <img src={default_pic} className="HomeForm_Img" alt={userName} />
         <br />
         <h2 className="HomeForm__heading">{`Hi, ${userName}!`}</h2>
       </div>

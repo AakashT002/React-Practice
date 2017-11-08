@@ -12,6 +12,7 @@ export class HomePage extends Component {
       userName: '',
     };
   }
+
   handleCreateDomain(e) {
     e.preventDefault();
     this.redirectToCreateDomain();
@@ -23,10 +24,9 @@ export class HomePage extends Component {
   }
 
   redirectToCreateDomain() {
-    this.props.history.push('/register-domian');
+    this.props.history.push('/register-domain');
   }
   render() {
-
     return (
       <div className="HomePage__background">
         <HomeForm
@@ -45,7 +45,6 @@ HomePage.propTypes = {
 };
 
 function mapStateToProps(state) {
-
   return {
     userName: state.user.userName,
   };
