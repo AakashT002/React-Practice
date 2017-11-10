@@ -11,7 +11,7 @@ const HomeForm = ({ userName, handleCreateDomain, handleManageDomain }) => {
       <div className="HomeForm__user-info">
         <img src={default_pic} className="HomeForm_Img" alt={userName} />
         <br />
-        <h2 className="HomeForm__heading">{`Hi, ${userName}!`}</h2>
+        <h2 className="HomeForm__heading">{`Hi, ${userName} !`}</h2>
       </div>
       <div className="HomeForm__user-options">
         <h1 className="HomeForm__heading">What would you like to do ?</h1>

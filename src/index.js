@@ -23,33 +23,33 @@ const keycloak = Keycloak({
 });
 
 keycloak
-  .init({ onLoad: 'check-sso', checkLoginIframe: false })
-  .success(authenticated => {
-    if (authenticated) {
+.init({ onLoad: 'check-sso', checkLoginIframe: false })
+.success(authenticated => {
+  if (authenticated) {
+    sessionStorage.setItem('kctoken', keycloak.token);
+    sessionStorage.setItem(
+      'username',
+      keycloak.tokenParsed.preferred_username
+    );
+    store.dispatch(setUserName(keycloak.tokenParsed.preferred_username));
+    setInterval(() => {
+      keycloak.updateToken(10).error(() => keycloak.logout());
       sessionStorage.setItem('kctoken', keycloak.token);
-      sessionStorage.setItem(
-        'username',
-        keycloak.tokenParsed.preferred_username
-      );
-      store.dispatch(setUserName(keycloak.tokenParsed.preferred_username));
-      setInterval(() => {
-        keycloak.updateToken(10).error(() => keycloak.logout());
-        sessionStorage.setItem('kctoken', keycloak.token);
-      }, 10000);
-    } else {
-      keycloak.login();
-    }
-  });
+    }, 10000);
+  } else {
+    keycloak.login();
+  }
+});
 
 const render = Component => {
-  ReactDOM.render(
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <Component />
-      </ConnectedRouter>
-    </Provider>,
-    document.getElementById('root')
-  );
+ReactDOM.render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <Component />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('root')
+);
 };
 
 render(App);

@@ -50,7 +50,7 @@ ManageDomain.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    domainList: state.domains.domainList,
+    domainList: state.domain.domainList,
   };
 }
 

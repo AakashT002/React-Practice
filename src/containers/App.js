@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import Header from '../components/Header';
 import DashboardPage from './DashboardPage';
+import DomainPage from './DomainPage';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import ManageDomain from './ManageDomain';
@@ -39,7 +40,7 @@ export class App extends Component {
               component={() => this.checkAuthenticated(LoginPage)}
             />
             <Route path="/home" component={HomePage} />
-            <Route path="/register-domain" component={DashboardPage} />
+            <Route path="/register-domain" component={DomainPage} />
             <Route
               path="/dashboard"
               component={RequireAuthentication(DashboardPage)}

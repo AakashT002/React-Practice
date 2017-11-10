@@ -4,14 +4,14 @@ import { loginReducer } from 'react-redux-modules/lib/reducers/loginReducer';
 import count from './count/reducer';
 import items from './items/reducer';
 import user from './user/reducer';
-import domains from './domain/reducers';
+import domain from './domain/reducer';
 
 const root = combineReducers({
   router: routerReducer,
   count,
   items,
   user,
-  domains,
+  domain,
   ...loginReducer('loginForm'),
 });
 

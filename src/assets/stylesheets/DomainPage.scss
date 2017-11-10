@@ -1,0 +1,49 @@
+@import './variables';
+
+.domain-page {
+  min-height: 598px;
+  padding-top: 100px;
+  margin-bottom: -360px;
+  padding-bottom: 100px;
+
+  .domain-page__save-button, .domain-page__add-button, .domain-page__cancel-button {
+    margin-left: 65px;
+  }
+
+  .domain-page__form-title {
+    margin-left: 15px;
+    margin-top: 5px;
+    margin-bottom: 25px;
+    font-weight: bold;  
+  }
+
+  .md-card-title--large {
+    font-weight: bold;
+  }
+
+  .md-block-centered {
+    min-height: 430px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px 2px $box-shadow;
+    margin: -32px auto;
+    width: 550px;
+  }
+
+  .domain-page__input {
+    margin-top: -25px;
+  }
+
+  .domain-page__red {
+    color: $red;
+    margin-left: 208px;
+  }
+
+  .domain-page__green {
+    color: $green;
+    margin-left: 208px;
+  }
+
+  .domain-page__buttons {
+   padding-bottom: 20px;
+  }
+}

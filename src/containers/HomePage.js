@@ -26,6 +26,7 @@ export class HomePage extends Component {
   redirectToCreateDomain() {
     this.props.history.push('/register-domain');
   }
+  
   redirectToManageDomain() {
     this.props.history.push('/manage-domain');
   }
