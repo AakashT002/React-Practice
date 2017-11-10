@@ -23,7 +23,7 @@ const keycloak = Keycloak({
 });
 
 keycloak
-  .init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 })
+  .init({ onLoad: 'check-sso', checkLoginIframe: false })
   .success(authenticated => {
     if (authenticated) {
       sessionStorage.setItem('kctoken', keycloak.token);

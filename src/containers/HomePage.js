@@ -20,11 +20,14 @@ export class HomePage extends Component {
 
   handleManageDomain(e) {
     e.preventDefault();
-    this.redirectToCreateDomain();
+    this.redirectToManageDomain();
   }
 
   redirectToCreateDomain() {
     this.props.history.push('/register-domain');
+  }
+  redirectToManageDomain() {
+    this.props.history.push('/manage-domain');
   }
   render() {
     return (

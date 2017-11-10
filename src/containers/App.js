@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
-
 import Header from '../components/Header';
 import DashboardPage from './DashboardPage';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
+import ManageDomain from './ManageDomain';
 import RequireAuthentication from './RequireAuthentication';
 
 import '../assets/stylesheets/App.css';
@@ -44,6 +44,7 @@ export class App extends Component {
               path="/dashboard"
               component={RequireAuthentication(DashboardPage)}
             />
+            <Route path="/manage-domain" component={ManageDomain} />
           </Switch>
         </div>
       </div>

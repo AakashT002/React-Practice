@@ -11,7 +11,7 @@ export const items = createReducer(initialItemsState, {
     return { ...state, requesting: true };
   },
   [ActionTypes.FETCH_ITEMS_SUCCESS](state, action) {
-    return { ...state, list: action.response.items, requesting: false };
+    return { ...state, list: action.response.items };
   },
   [ActionTypes.FETCH_ITEMS_FAILURE](state) {
     return { ...state, requesting: false };
