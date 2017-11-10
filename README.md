@@ -5,7 +5,10 @@ You will require to install Keycloak before you can run this application.
 
 ## Steps
 * Install Keycloak from [here](http://www.keycloak.org/downloads.html)
-* Create a superuser or admin user
+* Create a superuser or admin user with the below script
+* Create a new client `keyfob-ui` in master realm
+* Add a new user or a team such as `team03` to the master realm with `create-realm` role.
+* Go to client --> `keyfob-ui`
 
 ------
 
