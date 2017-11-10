@@ -3,6 +3,10 @@
 This is a React app which will help a developer to provision their applications into Keycloak for AuthN/AuthZ.
 You will require to install Keycloak before you can run this application.
 
+## Steps
+* Install Keycloak from [here](http://www.keycloak.org/downloads.html)
+* Create a superuser or admin user
+
 ------
 
 
