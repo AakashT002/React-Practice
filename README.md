@@ -30,7 +30,7 @@ You will require to install Keycloak before you can run this application.
 * Start to add your application domain, clients and user for your application
 * Your apps are now provisioned inside Keycloak for AuthN/Authz
 * Based on the application client type, you may choose appropriate start kit to begin your application.
-* For starter kits, please refer here
+* For starter kits, please refer [here](https://github.com/CognizantStudio/keyfob-ui/blob/master/STARTER_KIT.MD)
 
 ### Themes
 
