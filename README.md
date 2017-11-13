@@ -12,18 +12,21 @@ You will require to install Keycloak before you can run this application.
 * Install [Keycloak](http://www.keycloak.org/downloads.html)
 * Set the KEYCLOAK_HOME to the directory of your local keycloak installation.
 * Add %KEYCLOAK_HOME%/bin to the PATH
+* Default port for `KEYCLOAK` is 8080.
 
 ### Adding users for Keyfob
 
-* Add a admin user for keyfob using : add-user-keycloak -r master -u admin -p password
-* Now start to regular create users for keyfob using the keyfob.bat script.
-* Run the keyfob.bat and follow the instructions in the script
+* Add a admin user for keyfob using : `add-user-keycloak -r master -u admin -p password` (Choose any name for -u and -p option but remember them)
+* Now start to create non-admin users for keyfob using the keyfob.bat script. Eg: `team-03-developer`, `team-03-john`
 * Clone this repository
-* Edit the .env.development accordingly
-* npm install
-* npm start
+* Default port for `KEYFOB` is 3000. 
+* If you are planning to `KEYFOB` is different port, please set the KEYFOB_PORT in the environment variables.
+* Run the keyfob.bat and follow the instructions in the script.
+* Edit the .env.development if necessary
+* `npm install`
+* `npm start`
 * KeyFob is now up and running.
-* Log in with the user that was created for your team (not the admin)
+* Log in with the user that was created for your team (not the `admin` user)
 * Start to add your application domain, clients and user for your application
 * Your apps are now provisioned inside Keycloak for AuthN/Authz
 * Based on the application client type, you may choose appropriate start kit to begin your application.
