@@ -3,7 +3,7 @@ import { Button } from 'react-md';
 import 'font-awesome/css/font-awesome.min.css';
 import '../assets/stylesheets/HomeForm.css';
 import PropTypes from 'prop-types';
-import default_pic from '../assets/images/default_pic.jpg';
+import default_pic from '../assets/images/default_user.jpg';
 
 const HomeForm = ({ userName, handleCreateDomain, handleManageDomain }) => {
   return (

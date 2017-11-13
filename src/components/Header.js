@@ -1,30 +1,48 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Toolbar from 'react-md/lib/Toolbars';
-
-import '../assets/stylesheets/Header.scss';
+import { Button } from 'react-md';
+import PropTypes from 'prop-types';
+import '../assets/stylesheets/Header.css';
+import { connect } from 'react-redux';
+import default_pic from '../assets/images/default_user.jpg';
 
 class Header extends Component {
   renderUsername() {
-    const username = sessionStorage.getItem('username');
-
-    return <h4 className="header__username">{username}</h4>;
+    const username = this.props.userName;
+    return (
+      <div className="Header__header-username-keyfob">
+        <div className="Header__inner-div">
+          <div className="Header__header-img-div">
+            <img
+              src={default_pic}
+              className="Header__header-img"
+              alt={username}
+            />
+          </div>
+          <div className="Header__username">
+            <label>{username}</label>  </div>
+          <div className="Header__header-sign-out">
+            <Button icon className="fa fa-sign-out"></Button>
+          </div>
+        </div >
+      </div>
+    );
   }
 
   renderTitle() {
     return (
-      <Link className="header__title-link" to={'/home'}>
-        KeyFob
-      </Link>
+      <a className="Header__title-link" href={'/home'}>
+        Key<span className="Header__title-fob">Fob</span>
+      </a>
     );
   }
 
   render() {
     return (
-      <div className="Header">
+      <div className="Header--featured">
         <Toolbar
           actions={this.renderUsername()}
-          className="Header-toolbar"
+          className="Header__toolbar"
           colored
           title={this.renderTitle()}
         />
@@ -33,4 +51,15 @@ class Header extends Component {
   }
 }
 
-export default Header;
+
+Header.propTypes = {
+  userName: PropTypes.string,
+};
+
+function mapStateToProps(state) {
+  return {
+    userName: state.user.userName,
+  };
+}
+
+export default connect(mapStateToProps)(Header);

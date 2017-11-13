@@ -1,6 +1,6 @@
 @import 'variables';
 
-header.Header-toolbar {
+.Header__toolbar {
   height: 48px;
 
   > h2.md-title {
@@ -9,11 +9,45 @@ header.Header-toolbar {
   }
 }
 
-.header__username {
-  color: $white;
+.Header__header-img-div {
+  margin-top: 6px;
 }
 
-.header__title-link {
-  text-decoration: none;
+.Header__header-username-keyfob {
+  color: $white;
+  padding-right: 5px;
+  margin-left: -133px;
+  margin-top: 3px !important;
+  position: relative;
+}
+
+.Header__username {
+  margin-top: -26px;
+  margin-left: 39px;
+}
+
+.Header__header-sign-out {
+  margin-top: -31px;
+  margin-left: 86px;
+}
+
+.Header__header-img {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+}
+
+.Header__inner-div {
+  position: absolute;
+}
+
+.Header__title-link {
+  font-size: 28px !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
   margin-top: -8px !important;
 }
+ .Header__title-fob {
+  font-weight: 100px !important;    
+}
+
