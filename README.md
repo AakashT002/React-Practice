@@ -4,14 +4,30 @@ This is a React app which will help a developer to provision their applications 
 You will require to install Keycloak before you can run this application.
 
 ## Steps
-* Install Keycloak from [here](http://www.keycloak.org/downloads.html)
-* Create a superuser or admin user with the below script
-* Create a new client `keyfob-ui` in master realm
-* Add a new user or a team such as `team03` to the master realm with `create-realm` role.
-* Go to client --> `keyfob-ui`
 
-------
+### Installation
+* Install the [JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* Set the JAVA_HOME environment variable to the installed jdk
+* Add %JAVA_HOME%/bin to the PATH
+* Install [Keycloak](http://www.keycloak.org/downloads.html)
+* Set the KEYCLOAK_HOME to the directory of your local keycloak installation.
+* Add %KEYCLOAK_HOME%/bin to the PATH
 
+### Adding users for Keyfob
+
+* Add a admin user for keyfob using : add-user-keycloak -r master -u admin -p password
+* Now start to regular create users for keyfob using the keyfob.bat script.
+* Run the keyfob.bat and follow the instructions in the script
+* Clone this repository
+* Edit the .env.development accordingly
+* npm install
+* npm start
+* KeyFob is now up and running.
+* Log in with the user that was created for your team (not the admin)
+* Start to add your application domain, clients and user for your application
+* Your apps are now provisioned inside Keycloak for AuthN/Authz
+* Based on the application client type, you may choose appropriate start kit to begin your application.
+* For start kits, please refer here
 
 # Redux
 
