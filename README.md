@@ -20,9 +20,9 @@ You will require to install Keycloak before you can run this application.
 * Now start to create non-admin users for keyfob using the keyfob.bat script. Eg: `team-03-developer`, `team-03-john`
 * Clone this repository
 * Default port for `KEYFOB` is 3000. 
-* If you are planning to `KEYFOB` is different port, please set the KEYFOB_PORT in the environment variables.
+* If you are planning to run `KEYFOB` in different port, please set the KEYFOB_PORT in the environment variable.
 * Run the keyfob.bat and follow the instructions in the script.
-* Edit the .env.development if necessary
+* Edit the .env.development if necessary (It won't be required unless you have changed the default ports)
 * `npm install`
 * `npm start`
 * KeyFob is now up and running.
@@ -34,7 +34,8 @@ You will require to install Keycloak before you can run this application.
 
 ### Themes
 
-TODO
+Each application will have different styles and these styles can be used for Login / User registration pages. etc.
+For your LP Team, you might work with the designer and create a simple login screen for your application (API only application don't require login). Convert this to a HTML/freemarker template and upload it to the Keycloak themes folder. More information can be found [here]()
 
 -----------
 
