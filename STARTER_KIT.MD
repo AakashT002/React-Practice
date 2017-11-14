@@ -28,7 +28,7 @@ git clone --bare https://github.com/CognizantStudio/lp-auth-react-app.git
 cd lp-auth-react-app.git
 git push --mirror https://github.com/CognizantStudio/<<your-new-repo>>.git
 cd ..
-del lp-auth-react-app.git
+rmdir /s /q lp-auth-react-app.git
 git clone https://github.com/CognizantStudio/<<your-new-repo>>.git
 ````
 
@@ -38,7 +38,7 @@ git clone --bare https://github.com/CognizantStudio/lp-auth-node-app-api.git
 cd lp-auth-node-app-api.git
 git push --mirror https://github.com/CognizantStudio/<<your-new-repo>>.git
 cd ..
-del lp-auth-node-app-api.git
+rmdir /s /q lp-auth-node-app-api.git
 git clone https://github.com/CognizantStudio/<<your-new-repo>>.git
 ````
 
