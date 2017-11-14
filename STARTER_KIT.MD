@@ -2,7 +2,7 @@
 
 This document provides a list of available starter kits which have support for AuthN/Authz using Keycloak/KeyFob
 
-Before we begin to create new repository, please refer to README for Keycloak and KeyFob installation and provisioning.
+Before we begin to create new repository, please refer to [README](https://github.com/CognizantStudio/keyfob-ui/blob/master/README.md) for Keycloak and KeyFob installation and provisioning.
 
 ## Browser based application (Single Page Application)
 
