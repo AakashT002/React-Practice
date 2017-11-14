@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Toolbar from 'react-md/lib/Toolbars';
 import { Button } from 'react-md';
 import PropTypes from 'prop-types';
+
+import keycloak from '../keycloak-config';
+
 import '../assets/stylesheets/Header.css';
-import { connect } from 'react-redux';
 import default_pic from '../assets/images/default_user.jpg';
 
 class Header extends Component {
@@ -22,7 +25,11 @@ class Header extends Component {
           <div className="Header__username">
             <label>{username}</label>  </div>
           <div className="Header__header-sign-out">
-            <Button icon className="fa fa-sign-out"></Button>
+            <Button 
+              icon 
+              className="fa fa-sign-out" 
+              onClick={() => keycloak.logout() }>
+            </Button>
           </div>
         </div >
       </div>
