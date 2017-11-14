@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import Button from 'react-md/lib/Buttons/Button';
 
 import DomainForm from '../components/DomainForm';
-import { load, validate } from '../store/domain/action';
+import { saveDomain, validate } from '../store/domain/action';
+import { BACKEND_API } from '../utils/constants';
 
 import '../assets/stylesheets/DomainPage.css';
 
@@ -14,12 +15,20 @@ class DomainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      formCount: ['input-0'],
       domainName: '',
-      clients: [],
-      clientId: '',
-      rootUrl: '',
-      description: '',
+      clients: [{
+        clientId: '',
+        redirectUris: [],
+        webOrigins: [],
+        description: '',
+        implicitFlowEnabled: false,
+        directAccessGrantsEnabled: true,
+        bearerOnly: false,
+        consentRequired: false,
+        publicClient: true,
+        protocol: 'openid-connect',
+        standardFlowEnabled: true,
+      }],
     };
   }
 
@@ -40,81 +49,67 @@ class DomainPage extends Component {
   }
 
   onSave() {
-    let clients = [];
-    if (
-      this.state.clientId !== '' &&
-      this.state.rootUrl !== '' &&
-      this.state.description !== ''
-    ) {
-      var clientObj = {
-        clientId: this.state.clientId,
-        redirectUris: [`${this.state.rootUrl}/*`],
-        webOrigins: [`${this.state.rootUrl}`],
-        description: this.state.description,
-        implicitFlowEnabled: false,
-        directAccessGrantsEnabled: true,
-        bearerOnly: false,
-        consentRequired: false,
-        publicClient: true,
-        protocol: 'openid-connect',
-        standardFlowEnabled:
-          this.state.description === 'Backend API (API)' ? false : true,
-      };
-      clients = Object.assign([], this.state.clients);
-      clients.push(clientObj);
-    }
-
-    if (clients.length === 0) {
-      clients = this.state.clients;
-    }
     var realmObj = {
       realm: this.state.domainName,
       enabled: true,
-      clients: clients,
+      clients: this.state.clients,
     };
-    this.props.dispatch(load(realmObj));
+    this.props.dispatch(saveDomain(realmObj));
     this.props.history.push('/manage-domain');
   }
 
   appendInput() {
-    var clientObj = {
-      clientId: this.state.clientId,
-      redirectUris: [`${this.state.rootUrl}/*`],
-      webOrigins: [`${this.state.rootUrl}`],
-      description: this.state.description,
+    var client = {
+      clientId: '',
+      redirectUris: [],
+      webOrigins: [],
+      description: '',
       implicitFlowEnabled: false,
       directAccessGrantsEnabled: true,
       bearerOnly: false,
       consentRequired: false,
       publicClient: true,
       protocol: 'openid-connect',
-      standardFlowEnabled:
-        this.state.description === 'Backend API (API)' ? false : true,
+      standardFlowEnabled: true,
     };
-
-    let clients = Object.assign([], this.state.clients);
-    clients.push(clientObj);
-    this.setState({ clients });
-    this.setState({ clientId: '' });
-    this.setState({ rootUrl: '' });
-    this.setState({ description: '' });
-
-    var newInput = `input-${this.state.formCount.length}`;
-    this.setState({ formCount: this.state.formCount.concat([newInput]) });
+    this.setState({ clients: this.state.clients.concat([client]) });
   }
 
   removeClient(index) {
-    var obj = Object.assign({}, this.state);
-    obj.formCount.splice(index, 1);
-    this.setState(obj);
+    var clients = Object.assign([], this.state.clients);
+    clients.splice(index, 1);
+    this.setState({ clients });
   }
 
   validateDomain(domainName) {
     this.props.dispatch(validate(domainName));
   }
 
+  handleChange(name, value, i) {
+    this.setState(() => {
+      let currClients = this.state.clients;
+      let newClient = this.state.clients[i];
+
+      if(name === 'rootUrl') {
+        newClient['redirectUris'] = [`${value}/*`];
+        newClient['webOrigins'] = [`${value}`];
+      }
+      newClient[name] = value;
+      
+      if(name === 'description' && value === BACKEND_API) {
+        newClient['standardFlowEnabled'] = false;
+      } 
+      currClients[i] = newClient;
+
+      return {
+        clients: currClients
+      };
+    });
+  }
+
   render() {
     const { domainValid } = this.props;
+    const { clients } = this.state;
     return (
       <div className="domain-page">
         <Card className="md-block-centered">
@@ -137,11 +132,12 @@ class DomainPage extends Component {
           </CardActions>
           <h2 className="domain-page__form-title">Clients:</h2>
           <div id="domain-page__clients-div">
-            {this.state.formCount.map((_, i) => (
+            {clients.map((_, i) => (
               <DomainForm
                 key={i}
                 index={i}
-                handleChange={(name, value) => this.setState({ [name]: value })}
+                client={clients[i]}
+                handleChange={(name, value) => this.handleChange(name, value, i)}
                 removeClient={index => this.removeClient(index)}
               />
             ))}
@@ -151,7 +147,6 @@ class DomainPage extends Component {
           <Button
             className="domain-page__add-button"
             label="Add Client"
-            disabled={!this.formValid() && this.state.formCount.length > 0}
             raised
             primary
             onClick={() => this.appendInput()}

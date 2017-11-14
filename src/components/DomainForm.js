@@ -6,7 +6,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import '../assets/stylesheets/DomainForm.css';
 
 const technology = ['Browser based apps (SPA)', 'Backend API (API)', 'Webapps (Webapps)'];
-const DomainForm = ({ index, handleChange, removeClient }) => {
+const DomainForm = ({ index, handleChange, removeClient, client }) => {
   return (
     <div className="domain-form">
       <section className="dividers__example md-paper md-paper--3 domain-form__client-section">
@@ -15,6 +15,7 @@ const DomainForm = ({ index, handleChange, removeClient }) => {
             id="clientId"
             label="Client Name"
             required
+            value={client.clientId}
             className="md-cell md-cell--bottom login-form__input"
             inputClassName="font_size__normal"
             onChange={value => handleChange('clientId', value)}
@@ -23,6 +24,7 @@ const DomainForm = ({ index, handleChange, removeClient }) => {
             id="rootUrl"
             label="Root URL"
             required
+            value={client.rootUrl}
             className="md-cell md-cell--bottom login-form__input"
             inputClassName="font_size__normal"
             onChange={value => handleChange('rootUrl', value)}
@@ -33,6 +35,7 @@ const DomainForm = ({ index, handleChange, removeClient }) => {
             id="description"
             label="Client Type"
             className="md-cell"
+            value={client.description}
             menuItems={technology}
             onChange={value => handleChange('description', value)}
           />
@@ -51,6 +54,7 @@ DomainForm.propTypes = {
   index: PropTypes.number,
   handleChange: PropTypes.func,
   removeClient: PropTypes.func,
+  client: PropTypes.object,
 };
 
 export default DomainForm;

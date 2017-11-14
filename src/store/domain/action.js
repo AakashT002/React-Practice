@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actionTypes';
 import Domains from '../../services/Domains';
 
-export const load = realmObj => ({
+export const saveDomain = realmObj => ({
   types: [
     ActionTypes.CREATE_DOMAIN_REQUEST,
     ActionTypes.CREATE_DOMAIN_SUCCESS,

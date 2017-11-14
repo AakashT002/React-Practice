@@ -1,14 +1,17 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import SessionStorage from '../__mocks__/mockSessionStorage';
 import DomainForm from './DomainForm';
 
 describe('Component: DomainForm', () => {
-  window.sessionStorage = new SessionStorage();
-  const wrapper = shallow(<DomainForm />);
+  const client = {
+    clientId: '',
+    description: '',
+    rootUrl: '',
+  };
+  const wrapper = shallow(<DomainForm client={client}/>);  
 
-  it('renders a Domain page', () => {
+  it('renders a Domain form', () => {
     expect(wrapper.find('.domain-form').exists()).toBe(true);
   });
 });
