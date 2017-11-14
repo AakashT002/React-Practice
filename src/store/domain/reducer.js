@@ -21,7 +21,7 @@ export const domain = createReducer(initialDomainsState, {
     return { ...state, requesting: true };
   },
   [ActionTypes.FETCH_DOMAINS_SUCCESS](state, action) {
-    return { ...state, domainList: action.response };
+    return { ...state, domainList: action.response, requesting: false };
   },
   [ActionTypes.FETCH_DOMAINS_FAILURE](state) {
     return { ...state, requesting: false };

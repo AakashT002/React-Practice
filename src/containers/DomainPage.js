@@ -16,19 +16,21 @@ class DomainPage extends Component {
     super(props);
     this.state = {
       domainName: '',
-      clients: [{
-        clientId: '',
-        redirectUris: [],
-        webOrigins: [],
-        description: '',
-        implicitFlowEnabled: false,
-        directAccessGrantsEnabled: true,
-        bearerOnly: false,
-        consentRequired: false,
-        publicClient: true,
-        protocol: 'openid-connect',
-        standardFlowEnabled: true,
-      }],
+      clients: [
+        {
+          clientId: '',
+          redirectUris: [],
+          webOrigins: [],
+          description: '',
+          implicitFlowEnabled: false,
+          directAccessGrantsEnabled: true,
+          bearerOnly: false,
+          consentRequired: false,
+          publicClient: true,
+          protocol: 'openid-connect',
+          standardFlowEnabled: true,
+        },
+      ],
     };
   }
 
@@ -54,8 +56,9 @@ class DomainPage extends Component {
       enabled: true,
       clients: this.state.clients,
     };
-    this.props.dispatch(saveDomain(realmObj));
-    this.props.history.push('/manage-domain');
+    this.props.dispatch(saveDomain(realmObj)).then(() => {
+      this.props.history.push('/manage-domain');
+    });
   }
 
   appendInput() {
@@ -90,19 +93,19 @@ class DomainPage extends Component {
       let currClients = this.state.clients;
       let newClient = this.state.clients[i];
 
-      if(name === 'rootUrl') {
+      if (name === 'rootUrl') {
         newClient['redirectUris'] = [`${value}/*`];
         newClient['webOrigins'] = [`${value}`];
       }
       newClient[name] = value;
-      
-      if(name === 'description' && value === BACKEND_API) {
+
+      if (name === 'description' && value === BACKEND_API) {
         newClient['standardFlowEnabled'] = false;
-      } 
+      }
       currClients[i] = newClient;
 
       return {
-        clients: currClients
+        clients: currClients,
       };
     });
   }
@@ -137,35 +140,36 @@ class DomainPage extends Component {
                 key={i}
                 index={i}
                 client={clients[i]}
-                handleChange={(name, value) => this.handleChange(name, value, i)}
+                handleChange={(name, value) =>
+                  this.handleChange(name, value, i)}
                 removeClient={index => this.removeClient(index)}
               />
             ))}
           </div>
 
           <div className="domain-page__buttons">
-          <Button
-            className="domain-page__add-button"
-            label="Add Client"
-            raised
-            primary
-            onClick={() => this.appendInput()}
-          />
-          <Button
-            className="domain-page__save-button"
-            label="Save"
-            disabled={!domainValid}
-            raised
-            primary
-            onClick={() => this.onSave()}
-          />
-          <Button
-            className="domain-page__cancel-button"
-            label="Cancel"
-            raised
-            primary
-            onClick={() => this.props.history.push('/home')}
-          />
+            <Button
+              className="domain-page__add-button"
+              label="Add Client"
+              raised
+              primary
+              onClick={() => this.appendInput()}
+            />
+            <Button
+              className="domain-page__save-button"
+              label="Save"
+              disabled={!domainValid}
+              raised
+              primary
+              onClick={() => this.onSave()}
+            />
+            <Button
+              className="domain-page__cancel-button"
+              label="Cancel"
+              raised
+              primary
+              onClick={() => this.props.history.push('/home')}
+            />
           </div>
         </Card>
       </div>

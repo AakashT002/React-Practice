@@ -22,11 +22,12 @@ export class ManageDomain extends Component {
   }
 
   render() {
-    const { domainList } = this.props;
+    const { domainList, requesting } = this.props;
     return (
       <div className="DomainPage__background">
         <DomainTable
           domainList={domainList}
+          requesting={requesting}
           handleRegisterClick={() => {
             this.handleRegisterClick();
           }}
@@ -45,12 +46,14 @@ export class ManageDomain extends Component {
 ManageDomain.propTypes = {
   history: PropTypes.object,
   dispatch: PropTypes.func,
+  requesting: PropTypes.bool,
   domainList: PropTypes.array,
 };
 
 function mapStateToProps(state) {
   return {
     domainList: state.domain.domainList,
+    requesting: state.domain.requesting,
   };
 }
 

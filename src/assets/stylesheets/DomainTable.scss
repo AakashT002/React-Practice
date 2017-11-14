@@ -5,22 +5,30 @@
     height: 500px;
     text-align: center;
 }
+
 .DomainTable__card--nodomain {   
     width: 900px;
     height: 400px;
     text-align: center;
 }
+
 .DomainTable__table {
     margin-left: 100px;
     margin-right: 100px;
     height: 300px;
 }
 
-.DomainTable__card--header{
+.DomainTable__card--header {
     padding-top: 30px;
     color: $black;
 }
 
-.DomainTable__table--userButton{
+.DomainTable__table--userButton {
     padding-left: 10px;
+}
+
+.DomainTable__table--column {
+  width: 80px;
+  word-break: break-word;
+  word-wrap: break-word;
 }
