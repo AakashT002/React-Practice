@@ -28,7 +28,12 @@ const RenderDataTable = ({
                     Clients
                   </Button>
                   <span className="DomainTable__table--userButton">
-                    <Button flat primary swapTheming onClick={handleUserClick}>
+                    <Button
+                      flat
+                      primary
+                      swapTheming
+                      onClick={handleUserClick.bind(this, i, domainList)}
+                    >
                       Users
                     </Button>
                   </span>
