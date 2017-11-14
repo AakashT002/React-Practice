@@ -16,6 +16,7 @@ You will require to install Keycloak before you can run this application.
 
 ### Adding users for Keyfob
 
+* `cd %KEYCLOAK_HOME%/bin`
 * Add a admin user for keyfob using : `add-user-keycloak -r master -u admin -p password` (Choose any name for -u and -p option but remember them)
 * Restart or start the Keycloak server by running `standalone.bat` (In standalone mode)
 * Clone this repository
