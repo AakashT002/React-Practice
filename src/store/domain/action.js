@@ -50,4 +50,9 @@ export const loadDomains = () => ({
   },
 });
 
+export function setDomainName(domainName) {
+  return { type: ActionTypes.SET_DOMAINNAME, domainName };
+}
+
+
 export default loadDomains;

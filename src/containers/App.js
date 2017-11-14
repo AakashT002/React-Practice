@@ -9,6 +9,7 @@ import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import ManageDomain from './ManageDomain';
 import RequireAuthentication from './RequireAuthentication';
+import CreateUserPage from './CreateUserPage';
 
 import '../assets/stylesheets/App.css';
 import 'material-design-icons/iconfont/material-icons.css';
@@ -19,8 +20,8 @@ export class App extends Component {
     return this.props.isAuthenticated ? (
       <Redirect to="/dashboard" />
     ) : (
-      <Component to={path} />
-    );
+        <Component to={path} />
+      );
   }
 
   render() {
@@ -44,6 +45,10 @@ export class App extends Component {
             <Route
               path="/dashboard"
               component={RequireAuthentication(DashboardPage)}
+            />
+            <Route
+              path="/manage-users"
+              component={CreateUserPage}
             />
             <Route path="/manage-domain" component={ManageDomain} />
           </Switch>

@@ -14,7 +14,6 @@ import { setUserName } from './store/user/action.js';
 
 const history = createBrowserHistory();
 const store = configureStore(history);
-
 const render = Component => {
   ReactDOM.render(
     <Provider store={store}>
@@ -46,7 +45,6 @@ keycloak
       keycloak.login();
     }
   });
-
 // In development, hot module replacement (HMR) updates the application
 // when changes are made, without having to refresh.
 if (module.hot) {

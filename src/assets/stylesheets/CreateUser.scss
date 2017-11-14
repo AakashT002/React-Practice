@@ -1,0 +1,86 @@
+@import './variables';
+
+.CreateUser {
+  min-height: 700px;
+}
+.CreateUser__Card--featured {
+  width:850px !important;
+  box-shadow: 2px 2px 5px 2px $box-shadow;
+  border-radius: 5px;
+}
+
+ .CreateUser__responseHeader{
+    color:$white !important;
+ }
+
+.CreateUser__register-heading {
+  width: 750px;
+  height: 51px;
+}
+
+.CreateUser__register-label {
+  color: $black;
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.button__addUser {
+  position: relative;
+  float: right;
+  background-color: $white;
+  margin-right: 10px;
+  margin-top: 6px;
+  color: $md-blue-300;
+}
+
+.CreateUser__register-label--user {
+  margin-left: 397px;
+  color: $black;
+}
+
+.CreateUser__button-save {
+  margin-left: 220px !important; 
+
+
+  .CreateUser__button-AddUser {
+   background-color: $linear-green;
+   margin-left: 30px;
+       margin-top: 20px;
+ }
+ }
+
+ .CreateUser__horizontal-line {
+   width:600px;
+   margin-left: 52px;
+ }
+
+ .section__user {
+   border-radius: 10px !important;
+   background-color: $floralwhite !important;
+ }
+
+ .login-form__remove-button{
+  margin-left: 790px;
+  margin-top: -121px;
+  color: indianred !important;
+ }
+ 
+  .domain-page__red {
+    color: $red !important;
+    margin-left: 208px !important;
+  }
+
+  .domain-page__green {
+    color: $green !important;
+    margin-left: 208px !important;
+  }
+
+  .CreateUser__createUser {
+        padding-top: 10px;
+  }
+
+  .createUser__check-icon{
+    margin-top: -36px;
+    margin-left: 59px;
+  }

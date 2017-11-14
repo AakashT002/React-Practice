@@ -14,7 +14,9 @@ export class ManageDomain extends Component {
     // this.props.history.push('/register-domain');
   }
 
-  handleUserClick() {
+  handleUserClick(i, domainList) {
+    sessionStorage.setItem('manageUserForDomainName', domainList[i].realm);
+    // this.props.dispatch(setDomainName(domainList[i].realm));
     this.props.history.push('/manage-users');
   }
   componentWillMount() {
@@ -34,8 +36,8 @@ export class ManageDomain extends Component {
           handleClientClick={() => {
             this.handleClientClick();
           }}
-          handleUserClick={() => {
-            this.handleUserClick();
+          handleUserClick={(i, domainList) => {
+            this.handleUserClick(i, domainList);
           }}
         />
       </div>
