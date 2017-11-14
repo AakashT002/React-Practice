@@ -17,11 +17,13 @@ You will require to install Keycloak before you can run this application.
 ### Adding users for Keyfob
 
 * Add a admin user for keyfob using : `add-user-keycloak -r master -u admin -p password` (Choose any name for -u and -p option but remember them)
-* Now start to create non-admin users for keyfob using the keyfob.bat script. Eg: `team-03-developer`, `team-03-john`
+* Restart or start the Keycloak server by running `standalone.bat` (In standalone mode)
 * Clone this repository
+* `cd` to the local repository
+* Now start to create non-admin users for keyfob running the keyfob.bat script. Eg: `team-03-developer`, `team-03-john`
 * Default port for `KEYFOB` is 3000. 
-* If you are planning to run `KEYFOB` in different port, please set the KEYFOB_PORT in the environment variable.
-* Run the keyfob.bat and follow the instructions in the script.
+* If you are planning to run `KEYFOB` in different port, please set the `KEYFOB_PORT` in the environment variable and `PORT` in `.env.development`
+* Run the keyfob.cmd and follow the instructions in the script.
 * Edit the .env.development if necessary (It won't be required unless you have changed the default ports)
 * `npm install`
 * `npm start`
