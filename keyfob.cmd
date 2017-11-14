@@ -41,7 +41,7 @@ if exist "%KEYCLOAK_HOME%\bin\kcadm.bat" (
 set /p _adminUserName="Admin username : "
 set /p _adminPwd="Admin password : "
 set KEYFOB_REALM=master
-set KEYFOB_URL=http://localhost:%KEYFOB_PORT%
+set KEYFOB_URL=http://localhost:%KEYFOB_PORT%/*
 set KEYCLOAK_URL=http://localhost:%KEYCLOAK_PORT%/auth
 call kcadm config credentials --server %KEYCLOAK_URL% --realm %KEYFOB_REALM% --user %_adminUserName% --password %_adminPwd%
 call kcadm create clients -r %KEYFOB_REALM% -s clientId=keyfob-ui -s publicClient=true -s "redirectUris=[\"%KEYFOB_URL%\"]"
