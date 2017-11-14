@@ -31,6 +31,10 @@ export const validate = domainName => ({
   },
 });
 
+export function validateClient(isClientValid) {
+  return { type: ActionTypes.VALIDATE_CLIENT, isClientValid };
+}
+
 export const loadDomains = () => ({
   types: [
     ActionTypes.FETCH_DOMAINS_REQUEST,

@@ -26,6 +26,9 @@ export const domain = createReducer(initialDomainsState, {
   [ActionTypes.FETCH_DOMAINS_FAILURE](state) {
     return { ...state, requesting: false };
   },
+  [ActionTypes.VALIDATE_CLIENT](state, action) {
+    return { ...state, requesting: false, clientValid: action.isClientValid };
+  },
 });
 
 export default domain;

@@ -11,7 +11,7 @@
 
   .domain-form__minus {
     color: $indianred;
-    margin-left: 210px;
+    margin-left: 88px;
   }
 
   .domain-form__client--details {
@@ -22,5 +22,9 @@
   .domain-form__selection {
     margin-top: -100px;
     margin-bottom: 40px;
+  }
+
+  .domain-form__select {
+    margin-right: -50px;
   }
 }

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Button from 'react-md/lib/Buttons/Button';
 
 import DomainForm from '../components/DomainForm';
-import { saveDomain, validate } from '../store/domain/action';
+import { saveDomain, validate, validateClient } from '../store/domain/action';
 import { BACKEND_API } from '../utils/constants';
 
 import '../assets/stylesheets/DomainPage.css';
@@ -76,12 +76,14 @@ class DomainPage extends Component {
       standardFlowEnabled: true,
     };
     this.setState({ clients: this.state.clients.concat([client]) });
+    this.props.dispatch(validateClient(false));
   }
 
   removeClient(index) {
     var clients = Object.assign([], this.state.clients);
     clients.splice(index, 1);
     this.setState({ clients });
+    this.props.dispatch(validateClient(true));
   }
 
   validateDomain(domainName) {
@@ -110,8 +112,23 @@ class DomainPage extends Component {
     });
   }
 
+  validateClient(value) {
+    let existingClients = this.state.clients;
+    let clientCount = 0;
+    for(var j=0; j < existingClients.length; j++) {
+      if(value === existingClients[j].clientId && value!== '') {
+        clientCount++;
+      }
+    }
+    if(clientCount === 1) {
+      this.props.dispatch(validateClient(true));
+    } else{
+      this.props.dispatch(validateClient(false));
+    }
+  }
+
   render() {
-    const { domainValid } = this.props;
+    const { domainValid, clientValid } = this.props;
     const { clients } = this.state;
     return (
       <div className="domain-page">
@@ -143,33 +160,37 @@ class DomainPage extends Component {
                 handleChange={(name, value) =>
                   this.handleChange(name, value, i)}
                 removeClient={index => this.removeClient(index)}
+                checkClient={clients.length-1 === i ? true : false}
+                clientValid={this.props.clientValid}
+                validateClient={(value) => this.validateClient(value)}
               />
             ))}
           </div>
 
           <div className="domain-page__buttons">
-            <Button
-              className="domain-page__add-button"
-              label="Add Client"
-              raised
-              primary
-              onClick={() => this.appendInput()}
-            />
-            <Button
-              className="domain-page__save-button"
-              label="Save"
-              disabled={!domainValid}
-              raised
-              primary
-              onClick={() => this.onSave()}
-            />
-            <Button
-              className="domain-page__cancel-button"
-              label="Cancel"
-              raised
-              primary
-              onClick={() => this.props.history.push('/home')}
-            />
+          <Button
+            className="domain-page__add-button"
+            label="Add Client"
+            disabled={!clientValid}
+            raised
+            primary
+            onClick={() => this.appendInput()}
+          />
+          <Button
+            className="domain-page__save-button"
+            label="Save"
+            disabled={!domainValid || !clientValid}
+            raised
+            primary
+            onClick={() => this.onSave()}
+          />
+          <Button
+            className="domain-page__cancel-button"
+            label="Cancel"
+            raised
+            primary
+            onClick={() => this.props.history.push('/home')}
+          />
           </div>
         </Card>
       </div>
@@ -182,12 +203,14 @@ DomainPage.propTypes = {
   domainName: PropTypes.string,
   clients: PropTypes.array,
   domainValid: PropTypes.bool,
+  clientValid: PropTypes.bool,
   history: PropTypes.object,
 };
 
 function mapStateToProps(state) {
   return {
     domainValid: state.domain.domainValid,
+    clientValid: state.domain.clientValid,
   };
 }
 
