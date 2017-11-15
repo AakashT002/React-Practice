@@ -5,27 +5,46 @@ import { Button, FontIcon } from 'react-md';
 import '../assets/stylesheets/CreateUser.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-const CreateUser = ({ index, users, handleChange, validateUser, removeUser, userValid, userCheck, validateEmail, emailValid }) => {
+const CreateUser = ({ index, users, handleChange, validateUser, removeUser, userValid, userCheck, validateEmail, emailValid,saveInput,chkFlag }) => {
   const checkUser= () =>{
-    if(userCheck) {
+    if(userCheck && users.username !== '' && chkFlag) {
       if(userValid) {
         return(<FontIcon iconClassName="fa fa-check-circle-o domain-page__green" />);
       } else {
         return(<FontIcon iconClassName="fa fa-times-circle-o domain-page__red" />);
       }
-    }
-
+  }
   };
+
  const checkEmail= () =>{
-    if(userCheck) {
+    if(userCheck && users.email !== '' && chkFlag) {
       if(emailValid) {
         return(<FontIcon iconClassName="fa fa-check-circle-o domain-page__green" />);
       } else {
         return(<FontIcon iconClassName="fa fa-times-circle-o domain-page__red" />);
       }
     }
-
   };
+  
+   const checkAddButton= () =>{
+      if(userCheck) { 
+        if(!(userValid && emailValid))
+        {
+        return ( 
+       <Button id='btnAdd' icon className="fa fa-floppy-o fa-2x login-form__remove-button-disbaled"
+       disabled={!(userValid && emailValid)}
+       type='submit' onClick={() => saveInput()}></Button>);
+        }
+        else
+        {
+        return ( 
+        <Button id='btnAdd' icon className="fa fa-floppy-o fa-2x login-form__save-button"
+        disabled={!(userValid && emailValid)}
+        type='submit' onClick={() => saveInput()}></Button>);
+        }
+    }
+  };
+
   return (
     <div>
       <section className="dividers__example md-paper md-paper--3 section__user">
@@ -36,6 +55,7 @@ const CreateUser = ({ index, users, handleChange, validateUser, removeUser, user
           label="Type User Name"
           placeholder="User Name"
           required
+          disabled={!userCheck}
           value={users.username}
           className="md-cell md-cell--bottom login-form__input"
           inputClassName="font_size__normal"
@@ -44,17 +64,44 @@ const CreateUser = ({ index, users, handleChange, validateUser, removeUser, user
         />
          </div>
         <div className="createUser__check-icon">
-      {checkUser()}
+        {checkUser()}
        </div>
-      </div>
+       <div>
+         <div className="createUser__check-email-text">
+        <TextField
+            id="email"
+            placeholder="email"
+            required
+            disabled={!userCheck}
+            value={users.email}
+            className="md-cell md-cell--bottom login-form__input"
+            inputClassName="font_size__normal"
+            label="Email Address"
+            onChange={value => handleChange('email', value)}
+            onBlur={(value) => validateEmail(value)}
+          />
+          </div>
+          <div className="createUser__check-email-icon">
+           {checkEmail()}
+         </div>
+        <div>
+          <div className="createUser__add-button">
+          {checkAddButton()}
+           </div>
+          <div className="createUser__remove-button">
+            <Button id='btnRemove' icon className="fa fa-minus-circle fa-2x login-form__remove-button"
+            type='submit' onClick={() => removeUser(index)}></Button>
+           </div>
+          </div>
+        </div>
         <br />
         <div className="md-grid">
           <TextField
             id="firstName"
             label="First Name"
             placeholder="first Name"
-            required
             value={users.firstName}
+            disabled={!userCheck}            
             className="md-cell md-cell--bottom login-form__input"
             inputClassName="font_size__normal"
             onChange={value => handleChange('firstName', value)}
@@ -63,30 +110,13 @@ const CreateUser = ({ index, users, handleChange, validateUser, removeUser, user
             id="lastName"
             label="Last Name"
             placeholder="Last Name"
-            required
             value={users.lastName}
+            disabled={!userCheck}            
             className="md-cell md-cell--bottom login-form__input"
             inputClassName="font_size__normal"
             onChange={value => handleChange('lastName', value)}
           />
-         
-          <TextField
-            id="email"
-            placeholder="email"
-            required
-            value={users.email}
-            className="md-cell md-cell--bottom login-form__input"
-            inputClassName="font_size__normal"
-            label="Email Address"
-            onChange={value => handleChange('email', value)}
-            onBlur={(value) => validateEmail(value)}
-          />
-          
-          <div className="createUser__check-email-icon">
-           {checkEmail()}
            </div>
-          <Button id='btnRemove' icon className="fa fa-minus-circle fa-2x login-form__remove-button"
-          type='submit' onClick={() => removeUser(index)}></Button>
         </div>
       </section>
     </div>
@@ -103,7 +133,9 @@ CreateUser.propTypes = {
   userCheck: PropTypes.bool,
   validateEmail: PropTypes.func,
   emailValid: PropTypes.bool,
+  dispatch: PropTypes.func,
+  saveInput: PropTypes.func,
+  chkFlag: PropTypes.bool,
 };
-
 
 export default CreateUser;

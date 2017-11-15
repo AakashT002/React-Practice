@@ -5,6 +5,7 @@ import CreateUser from '../components/CreateUser';
 import { handleUserCreation, handleUserDeletion, handleUserValidation} from '../store/addUser/action';
 import {handleEmailValidation, setResponseHeader  } from '../store/addUser/action';
 import PropTypes from 'prop-types';
+import { MANAGE_USER_FOR_DOMAIN_NAME } from '../utils/constants';
 import '../assets/stylesheets/CreateUser.css';
 
 class CreateUserPage extends Component {
@@ -12,6 +13,7 @@ class CreateUserPage extends Component {
     super(props);
     this.state = {
       formCount: ['input-0'],
+      chkFlag: true,
       users: [{
         username: '',
         firstName: '',
@@ -27,13 +29,14 @@ class CreateUserPage extends Component {
   }
 
   render() {
+    const domainNameForDisplay= sessionStorage.getItem(MANAGE_USER_FOR_DOMAIN_NAME);
     const { users } = this.state;
     return (
       <div className="CreateUser">
         <Card className="CreateUser__Card--featured">
           <div className="CreateUser__createUser">
             <div className="CreateUser__register-heading">
-              <label className="CreateUser__register-label">Register Users</label>
+              <label className="CreateUser__register-label">Register Users - {domainNameForDisplay}</label>
               <br />
             </div>
           </div>
@@ -58,22 +61,23 @@ class CreateUserPage extends Component {
                 userCheck={users.length-1 === i ? true : false}
                 validateEmail={() => this.validateEmail(this.state.users[i].email)}
                 emailValid={this.props.emailValid}
+                saveInput={() => this.saveInput()}
+                chkFlag={this.state.chkFlag}
               />
             ))}
           </div>
 
-          <div className="CreateUser__button-save">
-            <Button
-              disabled={!(this.props.userValid && this.props.emailValid)}
+           <div className="CreateUser__button-save">
+             <Button
               flat
               label="Add User"
               className="CreateUser__button-AddUser"
-              onClick={() => this.appendInput()}
+              onClick={() => this.addUI()}
             />
             <Button
               flat
               className="CreateUser__button-AddUser"
-              label="Cancel"
+              label="Done"
               onClick={() => this.cancelButton()}
             />
           </div>
@@ -95,24 +99,31 @@ class CreateUserPage extends Component {
   }
 
   cancelButton() {
-    sessionStorage.removeItem('manageUserForDomainName');
+    sessionStorage.removeItem(MANAGE_USER_FOR_DOMAIN_NAME);
     this.props.history.push('/home');
   }
 
 
   validateUser(username) {
-    let realmName = (sessionStorage.manageUserForDomainName);
+    if(username!=='' && username!==null)
+    {
+    let realmName = sessionStorage.getItem(MANAGE_USER_FOR_DOMAIN_NAME);
     this.props.dispatch(handleUserValidation(username, realmName));
+    }   
   }
 
-    validateEmail(email) {
-    let realmName = (sessionStorage.manageUserForDomainName);
+  validateEmail(email) {
+    if(email!=='' && email!==null)
+    {
+    let realmName = sessionStorage.getItem(MANAGE_USER_FOR_DOMAIN_NAME);
     this.props.dispatch(handleEmailValidation(email, realmName));
+    }
   }
-
-  appendInput() {
-   this.props.dispatch(setResponseHeader());
-    let user = {
+  
+    addUI() {
+      this.setState({chkFlag:true});
+      this.props.dispatch(setResponseHeader());
+      let user = {
       username: '',
       firstName: '',
       lastName: '',
@@ -124,9 +135,14 @@ class CreateUserPage extends Component {
       }]
     };
     this.setState({ users: this.state.users.concat([user]) });
-    let realm = sessionStorage.manageUserForDomainName;
-    this.props.dispatch(handleUserCreation(realm, this.state.users[this.state.users.length - 1]));
+  }
 
+  saveInput() { 
+    let realm = sessionStorage.manageUserForDomainName;
+    this.setState({chkFlag:false});
+    this.props.dispatch(handleUserCreation(realm, this.state.users[this.state.users.length - 1]));
+    this.props.dispatch(setResponseHeader());
+    
   }
 
   formValid() {
@@ -153,6 +169,7 @@ CreateUserPage.propTypes = {
   formValid: PropTypes.func,
   userValid: PropTypes.bool,
   emailValid: PropTypes.bool,
+  chkFlag: PropTypes.bool,
 };
 
 

@@ -4,6 +4,7 @@ import '../assets/stylesheets/ManageDomain.css';
 import DomainTable from '../components/DomainTable';
 import { connect } from 'react-redux';
 import { loadDomains } from '../store/domain/action';
+import { MANAGE_USER_FOR_DOMAIN_NAME } from '../utils/constants';
 
 export class ManageDomain extends Component {
   handleRegisterClick() {
@@ -15,8 +16,7 @@ export class ManageDomain extends Component {
   }
 
   handleUserClick(i, domainList) {
-    sessionStorage.setItem('manageUserForDomainName', domainList[i].realm);
-    // this.props.dispatch(setDomainName(domainList[i].realm));
+    sessionStorage.setItem(MANAGE_USER_FOR_DOMAIN_NAME, domainList[i].realm);
     this.props.history.push('/manage-users');
   }
   componentWillMount() {
