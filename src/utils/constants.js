@@ -1,1 +1,1 @@
-export const BACKEND_API = 'Backend API (API)';
+export const CLIENT_TYPES = ['Browser based apps (SPA)', 'Backend API (API)', 'Webapps (Webapps)'];

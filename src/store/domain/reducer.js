@@ -13,10 +13,10 @@ export const domain = createReducer(initialDomainsState, {
     return { ...state, requesting: true };
   },
   [ActionTypes.VALIDATE_DOMAIN_SUCCESS](state) {
-    return { ...state, requesting: false, domainValid: true };
+    return { ...state, requesting: false, domainValid: false };
   },
   [ActionTypes.VALIDATE_DOMAIN_FAILURE](state) {
-    return { ...state, requesting: false, domainValid: false };
+    return { ...state, requesting: false, domainValid: true };
   },
   [ActionTypes.FETCH_DOMAINS_REQUEST](state) {
     return { ...state, requesting: true };

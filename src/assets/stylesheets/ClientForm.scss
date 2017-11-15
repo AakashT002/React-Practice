@@ -1,0 +1,40 @@
+@import './variables';
+
+.client-form {
+  padding-top: 30px;
+  background-color: $floralwhite;
+
+  .client-form__client-section {
+    border-radius: 10px;
+    background-color: $floralwhite;
+  }
+
+  .client-form__minus {
+    color: $indianred;
+    margin-left: 80px;
+  }
+
+  .client-form__client--details {
+    margin-top: -40px;
+    margin-bottom: 70px;
+  }
+
+  .client-form__selection {
+    margin-top: -100px;
+    margin-bottom: 40px;
+  }
+
+  .client-form__select {
+    margin-right: -50px;
+  }
+
+  .client-page__red {
+    color: $red;
+    margin-left: 208px;
+  }
+
+  .client-page__green {
+    color: $green;
+    margin-left: 208px;
+  }
+}

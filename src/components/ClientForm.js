@@ -2,25 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CardActions, SelectField, FontIcon } from 'react-md';
 import TextField from 'react-md/lib/TextFields';
-import 'font-awesome/css/font-awesome.min.css';
-import '../assets/stylesheets/DomainForm.css';
+import Button from 'react-md/lib/Buttons/Button';
 
-const technology = ['Browser based apps (SPA)', 'Backend API (API)', 'Webapps (Webapps)'];
-const DomainForm = ({ index, handleChange, removeClient, client, validateClient, checkClient, clientValid }) => {
-  const userCheck = () => {
+import { CLIENT_TYPES } from '../utils/constants';
+import 'font-awesome/css/font-awesome.min.css';
+import '../assets/stylesheets/ClientForm.css';
+
+const ClientForm = ({ index, handleChange, removeClient, client, validateClient, checkClient, clientValid }) => {
+  const clientCheckIcon = () => {
     if(checkClient) {
       if(clientValid) {
-        return(<FontIcon iconClassName="fa fa-check-circle-o domain-page__green" />);
+        return(<FontIcon iconClassName="fa fa-check-circle-o client-page__green" />);
       } else{
-        return(<FontIcon iconClassName="fa fa-times-circle-o domain-page__red" />);
+        return(<FontIcon iconClassName="fa fa-times-circle-o client-page__red" />);
       }
     }
   };
   
   return (
-    <div className="domain-form">
-      <section className="dividers__example md-paper md-paper--3 domain-form__client-section">
-        <CardActions className="domain-form__client--details">
+    <div className="client-form">
+      <section className="dividers__example md-paper md-paper--3 client-form__client-section">
+        <CardActions className="client-form__client--details">
           <TextField
             id="clientId"
             label="Client Name"
@@ -31,10 +33,10 @@ const DomainForm = ({ index, handleChange, removeClient, client, validateClient,
             onChange={value => handleChange('clientId', value)}
             onBlur={() => validateClient(client.clientId)}
           />
-          {userCheck()}
+          {clientCheckIcon()}
           
         </CardActions>
-        <CardActions className="domain-form__selection">
+        <CardActions className="client-form__selection">
           <TextField
             id="rootUrl"
             label="Root URL"
@@ -47,13 +49,13 @@ const DomainForm = ({ index, handleChange, removeClient, client, validateClient,
           <SelectField
             id="description"
             label="Client Type"
-            className="md-cell domain-form__select"
+            className="md-cell client-form__select"
             value={client.description}
-            menuItems={technology}
+            menuItems={CLIENT_TYPES}
             onChange={value => handleChange('description', value)}
           />
-          <a
-            className="fa fa-minus-circle fa-2x domain-form__minus"
+          <Button
+            className="fa fa-minus-circle fa-2x client-form__minus"
             onClick={() => removeClient(index)}
             aria-hidden="true"
           />
@@ -63,7 +65,7 @@ const DomainForm = ({ index, handleChange, removeClient, client, validateClient,
   );
 };
 
-DomainForm.propTypes = {
+ClientForm.propTypes = {
   index: PropTypes.number,
   handleChange: PropTypes.func,
   removeClient: PropTypes.func,
@@ -73,4 +75,4 @@ DomainForm.propTypes = {
   validateClient: PropTypes.func,
 };
 
-export default DomainForm;
+export default ClientForm;

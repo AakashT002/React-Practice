@@ -17,7 +17,7 @@ class Domains {
     }
   }
 
-  static async post(realmObj) {
+  static async createDomain(domainObject) {
     const token = sessionStorage.kctoken;
 
     const response = await fetch(API_URL, {
@@ -26,7 +26,7 @@ class Domains {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
       },
-      body: JSON.stringify(realmObj),
+      body: JSON.stringify(domainObject),
     });
 
     if (response.ok) {
@@ -37,7 +37,7 @@ class Domains {
     }
   }
 
-  static async validate(domainName) {
+  static async validateDomain(domainName) {
     const getDomainUrl = `${API_URL}/${domainName}`;
     const token = sessionStorage.kctoken;
 
@@ -47,8 +47,9 @@ class Domains {
         Authorization: 'Bearer ' + token,
       },
     });
-    if (!response.ok) {
-      const data = data + '';
+    if (response.ok) {
+      const data = await response.ok;
+      return data;
     } else {
       throw new Error('Domain already exists.');
     }

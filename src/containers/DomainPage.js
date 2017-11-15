@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from 'react-md/lib/Buttons/Button';
 
-import DomainForm from '../components/DomainForm';
-import { saveDomain, validate, validateClient } from '../store/domain/action';
-import { BACKEND_API } from '../utils/constants';
+import ClientForm from '../components/ClientForm';
+import { saveDomain, validateDomain, validateClient } from '../store/domain/action';
+import { CLIENT_TYPES } from '../utils/constants';
 
 import '../assets/stylesheets/DomainPage.css';
 
@@ -51,12 +51,12 @@ class DomainPage extends Component {
   }
 
   onSave() {
-    var realmObj = {
+    var domainObject = {
       realm: this.state.domainName,
       enabled: true,
       clients: this.state.clients,
     };
-    this.props.dispatch(saveDomain(realmObj)).then(() => {
+    this.props.dispatch(saveDomain(domainObject)).then(() => {
       this.props.history.push('/manage-domain');
     });
   }
@@ -87,7 +87,7 @@ class DomainPage extends Component {
   }
 
   validateDomain(domainName) {
-    this.props.dispatch(validate(domainName));
+    this.props.dispatch(validateDomain(domainName));
   }
 
   handleChange(name, value, i) {
@@ -101,7 +101,7 @@ class DomainPage extends Component {
       }
       newClient[name] = value;
 
-      if (name === 'description' && value === BACKEND_API) {
+      if (name === 'description' && value === CLIENT_TYPES[1]) {
         newClient['standardFlowEnabled'] = false;
       }
       currClients[i] = newClient;
@@ -116,7 +116,7 @@ class DomainPage extends Component {
     let existingClients = this.state.clients;
     let clientCount = 0;
     for(var j=0; j < existingClients.length; j++) {
-      if(value === existingClients[j].clientId && value!== '') {
+      if(value === existingClients[j].clientId && value !== '') {
         clientCount++;
       }
     }
@@ -153,7 +153,7 @@ class DomainPage extends Component {
           <h2 className="domain-page__form-title">Clients:</h2>
           <div id="domain-page__clients-div">
             {clients.map((_, i) => (
-              <DomainForm
+              <ClientForm
                 key={i}
                 index={i}
                 client={clients[i]}

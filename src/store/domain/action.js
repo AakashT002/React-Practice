@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actionTypes';
 import Domains from '../../services/Domains';
 
-export const saveDomain = realmObj => ({
+export const saveDomain = domainObject => ({
   types: [
     ActionTypes.CREATE_DOMAIN_REQUEST,
     ActionTypes.CREATE_DOMAIN_SUCCESS,
@@ -9,14 +9,14 @@ export const saveDomain = realmObj => ({
   ],
   callAPI: async () => {
     try {
-      return await Domains.post(realmObj);
+      return await Domains.createDomain(domainObject);
     } catch (error) {
       throw new Error(error.message);
     }
   },
 });
 
-export const validate = domainName => ({
+export const validateDomain = domainName => ({
   types: [
     ActionTypes.VALIDATE_DOMAIN_REQUEST,
     ActionTypes.VALIDATE_DOMAIN_SUCCESS,
@@ -24,7 +24,7 @@ export const validate = domainName => ({
   ],
   callAPI: async () => {
     try {
-      return await Domains.validate(domainName);
+      return await Domains.validateDomain(domainName);
     } catch (error) {
       throw new Error(error.message);
     }
