@@ -14,25 +14,23 @@ class Header extends Component {
     const username = this.props.userName;
     return (
       <div className="Header__header-username-keyfob">
-        <div className="Header__inner-div">
-          <div className="Header__header-img-div">
-            <img
-              src={default_pic}
-              className="Header__header-img"
-              alt={username}
-            />
-          </div>
-          <div className="Header__username">
-            <label>{username}</label>  </div>
-          <div className="Header__header-sign-out">
-            <Button 
-              icon 
-              className="fa fa-sign-out" 
-              onClick={() => keycloak.logout() }>
-            </Button>
-          </div>
-        </div >
-      </div>
+        <div className="Header__header-img-div">
+          <img
+            src={default_pic}
+            className="Header__header-img"
+            alt={username}
+          />
+        </div>
+        <div className="Header__username">
+          <label>{username}</label>  </div>
+        <div className="Header__header-sign-out">
+          <Button
+            icon
+            className="fa fa-sign-out fa-2x button_sign-out"
+            onClick={() => keycloak.logout()}>
+          </Button>
+        </div>
+      </div >
     );
   }
 

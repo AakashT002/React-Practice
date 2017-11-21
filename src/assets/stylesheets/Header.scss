@@ -10,34 +10,40 @@
 }
 
 .Header__header-img-div {
-  margin-top: 6px;
+  margin: 0 0 0 -10px;
 }
 
 .Header__header-username-keyfob {
   color: $white;
-  padding-right: 5px;
   margin-left: -133px;
   margin-top: 3px !important;
   position: relative;
+  width: 161px;
+  float: left;
 }
 
 .Header__username {
-  margin-top: -26px;
-  margin-left: 39px;
+  margin: -28px 0 0 28px;
+  word-wrap: break-word;
+  width: 80px;
+  position: absolute;
 }
 
 .Header__header-sign-out {
-  margin-top: -31px;
-  margin-left: 86px;
+  margin: -45px 0 0 105px;
+  padding-left: 5px;
+  position: fixed;
 }
 
 .Header__header-img {
   border-radius: 50%;
   height: 30px;
   width: 30px;
+  margin-top: 7px;
 }
 
 .Header__inner-div {
+  margin-left: -43px;
   position: absolute;
 }
 
@@ -47,7 +53,7 @@
   text-decoration: none !important;
   margin-top: -8px !important;
 }
+
  .Header__title-fob {
   font-weight: 100px !important;    
 }
-
