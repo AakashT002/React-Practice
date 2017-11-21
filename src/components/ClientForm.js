@@ -12,9 +12,9 @@ const ClientForm = ({ index, handleChange, removeClient, client, validateClient,
   const clientCheckIcon = () => {
     if(checkClient) {
       if(clientValid) {
-        return(<FontIcon iconClassName="fa fa-check-circle-o client-page__green" />);
+        return(<FontIcon iconClassName="fa fa-check-circle-o client-form__green" />);
       } else{
-        return(<FontIcon iconClassName="fa fa-times-circle-o client-page__red" />);
+        return(<FontIcon iconClassName="fa fa-times-circle-o client-form__red" />);
       }
     }
   };

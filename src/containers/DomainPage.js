@@ -8,6 +8,7 @@ import Button from 'react-md/lib/Buttons/Button';
 import ClientForm from '../components/ClientForm';
 import { saveDomain, validateDomain, validateClient } from '../store/domain/action';
 import { CLIENT_TYPES } from '../utils/constants';
+import { PulseLoader } from 'react-spinners';
 
 import '../assets/stylesheets/DomainPage.css';
 
@@ -193,6 +194,12 @@ class DomainPage extends Component {
           />
           </div>
         </Card>
+        <div className="domain-page__loader">
+        <PulseLoader
+          color={'green'} 
+          loading={this.props.loading} 
+        />
+        </div>
       </div>
     );
   }
@@ -205,12 +212,14 @@ DomainPage.propTypes = {
   domainValid: PropTypes.bool,
   clientValid: PropTypes.bool,
   history: PropTypes.object,
+  loading: PropTypes.bool,
 };
 
 function mapStateToProps(state) {
   return {
     domainValid: state.domain.domainValid,
     clientValid: state.domain.clientValid,
+    loading: state.domain.loading,
   };
 }
 

@@ -6,6 +6,7 @@ const initialDomainsState = {
   domainValid: false,
   requesting: false,
   domainName: '',
+  loading: false,
 };
 
 export const domain = createReducer(initialDomainsState, {
@@ -34,6 +35,15 @@ export const domain = createReducer(initialDomainsState, {
   },
   [ActionTypes.VALIDATE_CLIENT](state, action) {
     return { ...state, requesting: false, clientValid: action.isClientValid };
+  },
+  [ActionTypes.CREATE_DOMAIN_REQUEST](state) {
+    return { ...state, loading: true };
+  },
+  [ActionTypes.CREATE_DOMAIN_SUCCESS](state) {
+    return { ...state, loading: false };
+  },
+  [ActionTypes.CREATE_DOMAIN_FAILURE](state) {
+    return { ...state, loading: false };
   },
 });
 
