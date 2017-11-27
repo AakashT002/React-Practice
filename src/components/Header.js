@@ -7,38 +7,55 @@ import PropTypes from 'prop-types';
 import keycloak from '../keycloak-config';
 
 import '../assets/stylesheets/Header.css';
-import default_pic from '../assets/images/default_user.jpg';
+import keyfob_logo from '../assets/images/keyfob_logo.jpg';
+import default_user from '../assets/images/default_user.jpg';
 
 class Header extends Component {
   renderUsername() {
     const username = this.props.userName;
     return (
-      <div className="Header__header-username-keyfob">
-        <div className="Header__header-img-div">
-          <img
-            src={default_pic}
-            className="Header__header-img"
-            alt={username}
+      <div>
+        <div className="Header_username-img">
+        <img
+            src={default_user}
+            className="Header__user-icon"
+            alt="logo"
           />
-        </div>
         <div className="Header__username">
           <label>{username}</label>  </div>
-        <div className="Header__header-sign-out">
+        <div className="Header__sign-out">
           <Button
-            icon
-            className="fa fa-sign-out fa-2x button_sign-out"
-            onClick={() => keycloak.logout()}>
+            className="Header__sign-out-button"
+            onClick={() => keycloak.logout()}>Logout&gt;
           </Button>
         </div>
       </div >
+      </div>
     );
   }
 
   renderTitle() {
     return (
-      <a className="Header__title-link" href={'/home'}>
-        Key<span className="Header__title-fob">Fob</span>
-      </a>
+      <div className="Header__info">
+          <Button
+            primary
+            className="fa fa-wrench Header_home">
+            <h4 className="Header_home-text">Home</h4>
+          </Button>
+          <div className="Header__title">
+          <span className="Header__title-key">
+            Key
+            <span className="Header__title-fob">
+              Fob
+            </span>
+          </span>
+          <img
+            src={keyfob_logo}
+            className="Header__title-logo"
+            alt="logo"
+          />
+          </div>
+      </div>
     );
   }
 
@@ -48,14 +65,12 @@ class Header extends Component {
         <Toolbar
           actions={this.renderUsername()}
           className="Header__toolbar"
-          colored
           title={this.renderTitle()}
         />
       </div>
     );
   }
 }
-
 
 Header.propTypes = {
   userName: PropTypes.string,

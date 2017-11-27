@@ -2,58 +2,86 @@
 
 .Header__toolbar {
   height: 48px;
-
-  > h2.md-title {
-    line-height: 48px;
-    margin: 0 0 0 20px;
-  }
 }
 
-.Header__header-img-div {
-  margin: 0 0 0 -10px;
-}
-
-.Header__header-username-keyfob {
+.Header_username-img {
+  margin-top: -4%;
   color: $white;
   margin-left: -133px;
-  margin-top: 3px !important;
-  position: relative;
   width: 161px;
-  float: left;
 }
 
 .Header__username {
-  margin: -28px 0 0 28px;
+  margin: -30px 0 0 -65px;
   word-wrap: break-word;
   width: 80px;
   position: absolute;
+  font-size: 18px;
+  font-family: Lato;
 }
 
-.Header__header-sign-out {
+.Header__sign-out {
   margin: -45px 0 0 105px;
   padding-left: 5px;
   position: fixed;
+  margin-top: -51px;
 }
 
-.Header__header-img {
+.Header__title-logo {
   border-radius: 50%;
   height: 30px;
   width: 30px;
   margin-top: 7px;
 }
 
-.Header__inner-div {
-  margin-left: -43px;
-  position: absolute;
+.Header__info {
+  font-size: 36px !important;
+  margin-left: auto !important;
+  font-family: Lato;
 }
 
-.Header__title-link {
-  font-size: 28px !important;
-  font-weight: bold !important;
-  text-decoration: none !important;
-  margin-top: -8px !important;
+.Header__title-key {
+  font-weight: bolder;  
+  color: $white;
+  margin-left: 25%;
 }
 
- .Header__title-fob {
-  font-weight: 100px !important;    
+.Header__title-fob {
+  font-weight: 100;    
 }
+
+.Header__sign-out-button {
+  color: $white !important;
+  font-size: 18px;
+  font-family: Lato;
+  font-style: italic;
+  height: 30px;
+  width: 80px;
+  margin-left: -88px;
+  margin-top: 20px;
+}
+
+.Header__user-icon {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin-top: 7px;
+  margin-left: -100px;
+}
+
+.Header__title {
+  margin-top: -32%;
+  margin-left: -10px;
+}
+
+.Header_home {
+  color: $white !important;
+  margin-left: -510px;
+}
+
+.Header_home-text {
+  color: $white;
+  margin-top: -26px;
+  margin-right: -75px;
+}
+

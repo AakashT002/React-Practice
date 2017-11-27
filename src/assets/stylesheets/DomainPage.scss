@@ -1,55 +1,56 @@
 @import './variables';
 
-.domain-page {
-  min-height: 598px;
+.DomainPage {
+  max-height: 598px;
   padding-top: 100px;
-  margin-bottom: -360px;
-  padding-bottom: 100px;
-
-  .domain-page__save-button, .domain-page__add-button, .domain-page__cancel-button {
-    margin-left: 65px;
-  }
-
-  .domain-page__form-title {
-    margin-left: 15px;
-    margin-top: 5px;
-    margin-bottom: 25px;
-    font-weight: bold;  
-  }
+  padding-bottom: 8px;
+  font-family: Muli;
 
   .md-card-title--large {
     font-weight: bold;
   }
 
-  .md-block-centered {
-    min-height: 430px;
+  .card-centered {
     border-radius: 5px;
-    box-shadow: 2px 2px 5px 2px $box-shadow;
-    margin: -32px auto;
-    width: 550px;
+    margin: 10px auto;
+    width: 731px;
+    max-height: 470px;
+    min-height: 430px;
   }
 
-  .domain-page__input {
-    margin-top: -25px;
+  .DomainPage__tabs {
+    background-color: $light-grey;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
 
-  .domain-page__red {
-    color: $red;
-    margin-left: 208px;
+  .md-tab-indicator {
+    background: $pink;
+    height: 5px !important;
   }
 
-  .domain-page__green {
-    color: $green;
-    margin-left: 208px;
+  .md-tab-label {
+    color: $white;
+    font-size: 18px;
   }
 
-  .domain-page__buttons {
-   padding-bottom: 20px;
+  .md-tab--active .md-tab-label {
+    font-weight: bolder;
   }
 
-  .domain-page__loader {
-    margin-top: -80px;
-    margin-left: 655px;
-    color: $lightgreen;
+  .DomainPage__domain-name {
+    color: $white;
+    text-align: center;
+    margin-top: -44px;
+  }
+
+  .DomainPage__plus-icon {
+    position: relative;
+    left: 977px;
+    bottom: 420px;
+    color: $white;
+    background-color: $light-pink;
+    height: 56px;
+    width: 56px;
   }
 }

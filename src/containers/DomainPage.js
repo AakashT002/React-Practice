@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
-import { Card, CardTitle, CardActions, FontIcon } from 'react-md';
-import TextField from 'react-md/lib/TextFields';
-import { connect } from 'react-redux';
+import { Card, TabsContainer, Tabs, Tab, Button } from 'react-md';
 import PropTypes from 'prop-types';
-import Button from 'react-md/lib/Buttons/Button';
-
-import ClientForm from '../components/ClientForm';
-import { saveDomain, validateDomain, validateClient } from '../store/domain/action';
-import { CLIENT_TYPES } from '../utils/constants';
-import { PulseLoader } from 'react-spinners';
+import { CURRENT_DOMAIN_NAME } from '../utils/constants';
 
 import '../assets/stylesheets/DomainPage.css';
 
@@ -16,190 +9,57 @@ class DomainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      domainName: '',
-      clients: [
-        {
-          clientId: '',
-          redirectUris: [],
-          webOrigins: [],
-          description: '',
-          implicitFlowEnabled: false,
-          directAccessGrantsEnabled: true,
-          bearerOnly: false,
-          consentRequired: false,
-          publicClient: true,
-          protocol: 'openid-connect',
-          standardFlowEnabled: true,
-        },
-      ],
+      activeTab: 0,
+      clients: [],
+      roles: [],
+      users: [],
     };
   }
 
-  componentDidUpdate() {
-    window.scrollTo(0, 10000);
+  handleTabChange(index) {
+    this.setState({ activeTab: index });
   }
 
-  formValid() {
-    return (
-      this.validatePresence(this.state.clientId) &&
-      this.validatePresence(this.state.rootUrl) &&
-      this.validatePresence(this.state.description)
-    );
-  }
-
-  validatePresence(value) {
-    return value.toString().length > 0;
-  }
-
-  onSave() {
-    var domainObject = {
-      realm: this.state.domainName,
-      enabled: true,
-      clients: this.state.clients,
-    };
-    this.props.dispatch(saveDomain(domainObject)).then(() => {
-      this.props.history.push('/manage-domain');
-    });
-  }
-
-  appendInput() {
-    var client = {
-      clientId: '',
-      redirectUris: [],
-      webOrigins: [],
-      description: '',
-      implicitFlowEnabled: false,
-      directAccessGrantsEnabled: true,
-      bearerOnly: false,
-      consentRequired: false,
-      publicClient: true,
-      protocol: 'openid-connect',
-      standardFlowEnabled: true,
-    };
-    this.setState({ clients: this.state.clients.concat([client]) });
-    this.props.dispatch(validateClient(false));
-  }
-
-  removeClient(index) {
-    var clients = Object.assign([], this.state.clients);
-    clients.splice(index, 1);
-    this.setState({ clients });
-    this.props.dispatch(validateClient(true));
-  }
-
-  validateDomain(domainName) {
-    this.props.dispatch(validateDomain(domainName));
-  }
-
-  handleChange(name, value, i) {
-    this.setState(() => {
-      let currClients = this.state.clients;
-      let newClient = this.state.clients[i];
-
-      if (name === 'rootUrl') {
-        newClient['redirectUris'] = [`${value}/*`];
-        newClient['webOrigins'] = [`${value}`];
-      }
-      newClient[name] = value;
-
-      if (name === 'description' && value === CLIENT_TYPES[1]) {
-        newClient['standardFlowEnabled'] = false;
-      }
-      currClients[i] = newClient;
-
-      return {
-        clients: currClients,
-      };
-    });
-  }
-
-  validateClient(value) {
-    let existingClients = this.state.clients;
-    let clientCount = 0;
-    for(var j=0; j < existingClients.length; j++) {
-      if(value === existingClients[j].clientId && value !== '') {
-        clientCount++;
-      }
-    }
-    if(clientCount === 1) {
-      this.props.dispatch(validateClient(true));
-    } else{
-      this.props.dispatch(validateClient(false));
+  handlePlusClick() {
+    const { clients, roles, users, activeTab } = this.state;
+    if (activeTab === 0) {
+      var client = {};
+      this.setState({ clients: clients.concat([client]) });
+    } else if (activeTab === 1) {
+      var role = {};
+      this.setState({ roles: roles.concat([role]) });
+    } else if (activeTab === 2) {
+      var user = {};
+      this.setState({ users: users.concat([user]) });
     }
   }
 
   render() {
-    const { domainValid, clientValid } = this.props;
-    const { clients } = this.state;
+    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
     return (
-      <div className="domain-page">
-        <Card className="md-block-centered">
-          <CardTitle title="Register Domain" className="title" />
-          <CardActions>
-            <TextField
-              id="domainName"
-              label="Domain Name"
-              required
-              className="md-cell md-cell--bottom domain-page__input"
-              inputClassName="font_size__normal"
-              onChange={value => this.setState({ domainName: value })}
-              onBlur={() => this.validateDomain(this.state.domainName)}
-            />
-            {domainValid ? (
-              <FontIcon iconClassName="fa fa-check-circle-o domain-page__green" />
-            ) : (
-              <FontIcon iconClassName="fa fa-times-circle-o domain-page__red" />
-            )}
-          </CardActions>
-          <h2 className="domain-page__form-title">Clients:</h2>
-          <div id="domain-page__clients-div">
-            {clients.map((_, i) => (
-              <ClientForm
-                key={i}
-                index={i}
-                client={clients[i]}
-                handleChange={(name, value) =>
-                  this.handleChange(name, value, i)}
-                removeClient={index => this.removeClient(index)}
-                checkClient={clients.length-1 === i ? true : false}
-                clientValid={this.props.clientValid}
-                validateClient={(value) => this.validateClient(value)}
-              />
-            ))}
-          </div>
-
-          <div className="domain-page__buttons">
-          <Button
-            className="domain-page__add-button"
-            label="Add Client"
-            disabled={!clientValid}
-            raised
-            primary
-            onClick={() => this.appendInput()}
-          />
-          <Button
-            className="domain-page__save-button"
-            label="Save"
-            disabled={!domainValid || !clientValid}
-            raised
-            primary
-            onClick={() => this.onSave()}
-          />
-          <Button
-            className="domain-page__cancel-button"
-            label="Cancel"
-            raised
-            primary
-            onClick={() => this.props.history.push('/home')}
-          />
-          </div>
+      <div className="DomainPage">
+        <h1 className="DomainPage__domain-name">
+          {currentdomainName !== null ? currentdomainName : 'Heartbeat 3.0'}</h1>
+        <Card className="card-centered">
+          <TabsContainer panelClassName="md-grid" onTabChange={(index) => this.handleTabChange(index)}>
+            <Tabs tabId="domain-tab" className="DomainPage__tabs">
+              <Tab label="CLIENTS">
+                <h3>CLIENTS Tab</h3>
+              </Tab>
+              <Tab label="ROLES">
+                <h3>ROLES Tab</h3>
+              </Tab>
+              <Tab label="USERS">
+                <h3>USERS Tab</h3>
+              </Tab>
+            </Tabs>
+          </TabsContainer>
         </Card>
-        <div className="domain-page__loader">
-        <PulseLoader
-          color={'green'} 
-          loading={this.props.loading} 
-        />
-        </div>
+        <Button
+          floating
+          className="fa fa-plus fa-2x DomainPage__plus-icon"
+          onClick={() => this.handlePlusClick()}>
+        </Button>
       </div>
     );
   }
@@ -207,20 +67,7 @@ class DomainPage extends Component {
 
 DomainPage.propTypes = {
   dispatch: PropTypes.func,
-  domainName: PropTypes.string,
-  clients: PropTypes.array,
-  domainValid: PropTypes.bool,
-  clientValid: PropTypes.bool,
   history: PropTypes.object,
-  loading: PropTypes.bool,
 };
 
-function mapStateToProps(state) {
-  return {
-    domainValid: state.domain.domainValid,
-    clientValid: state.domain.clientValid,
-    loading: state.domain.loading,
-  };
-}
-
-export default connect(mapStateToProps)(DomainPage);
+export default DomainPage;
