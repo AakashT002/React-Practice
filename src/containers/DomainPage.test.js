@@ -1,50 +1,78 @@
 import React from 'react';
 import  DomainPage from './DomainPage';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import SessionStorage from '../__mocks__/mockSessionStorage';
 import { mockInitialState, mockStore } from '../__mocks__/mockInitialState';
 import { Provider } from 'react-redux';
 
 describe('Component: DomainPage', () => {
   window.sessionStorage = new SessionStorage();
-  let domainPage;
+  let wrapper;
   beforeEach(() => {
     sessionStorage.setItem('currentdomainName', 'sample domain');
-    const wrapper = mount(
+    wrapper = mount(
       <Provider store={mockStore(mockInitialState)}>
         <DomainPage />
       </Provider>
     );
-    domainPage = wrapper.find(DomainPage);
   });
 
   it('renders without crashing', () => {
-    expect(domainPage.exists()).toBe(true);
+    expect(wrapper.exists()).toBe(true);
   });
 
   it('renders a proper card class css', () => {
-    expect(domainPage.find('.card-centered').exists()).toBe(true);
+    expect(wrapper.find('.card-centered').exists()).toBe(true);
   });
 
   it('renders the CLIENTS tab', () => {
-    expect(domainPage.find('#domain-tab-0').exists()).toBe(true);
+    const wrapper = shallow(<DomainPage/>);
+    expect(wrapper.find('.DomainPage__clients-tab').prop('label')).toBe('CLIENTS');
+    expect(wrapper.find('.DomainPage__clients-tab').exists()).toBe(true);
   });
 
   it('renders the ROLES tab', () => {
-    expect(domainPage.find('#domain-tab-1').exists()).toBe(true);
+    const wrapper = shallow(<DomainPage/>);
+    expect(wrapper.find('.DomainPage__roles-tab').prop('label')).toBe('ROLES');
+    expect(wrapper.find('.DomainPage__roles-tab').exists()).toBe(true);
   });
 
   it('renders the USERS tab', () => {
-    expect(domainPage.find('#domain-tab-2').exists()).toBe(true);
+    const wrapper = shallow(<DomainPage/>);
+    expect(wrapper.find('.DomainPage__users-tab').prop('label')).toBe('USERS');
+    expect(wrapper.find('.DomainPage__users-tab').exists()).toBe(true);
   });
 
   it('renders the PLUS button', () => {
-    expect(domainPage.find('.DomainPage__plus-icon').exists()).toBe(true);
+    expect(wrapper.find('.DomainPage__plus-icon').exists()).toBe(true);
   });
 
   it('renders the domain name', () => {
-    expect(domainPage.find('.DomainPage__domain-name').text()
+    expect(wrapper.find('.DomainPage__domain-name').text()
   ).toContain('sample domain');
   });
-});
 
+  it('renders the Previous navigation button', () => {
+    expect(wrapper.find('.DomainPage__button-prev').exists()).toBe(true);
+  });
+
+  it('renders the Next navigation button', () => {
+    expect(wrapper.find('.DomainPage__button-next').exists()).toBe(true);
+  });
+
+  it('renders the disabled Previous button on clients tab', () => {
+    const wrapper = shallow(<DomainPage activeTab={0}/>);
+    expect(wrapper.find('.DomainPage__button-prev').props().disabled).toEqual(true);
+  });
+
+  it('renders the disabled Next button on users tab', () => {
+    const wrapper = shallow(<DomainPage activeTab={1}/>);
+    expect(wrapper.find('.DomainPage__button-prev').props().disabled).toEqual(false);
+    expect(wrapper.find('.DomainPage__button-next').props().disabled).toEqual(false);
+  });
+
+  it('renders the disabled Next button on users tab', () => {
+    const wrapper = shallow(<DomainPage activeTab={2}/>);
+    expect(wrapper.find('.DomainPage__button-next').props().disabled).toEqual(true);
+  });
+});
