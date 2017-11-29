@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import './mockSessionStorage.js';
 
 export const mockInitialState = {
-  user: { userName: '' },
+  user: { userName: '', userRoles: [] },
 };
 
 const middlewares = [thunk];

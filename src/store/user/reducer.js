@@ -6,6 +6,7 @@ const initialUserState = {
   isAuthenticated: false,
   name: null,
   userName: null,
+  userRoles: [],
 };
 
 export const user = createReducer(initialUserState, {
@@ -20,6 +21,15 @@ export const user = createReducer(initialUserState, {
     return Object.assign({}, state, {
       userName: action.userName,
     });
+  },
+  [ActionTypes.GET_USER_ROLE_REQUEST](state) {
+    return { ...state, requesting: true };
+  },
+  [ActionTypes.GET_USER_ROLE_SUCCESS](state, action) {
+    return { ...state, requesting: false, userRoles: action.response };
+  },
+  [ActionTypes.GET_USER_ROLE_FAILURE](state) {
+    return { ...state, requesting: false };
   },
 });
 
