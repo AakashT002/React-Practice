@@ -1,4 +1,83 @@
-.DomainPage__background {
-  height: 598px;
-  overflow-y: hidden;
+@import './variables';
+
+.ManageDomainPage {
+  max-height: 598px;
+  padding-top: 100px;
+  padding-bottom: 8px;
+  font-family: Muli;
+
+  .card-block-centered {
+    border-radius: 5px;
+    margin: 10px auto;
+    width: 731px;
+    max-height: 470px;
+    min-height: 470px;
+  }
+
+ .ManageDomainPage__domain-name {
+    color: $white;
+    text-align: center;
+    margin-top: -41px;
+    padding-bottom: 5px;
+  }
+
+ .ManageDomainPage__domain-numbers {
+    background-color: $blue-grey;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 50px;
+    
+    .ManageDomain__domain-text {
+      color: $white;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 25px;
+    }
+
+    .plus-icon {
+    color: $white;
+    background-color: $light-pink;
+    position: relative;
+    bottom: 35px;
+    left: 666px;
+    }
+  }
+
+  .ManageDomainPage__domain-list {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 420px;
+    overflow-y: auto;
+     
+     .ManageDomainPage__icon-bg {
+      background-color: $maroon;
+      border-radius: 50%;
+      height: 55px;
+      width: 55px;
+     }
+
+    .ManageDomainPage__icon {
+      cursor: pointer;
+      color: $font-white ;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-weight: 100;
+      font-size: 26px;
+      position: relative;
+      left: 19px;
+      top: 15px;
+    }
 }
+
+ .ManageDomainPage__background {
+    height: 598px;
+    overflow-y: hidden;
+  }
+  
+  .ManageDomain__spinner-div {
+    position: relative;
+    left: 45%;
+    top: 50px;
+  }
+}
+
+

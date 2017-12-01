@@ -28,6 +28,33 @@ export const domain = createReducer(initialDomainsState, {
   [ActionTypes.FETCH_DOMAINS_FAILURE](state) {
     return { ...state, requesting: false };
   },
+  [ActionTypes.FETCH_USERS_REQUEST](state) {
+    return { ...state, requesting: true };
+  },
+  [ActionTypes.FETCH_USERS_SUCCESS](state, action) {
+    return { ...state, domainList: action.response, requesting: false };
+  },
+  [ActionTypes.FETCH_USERS_FAILURE](state) {
+    return { ...state, requesting: false };
+  },
+  [ActionTypes.FETCH_CLIENTS_REQUEST](state) {
+    return { ...state, requesting: true };
+  },
+  [ActionTypes.FETCH_CLIENTS_SUCCESS](state, action) {
+    return { ...state, domainList: action.response, requesting: false };
+  },
+  [ActionTypes.FETCH_CLIENTS_FAILURE](state) {
+    return { ...state, requesting: false };
+  },
+  [ActionTypes.FETCH_ROLES_REQUEST](state) {
+    return { ...state, requesting: true };
+  },
+  [ActionTypes.FETCH_ROLES_SUCCESS](state, action) {
+    return { ...state, domainList: action.response, requesting: false };
+  },
+  [ActionTypes.FETCH_ROLES_FAILURE](state) {
+    return { ...state, requesting: false };
+  },
   [ActionTypes.SET_DOMAINNAME](state = initialDomainsState, action) {
     return Object.assign({}, state, {
       domainName: action.domainName,

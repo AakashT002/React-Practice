@@ -1,33 +1,135 @@
-const API_URL = `${process.env.REACT_APP_AUTH_URL}/admin/realms`;
-
 class Domains {
-  static async get() {
+  static async getRealms() {
     const token = sessionStorage.kctoken;
-    const response = await fetch(API_URL, {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + token,
-      },
-    });
+    let result = [];
+    // calling the api to fetch realm name
+    const response = await fetch(
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
     if (response.ok) {
       const data = await response.json();
-      return data;
+
+      data.map(realmName => {
+        return result.push({
+          realm: realmName.realm,
+        });
+      });
+
+      return result;
     } else {
       throw new Error('Domains could not be fetched.');
     }
   }
 
+  static async getUsers(list, realm) {
+    const token = sessionStorage.kctoken;
+    // calling the api to fetch number of users for each realm
+    const users = await fetch(
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realm}/users/count`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (users.ok) {
+      const usersData = await users.json();
+      const res = Object.assign([], list);
+
+      res.map(item => {
+        if (item.realm === realm) {
+          item.users = usersData;
+        }
+        return item;
+      });
+      return res;
+    } else {
+      throw new Error('users could not be fetched.');
+    }
+  }
+
+  static async getClients(list, realm) {
+    const token = sessionStorage.kctoken;
+    // calling the api to fetch number of Clients for each realm
+    const clients = await fetch(
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realm}/clients?viewableOnly=true`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (clients.ok) {
+      const clientsData = await clients.json();
+      const res = Object.assign([], list);
+
+      res.map(item => {
+        if (item.realm === realm) {
+          item.clients = clientsData.length;
+        }
+
+        return item;
+      });
+      return res;
+    } else {
+      throw new Error('Clients could not be fetched.');
+    }
+  }
+
+  static async getRoles(list, realm) {
+    const token = sessionStorage.kctoken;
+    // calling the api to fetch number of roles for each realm
+    const roles = await fetch(
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realm}/roles`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (roles.ok) {
+      const rolesData = await roles.json();
+      const res = Object.assign([], list);
+
+      res.map(item => {
+        if (item.realm === realm) {
+          item.roles = rolesData.length;
+        }
+
+        return item;
+      });
+      return res;
+    } else {
+      throw new Error('Clients could not be fetched.');
+    }
+  }
+
   static async createDomain(domainObject) {
     const token = sessionStorage.kctoken;
-
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-      body: JSON.stringify(domainObject),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(domainObject),
+      }
+    );
 
     if (response.ok) {
       return response;
@@ -37,13 +139,11 @@ class Domains {
   }
 
   static async validateDomain(domainName) {
-    const getDomainUrl = `${API_URL}/${domainName}`;
     const token = sessionStorage.kctoken;
-
-    const response = await fetch(getDomainUrl, {
+    const response = await fetch(`${process.env.REACT_APP_AUTH_URL}/admin/realms/${domainName}`, {
       method: 'GET',
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (response.ok) {

@@ -1,0 +1,16 @@
+@import './variables';
+
+.Domain {
+  height: 75px;
+
+  .Domain__domain-info {
+	position: relative;
+	right: 70px; 
+	bottom: 45%;
+	width: 275px;
+
+	.md-text--disabled {
+      color: $black;
+}
+	}
+}
