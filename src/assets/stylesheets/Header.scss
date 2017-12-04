@@ -17,7 +17,7 @@
   width: 80px;
   position: absolute;
   font-size: 18px;
-  font-family: Lato;
+  font-family: $header-font;
 }
 
 .Header__sign-out {
@@ -37,23 +37,25 @@
 .Header__info {
   font-size: 36px !important;
   margin-left: auto !important;
-  font-family: Lato;
+  font-family: $header-font;
 }
 
 .Header__title-key {
   font-weight: bolder;  
   color: $white;
   margin-left: 25%;
+  font-family: $header-font;
 }
 
 .Header__title-fob {
-  font-weight: 100;    
+  font-weight: 300;    
+  font-family: $header-font;
 }
 
 .Header__sign-out-button {
   color: $white !important;
   font-size: 18px;
-  font-family: Lato;
+  font-family: $header-font;
   font-style: italic;
   height: 30px;
   width: 80px;
@@ -80,8 +82,10 @@
 }
 
 .Header_home-text {
+  font-size: 18px;
+  font-family: $header-font;
   color: $white;
   margin-top: -26px;
-  margin-right: -75px;
+  margin-right: -100px;
 }
 

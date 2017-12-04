@@ -9,8 +9,12 @@ import registerServiceWorker from './registerServiceWorker';
 import App from './containers/App';
 import configureStore from './store/configureStore';
 
-import './assets/stylesheets/index.css';
 import { setUserName, getUserRoles } from './store/user/action.js';
+
+import 'lato-font';
+import 'roboto-npm-webfont';
+import 'typeface-muli';
+import './assets/stylesheets/index.css';
 
 const history = createBrowserHistory();
 const store = configureStore(history);
