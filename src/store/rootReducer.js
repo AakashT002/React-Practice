@@ -6,6 +6,7 @@ import items from './items/reducer';
 import user from './user/reducer';
 import addUser from './addUser/reducer';
 import domain from './domain/reducer';
+import role from './roles/reducer';
 
 const root = combineReducers({
   router: routerReducer,
@@ -14,6 +15,7 @@ const root = combineReducers({
   user,
   addUser,
   domain,
+  role,
   ...loginReducer('loginForm'),
 });
 

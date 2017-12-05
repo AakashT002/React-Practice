@@ -25,7 +25,7 @@
 
   .card-centered {
     border-radius: 5px;
-    margin: 2px auto;
+    margin: 2px auto -10px auto;
     width: 731px;
     max-height: 470px;
     min-height: 430px;
@@ -54,13 +54,14 @@
   .DomainPage__domain-name {
     color: $white;
     text-align: center;
-    margin-top: -44px;
+    margin-top: -70px;
   }
-
   .DomainPage__plus-icon {
+    margin-top: 38px;
+    margin-left: -16px;
     position: relative;
     left: 977px;
-    bottom: 415px;
+    bottom: 440px;
     color: $white;
     background-color: $lighter-pink;
     height: 56px;
@@ -81,12 +82,42 @@
     margin-left: 500px;
   }
 
-  .DomainPage__navigate {
-    margin-top: 275px;
-  }
-
   .DomainPage__line {
     width: 688px;
     color: $light-grey;
   }
+  
+  .Domain__roles--card {
+    background-color: #F4F4F4;
+    margin-top:-72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 304px;
+		width: 717px;
+  }
+
+  .Domain_roles--no-data {
+	  color: #A7A7A7;
+    word-break: break-word;
+    word-wrap: break-word;
+    text-align: center;
+  } 
+
+  #domain-tab-panel-0 {
+    max-height: 380px;
+    min-height: 380px;
+  }
+
+  #domain-tab-panel-1 {
+    max-height: 380px;
+    min-height: 380px;
+  }
+
+  #domain-tab-panel-2 {
+    max-height: 380px;
+    min-height: 380px;
+  }
+  .DomainPage__navigate {
+    margin-top: -65px;
+   }
 }
