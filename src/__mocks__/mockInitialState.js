@@ -4,6 +4,8 @@ import './mockSessionStorage.js';
 
 export const mockInitialState = {
   user: { userName: '', userRoles: [] },
+  domain: { loading: false },
+  client: { requesting: false, clientList: [] }
 };
 
 const middlewares = [thunk];

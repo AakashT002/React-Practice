@@ -4,9 +4,10 @@
   height: 24px;
   width: 114px;
   color: $lighter-pink;
-  font-size: 18px;	
+  font-size: 14px;	
   font-weight: bold;	
   line-height: 23px;
+  padding-top: 1px;
 
   &:disabled {
     color: $grey-text;
@@ -15,7 +16,7 @@
 
 .DomainPage {
   max-height: 598px;
-  padding-top: 100px;
+  padding-top: 65px;
   padding-bottom: 8px;
   font-family: Muli;
 
@@ -25,10 +26,11 @@
 
   .card-centered {
     border-radius: 5px;
-    margin: 2px auto -10px auto;
+    margin: -2px auto -30px auto;
     width: 731px;
     max-height: 470px;
-    min-height: 430px;
+    min-height: 465px;
+    background-color: $grey-white;    
   }
 
   .DomainPage__tabs {
@@ -54,10 +56,10 @@
   .DomainPage__domain-name {
     color: $white;
     text-align: center;
-    margin-top: -70px;
+    margin-top: -30px;
   }
   .DomainPage__plus-icon {
-    margin-top: 38px;
+    margin-top: 20px;
     margin-left: -16px;
     position: relative;
     left: 977px;
@@ -84,40 +86,58 @@
 
   .DomainPage__line {
     width: 688px;
-    color: $light-grey;
+    color: $light-gray;
+    margin-bottom: 15px;
+    margin-top: 15px;    
+  }
+
+  #domain-tab-panel-0 {
+    max-height: 355px;
+    min-height: 355px;
+    padding-top: 25px;    
+  }
+
+  #domain-tab-panel-1 {
+    max-height: 355px;
+    min-height: 355px;
+    padding-top: 25px;
+  }
+
+  #domain-tab-panel-2 {
+    max-height: 355px;
+    min-height: 355px;
+  }
+
+  .DomainPage__clients-msg {
+    height: 27.34%;
+    width: 31.46%;
+    color: $text-grey;
+    font-family: Muli;
+    font-size: 36px;
+    line-height: 45px;
+    text-align: center;
+    margin-top: 110px;
+    margin-left: 250px;
   }
   
   .Domain__roles--card {
-    background-color: #F4F4F4;
-    margin-top:-72px;
+    background-color: $grey-white;
+    margin-top: -20px;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 304px;
+    max-height: 350px;
+    margin-left: 15px;
 		width: 717px;
   }
 
   .Domain_roles--no-data {
-	  color: #A7A7A7;
+	  color: $text-grey;
     word-break: break-word;
     word-wrap: break-word;
     text-align: center;
-  } 
-
-  #domain-tab-panel-0 {
-    max-height: 380px;
-    min-height: 380px;
   }
 
-  #domain-tab-panel-1 {
-    max-height: 380px;
-    min-height: 380px;
-  }
-
-  #domain-tab-panel-2 {
-    max-height: 380px;
-    min-height: 380px;
-  }
   .DomainPage__navigate {
-    margin-top: -65px;
+    margin-top: -10px;
    }
 }

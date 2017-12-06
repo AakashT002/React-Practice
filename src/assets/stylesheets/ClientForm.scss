@@ -1,40 +1,55 @@
 @import './variables';
 
-.client-form {
-  padding-top: 30px;
-  background-color: $floralwhite;
+.ClientForm {
+  padding-top: 40px;
+  width: 686px;
+  margin-left: 15px;
+  background-color: $grey-white;
+  padding-bottom: 20px;
 
-  .client-form__client-section {
-    border-radius: 10px;
-    background-color: $floralwhite;
+  .ClientForm__client-section {
+    height: 135px;
   }
 
-  .client-form__minus {
-    color: $indianred;
-    margin-left: 80px;
-  }
-
-  .client-form__client--details {
+  .ClientForm__client--details {
     margin-top: -40px;
     margin-bottom: 70px;
   }
 
-  .client-form__selection {
-    margin-top: -100px;
+  .ClientForm__bottom-section {
+    margin-top: -70px;
     margin-bottom: 40px;
+    margin-left: 470px;
   }
 
-  .client-form__select {
-    margin-right: -50px;
+  .ClientForm__forms-section {
+    background-color: $white;
   }
 
-  .client-form__red {
-    color: $red;
-    margin-left: 208px;
+  .ClientForm__save {
+    color: $light-pink;
+    font-weight: bold;
   }
 
-  .client-form__green {
-    color: $green;
-    margin-left: 208px;
+  .ClientForm__remove {
+    color: $light-pink;
+    margin-left: 35px;   
+    font-weight: bold;
+  }
+
+  .ClientForm__registered {
+    color: $light-green;
+    margin-left: -465px;   
+    display: none; 
+  }
+
+  .md-avatar {
+    border: 2px solid $light-green;
+    height: 20px;
+    width: 20px;
+  }
+
+  .ClientForm__saved-icon {
+    font-size: 12px;
   }
 }

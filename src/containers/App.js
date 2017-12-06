@@ -3,12 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import Header from '../components/Header';
-import DashboardPage from './DashboardPage';
 import DomainPage from './DomainPage';
-import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import ManageDomain from './ManageDomain';
-import RequireAuthentication from './RequireAuthentication';
 import CreateUserPage from './CreateUserPage';
 
 import '../assets/stylesheets/App.css';
@@ -34,23 +31,19 @@ export class App extends Component {
             <Route
               exact
               path="/"
-              render={() => this.checkAuthenticated(Redirect, '/home')}
+              render={() => this.checkAuthenticated(Redirect, '/domains')}
             />
             <Route
               path="/login"
               component={() => this.checkAuthenticated(LoginPage)}
             />
-            <Route path="/home" component={HomePage} />
+            <Route path="/domains" component={ManageDomain} />
             <Route path="/register-domain" component={DomainPage} />
-            <Route
-              path="/dashboard"
-              component={RequireAuthentication(DashboardPage)}
-            />
             <Route
               path="/manage-users"
               component={CreateUserPage}
             />
-            <Route path="/manage-domain" component={ManageDomain} />
+            <Route path="/manage-domain" component={DomainPage} />
           </Switch>
         </div>
       </div>
