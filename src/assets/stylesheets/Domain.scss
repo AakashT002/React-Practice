@@ -1,16 +1,86 @@
 @import './variables';
 
 .Domain {
-  height: 75px;
+  height: 90px;
 
   .Domain__domain-info {
 	position: relative;
-	right: 70px; 
-	bottom: 45%;
+	right: 120px; 
+	bottom: 40%;
 	width: 275px;
+  margin-left: 100px;
 
-	.md-text--disabled {
+	  .md-text--disabled {
       color: $black;
-}
-	}
+    }
+  }
+
+
+  .md-avatar {
+    cursor: pointer;
+    height: 50px;
+    width: 50px;
+  }
+  
+  .md-avatar-content {
+    font-size: 25px;
+  }
+
+  .md-avatar--pink {
+    background : $maroon;
+  }
+
+  .md-divider {
+    border: 0;
+    content: '';
+    display: block;
+    height: 1px;
+    margin: 0;
+    background-color: black;
+}  
+
+  .Domain__icon { 
+    color: $font-white ;
+    font-family: Muli;
+    font-weight: 100;
+    font-size: 10px;
+    position: relative;
+    left: 21px;
+    top: 18px;
+    }
+
+    .Domain__buttons--all {
+      cursor: pointer;
+      padding-left: 8px;
+    }
+
+    .Domain__button--save {
+      visibility: hidden;
+      position: relative;
+      right: 90px;
+    }
+
+    .Domain__button--edit {
+      position: relative;
+      right: 70px;
+    }
+
+    .Domain__button--info {
+      position: relative;
+      right: 50px;
+    }
+
+    .Domain__button--trash {
+      position: relative;
+      right: 30px;
+      bottom: 2px;
+    }
+
+    .Domain__divider {
+      position: relative;
+      bottom: 7px;
+      border: 1px solid $grey;
+      z-index: -1;
+    }
+
 }

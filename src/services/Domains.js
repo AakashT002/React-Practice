@@ -1,3 +1,5 @@
+import { IGNORED_CLIENTS, IGNORED_ROLES } from '../utils/constants';
+
 class Domains {
   static async getRealms() {
     const token = sessionStorage.kctoken;
@@ -61,7 +63,8 @@ class Domains {
     const token = sessionStorage.kctoken;
     // calling the api to fetch number of Clients for each realm
     const clients = await fetch(
-      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realm}/clients?viewableOnly=true`,
+      `${process.env
+        .REACT_APP_AUTH_URL}/admin/realms/${realm}/clients?viewableOnly=true`,
       {
         method: 'GET',
         headers: {
@@ -73,12 +76,23 @@ class Domains {
     if (clients.ok) {
       const clientsData = await clients.json();
       const res = Object.assign([], list);
-
       res.map(item => {
         if (item.realm === realm) {
-          item.clients = clientsData.length;
+          let count = 0;
+          clientsData.forEach(client => {
+            if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
+              if (
+                item.realm === 'master' &&
+                !client.clientId.substr(-6, 6) === '-realm'
+              ) {
+                count++;
+              } else {
+                count++;
+              }
+            }
+          });
+          item.clients = count;
         }
-
         return item;
       });
       return res;
@@ -106,7 +120,13 @@ class Domains {
 
       res.map(item => {
         if (item.realm === realm) {
-          item.roles = rolesData.length;
+          let count = 0;
+          rolesData.forEach(role => {
+            if (!IGNORED_ROLES.includes(role.name.toString())) {
+              count++;
+            }
+          });
+          item.roles = count;
         }
 
         return item;
@@ -140,17 +160,39 @@ class Domains {
 
   static async validateDomain(domainName) {
     const token = sessionStorage.kctoken;
-    const response = await fetch(`${process.env.REACT_APP_AUTH_URL}/admin/realms/${domainName}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${domainName}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const data = await response.ok;
       return data;
     } else {
       throw new Error('Domain already exists.');
+    }
+  }
+
+  static async deleteRealm(i, realmName) {
+    const token = sessionStorage.kctoken;
+    const response = await fetch(
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realmName}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.ok;
+      return data;
+    } else {
+      throw new Error('Domain not deleted.');
     }
   }
 }

@@ -2,23 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SyncLoader } from 'react-spinners';
-import {
-  Card,
-  Button,
-  FontIcon,
-  DataTable,
-  TableBody,
-  TableRow,
-  TableColumn,
-} from 'react-md';
+import { Card, Button, DataTable, TableBody } from 'react-md';
 
 import Domain from '../components/Domain';
+import { CURRENT_DOMAIN_NAME } from '../utils/constants';
 
 import {
   loadDomains,
   getUser,
   getClient,
   getRole,
+  handleRealmDeletion,
 } from '../store/domain/action';
 
 import '../assets/stylesheets/ManageDomain.css';
@@ -26,11 +20,15 @@ import '../assets/stylesheets/ManageDomain.css';
 export class ManageDomain extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      chkFlag: false,
+      domainList: props.domainList || [],
+    };
     this.handleIconClick = this.handleIconClick.bind(this);
   }
 
-  handleIconClick() {
+  handleIconClick(realm) {
+    sessionStorage.setItem(CURRENT_DOMAIN_NAME, realm);
     this.props.history.push('./register-domain');
   }
 
@@ -38,20 +36,43 @@ export class ManageDomain extends Component {
     const { dispatch } = this.props;
 
     dispatch(loadDomains()).then(() => {
-      this.props.domainList.map(realm => {
-        const { domainList } = this.props;
-        
+      const { domainList } = this.props;
+      domainList.map(realm => {
         dispatch(getUser(domainList, realm.realm));
         dispatch(getClient(domainList, realm.realm));
         dispatch(getRole(domainList, realm.realm));
-
         return realm;
       });
+
+      this.setState({ domainList });
     });
   }
-  
+
+  removeRealm(i, realmName) {
+    const domains = Object.assign([], this.state.domainList);
+    this.props.dispatch(handleRealmDeletion(i, realmName)).then(() => {
+      domains.splice(i, 1);
+      this.setState({ domainList: domains });
+    });
+  }
+
+  addNewDomain() {
+    const { domainList } = this.state;
+    const domain = {
+      realm: '',
+    };
+    domainList.splice(0, 0, domain);
+    this.setState({ domainList });
+  }
+
+  handleChange() {
+    this.setState({ chkFlag: true });
+  }
+
   render() {
-    const { domainList, requesting } = this.props;
+    const { requesting } = this.props;
+    const { domainList } = this.state;
+
     if (domainList && domainList.length > 0) {
       return (
         <div className="ManageDomainPage">
@@ -61,41 +82,28 @@ export class ManageDomain extends Component {
               <h3 className="ManageDomain__domain-text">
                 {domainList.length} DOMAINS
               </h3>
-              <Button floating className="fa fa-plus plus-icon" />
+              <Button
+                floating
+                className="fa fa-plus ManageDomain__plus-icon"
+                onClick={() => this.addNewDomain()}
+              />
             </div>
             <DataTable plain className="ManageDomainPage__domain-list">
               <TableBody>
-                {domainList.map(realm => {
+                {domainList.map((realm, i) => {
                   return (
-                    <TableRow key={realm.realm}>
-                      <TableColumn>
-                        <div className="ManageDomainPage__icon-bg">
-                          <FontIcon
-                            className="ManageDomainPage__icon"
-                            onClick={this.handleIconClick}
-                          >
-                            {realm.realm.slice(0, 1).toUpperCase()}
-                          </FontIcon>
-                        </div>
-                      </TableColumn>
-                      <TableColumn>
-                        <Domain
-                          key={realm.realm}
-                          realm={realm.realm}
-                          info={` ${realm.clients ||
-                            '0 ' ||
-                            'fetching ...'} clients \u2022 ${realm.roles ||
-                            '0' ||
-                            'fetching ...'} roles \u2022 ${realm.users ||
-                            '0' ||
-                            'fetching ...'} users`}
-                        />
-                      </TableColumn>
-                      <TableColumn>
-                        <Button floating className="fa fa-info " />
-                        <Button floating className="fa fa-trash-o " />
-                      </TableColumn>
-                    </TableRow>
+                    <Domain
+                      index={i}
+                      key={realm.realm}
+                      realm={realm.realm}
+                      clients={realm.clients || '0' || 'fetching...'}
+                      users={realm.users || '0' || 'fetching...'}
+                      roles={realm.roles || '0' || 'fetching...'}
+                      handleIconClick={this.handleIconClick}
+                      removeRealm={() => this.removeRealm(i, realm.realm)}
+                      handleChange={() => this.handleChange()}
+                      chkFlag={this.state.chkFlag}
+                    />
                   );
                 })}
               </TableBody>
@@ -104,7 +112,20 @@ export class ManageDomain extends Component {
         </div>
       );
     } else if (!requesting) {
-      return <div>No Domains </div>;
+      return (
+        <div className="ManageDomainPage">
+          <h1 className="ManageDomainPage__domain-name">Manage Domains</h1>
+          <Card className="card-block-centered">
+            <div className="ManageDomainPage__domain-numbers">
+              <h3 className="ManageDomain__domain-text">0 DOMAINS</h3>
+              <Button floating className="fa fa-plus ManageDomain__plus-icon" />
+              <h1 className="ManageDomainPage__no-domain">
+                Looks like there are no domains here{' '}
+              </h1>
+            </div>
+          </Card>
+        </div>
+      );
     } else {
       return (
         <div className="ManageDomainPage">
@@ -112,7 +133,7 @@ export class ManageDomain extends Component {
           <Card className="card-block-centered">
             <div className="ManageDomainPage__domain-numbers">
               <h3 className="ManageDomain__domain-text">0 DOMAINS</h3>
-              <Button floating className="fa fa-plus plus-icon" />
+              <Button floating className="fa fa-plus ManageDomain__plus-icon" />
             </div>
             <div className="ManageDomain__spinner-div">
               <SyncLoader color={'#BC477B'} loading={true} />
@@ -129,6 +150,7 @@ ManageDomain.propTypes = {
   dispatch: PropTypes.func,
   requesting: PropTypes.bool,
   domainList: PropTypes.array,
+  chkFlag: PropTypes.bool,
 };
 
 function mapStateToProps(state) {

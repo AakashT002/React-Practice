@@ -48,6 +48,7 @@ export const loadDomains = () => ({
       throw new Error(error.message);
     }
   },
+  type: '',
 });
 
 export const getUser = (list, realm) => ({
@@ -63,6 +64,7 @@ export const getUser = (list, realm) => ({
       throw new Error(error.message);
     }
   },
+  type: '',
 });
 
 export const getClient = (list, realm) => ({
@@ -78,6 +80,7 @@ export const getClient = (list, realm) => ({
       throw new Error(error.message);
     }
   },
+  type: '',
 });
 
 export const getRole = (list, realm) => ({
@@ -98,5 +101,20 @@ export const getRole = (list, realm) => ({
 export function setDomainName(domainName) {
   return { type: ActionTypes.SET_DOMAINNAME, domainName };
 }
+
+export const handleRealmDeletion = (i, realmName) => ({
+  types: [
+    ActionTypes.DELETE_REALM_REQUEST,
+    ActionTypes.DELETE_REALM_SUCCESS,
+    ActionTypes.DELETE_REALM_FAILURE,
+  ],
+  callAPI: async () => {
+    try {
+      return await Domains.deleteRealm(i, realmName);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+});
 
 export default loadDomains;
