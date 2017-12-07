@@ -7,7 +7,7 @@ import ClientForm from '../components/ClientForm';
 
 import { loadClients } from '../store/client/action';
 import { loadRoles } from '../store/roles/action';
-import { CURRENT_DOMAIN_NAME, DEFAULT_CLIENTS, DEFAULT_ROLES } from '../utils/constants';
+import { CURRENT_DOMAIN_NAME, IGNORED_CLIENTS, IGNORED_ROLES } from '../utils/constants';
 
 import Roles from '../components/Roles';  
 import '../assets/stylesheets/DomainPage.css';
@@ -35,7 +35,7 @@ class DomainPage extends Component {
       const { clientList } = this.props;
 
       clientList.forEach((client) => {
-        if (!DEFAULT_CLIENTS.includes(client.clientId.toString())) {
+        if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
           if(currentdomainName === 'master') {
             if(client.clientId.substr(client.clientId.length-6, 6) !== '-realm') {
               let clientObj = {
@@ -63,7 +63,7 @@ class DomainPage extends Component {
 			let { roleList } = this.props;
 			let existingRoles = [];
 			for (var j = 0; j < roleList.length; j++) {
-				if (!DEFAULT_ROLES.includes(roleList[j].name.toString())) {
+				if (!IGNORED_ROLES.includes(roleList[j].name.toString())) {
 					let roleObj = {
 						id: roleList[j].id,
 						name: roleList[j].name,
