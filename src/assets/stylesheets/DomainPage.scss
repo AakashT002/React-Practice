@@ -120,7 +120,7 @@
     margin-left: 250px;
   }
   
-  .Domain__roles--card {
+  .DomainPage__roles--card {
     background-color: $grey-white;
     margin-top: -20px;
     overflow-y: auto;
@@ -130,11 +130,50 @@
 		width: 717px;
   }
 
-  .Domain_roles--no-data {
+  .DomainPage_roles--no-data {
 	  color: $text-grey;
     word-break: break-word;
     word-wrap: break-word;
     text-align: center;
+  } 
+
+  .DomainPage__red {
+    color: $red;
+    margin-left: 211px;
+  }
+
+  .DomainPage__green {
+    color: $green;
+    margin-left: 211px;
+  }
+
+  .DomainPage__message-green {
+   color: $green;
+   margin: 8px;
+  }
+
+  .DomainPage__message-red {
+   color: $red;
+   margin: 8px;
+  }
+
+  .DomainPage__icon {
+    float: left;
+  }
+
+  #domain-tab-panel-0 {
+    max-height: 380px;
+    min-height: 380px;
+  }
+
+  #domain-tab-panel-1 {
+    max-height: 380px;
+    min-height: 380px;
+  }
+
+  #domain-tab-panel-2 {
+    max-height: 380px;
+    min-height: 380px;
   }
 
   .DomainPage__navigate {

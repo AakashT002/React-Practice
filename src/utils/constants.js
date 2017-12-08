@@ -1,4 +1,5 @@
 export const BACKEND_API = 'Backend API (API)';
+export const MANAGE_USER_FOR_DOMAIN_NAME = 'manageUserForDomainName';
 export const CLIENT_TYPES = [
   'Browser based apps (SPA)',
   'Backend API (API)',
@@ -12,6 +13,5 @@ export const IGNORED_CLIENTS = [
   'security-admin-console',
   'master-realm',
 ];
-export const MANAGE_USER_FOR_DOMAIN_NAME = 'manageUserForDomainName';
 export const CURRENT_DOMAIN_NAME = 'currentdomainName';
 export const IGNORED_ROLES = ['offline_access', 'uma_authorization'];

@@ -9,7 +9,6 @@ class User {
         'Authorization': 'Bearer ' + token,
       },
       body: JSON.stringify(userObj),
-
     });
     if (!response.ok) {
       var responseHeader = response.headers.get('Location');

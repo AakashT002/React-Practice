@@ -1,32 +1,35 @@
 @import './variables';
 
 .Roles__form {
-    margin-top :20px;
-    width: 100%;
-    overflow-x: hidden;
+	margin-top :20px;
+	width: 100%;
+	overflow-x: hidden;
 }
 
 .Roles_rectangle {
-    background-color: #FFFFFF;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
-}
-.Roles__button--save {
-    margin-left: 530px;
+	background-color: $white;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
 }
 
-.Roles__button--remove { 
-    margin-left: 596px;    
-    margin-top: -32px;
+.Roles__buttons {
+	float: right;
+}
+
+.Roles__button { 
+	display: inline;
+}
+
+.Roles__message {
+	margin-left: -192px !important;
 }
 
 #Roles_div {
-    .md-text-field {
-      color: $black;
-      font-size: 1.5em;
-     
+	.md-text-field {
+		color: $black;
+		font-size: 1.5em;
 		}
-        .md-divider {
-      background-color: black;
-    } 
+			
+		.md-divider {
+			background-color: black;
+		} 
 }
-
