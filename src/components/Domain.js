@@ -17,8 +17,8 @@ const Domain = ({
   clients,
   users,
   roles,
-  removeRealm,
   handleChange,
+  confirmDelete,
 }) => {
   return (
     <div className="Domain">
@@ -27,11 +27,7 @@ const Domain = ({
           <Avatar
             key={realm}
             suffix="pink"
-            onClick={
-              handleIconClick
-                ? handleIconClick.bind(this, realm)
-                : alert('no function passed')
-            }
+            onClick={handleIconClick && handleIconClick.bind(this, realm)}
           >
             {realm && realm.length > 0 ? realm.charAt(0).toUpperCase() : '?'}
           </Avatar>
@@ -74,8 +70,16 @@ const Domain = ({
             <img
               src={trashIcon}
               alt="Delete"
-              className="Domain__buttons--all Domain__button--trash"
-              onClick={() => removeRealm(index, realm)}
+              className={
+                realm === 'master'
+                  ? 'Domain__buttons--all Domain__button--trash not-clickable'
+                  : 'Domain__buttons--all Domain__button--trash'
+              }
+              onClick={
+                confirmDelete && realm !== 'master'
+                  ? confirmDelete.bind(this, index, realm)
+                  : null
+              }
             />
           </div>
         </TableColumn>
@@ -91,7 +95,7 @@ Domain.propTypes = {
   clients: PropTypes.number,
   users: PropTypes.number,
   roles: PropTypes.number,
-  removeRealm: PropTypes.func,
+  confirmDelete: PropTypes.func,
   index: PropTypes.number,
   handleChange: PropTypes.func,
 };

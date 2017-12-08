@@ -74,6 +74,15 @@
       position: relative;
       right: 30px;
       bottom: 2px;
+
+        &.not-clickable {
+          cursor: auto;
+    
+          &:hover {
+            background-color: transparent;
+            opacity: 0.5;
+          }
+        }
     }
 
     .Domain__divider {

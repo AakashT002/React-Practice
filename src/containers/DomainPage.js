@@ -9,7 +9,7 @@ import { loadClients } from '../store/client/action';
 import { loadRoles, saveRole } from '../store/roles/action';
 import { CURRENT_DOMAIN_NAME, IGNORED_CLIENTS, IGNORED_ROLES } from '../utils/constants';
 
-import Roles from '../components/Roles';  
+import Roles from '../components/Roles';
 import '../assets/stylesheets/DomainPage.css';
 
 class DomainPage extends Component {
@@ -38,10 +38,10 @@ class DomainPage extends Component {
       let clients = [];
       const { clientList } = this.props;
 
-      clientList.forEach((client) => {
+      clientList.forEach(client => {
         if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
-          if(currentdomainName === 'master') {
-            if(client.clientId.substr(client.clientId.length-6, 6) !== '-realm') {
+          if (currentdomainName === 'master') {
+            if (client.clientId.substr(client.clientId.length - 6, 6) !== '-realm') {
               let clientObj = {
                 clientId: client.clientId,
                 rootUrl: client.rootUrl,
@@ -49,7 +49,7 @@ class DomainPage extends Component {
               };
               clients = clients.concat([clientObj]);
             }
-          }else {
+          } else {
             let clientObj = {
               clientId: client.clientId,
               rootUrl: client.rootUrl,
@@ -96,7 +96,7 @@ class DomainPage extends Component {
 	handleTabChange(index) {
 		this.setState({ activeTab: index });
   }
-  
+
   handlePlusClick() {
 		const { clients, roles, users, activeTab } = this.state;
 		if (activeTab === 0) {
@@ -183,14 +183,15 @@ class DomainPage extends Component {
           >
             <Tabs tabId="domain-tab" className="DomainPage__tabs">
               <Tab label="CLIENTS" className="DomainPage__clients-tab">
-                {clients.length !== 0 ? clients.map((client, i) => (
-                  <ClientForm 
-                    key={i}
-                    index={i}
-                    client={client}
-                  />
-                  )) : <div className="DomainPage__clients-msg">No Clients Added Yet</div>
-                }
+                {clients.length !== 0 ? (
+                  clients.map((client, i) => (
+                    <ClientForm key={i} index={i} client={client} />
+                  ))
+                ) : (
+                  <div className="DomainPage__clients-msg">
+                    No Clients Added Yet
+                  </div>
+                )}
               </Tab>
               <Tab label="ROLES" className="DomainPage__roles-tab">
                 <div 
@@ -239,27 +240,29 @@ class DomainPage extends Component {
             >
               keyboard_arrow_left
             </Button>
-						<Button
-							flat
-							disabled={activeTab === 2}
-							key="next"
-							label="Next"
-							iconBefore={false}
-							className="DomainPage__button-next"
-							onClick={() => this.setState({ activeTab: activeTab + 1 })}
-							>
-							keyboard_arrow_right
+            <Button
+              flat
+              disabled={activeTab === 2}
+              key="next"
+              label="Next"
+              iconBefore={false}
+              className="DomainPage__button-next"
+              onClick={() => this.setState({ activeTab: activeTab + 1 })}
+            >
+              keyboard_arrow_right
             </Button>
-					</div>
-				</Card>
-				<Button
-					floating
-					className="fa fa-2x DomainPage__plus-icon"
-					onClick={this.handlePlusClick}>add
+          </div>
+        </Card>
+        <Button
+          floating
+          className="fa fa-2x DomainPage__plus-icon"
+          onClick={this.handlePlusClick}
+        >
+          add
         </Button>
-			</div>
-		);
-	}
+      </div>
+    );
+  }
 }
 
 DomainPage.propTypes = {

@@ -79,6 +79,25 @@
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     }
+  
+  .ManageDomain__Modal--delete {
+    font-family: Muli;
+    font-size: 13px;  
+    border-radius: 5px;
+    position: fixed;
+    max-height: 250px;
+    min-height: 250px;
+}
+  
+  .ManageDomain__button--delete-yes {
+    float: right;
+    color: $lighter-pink;
+  }
+
+  .ManageDomain__button--delete-no {
+    float: right;
+    color: $lighter-pink;
+  }
 
 }
 

@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SyncLoader } from 'react-spinners';
-import { Card, Button, DataTable, TableBody } from 'react-md';
+import { Card, Button, DataTable, TableBody, DialogContainer } from 'react-md';
 
 import Domain from '../components/Domain';
-import { CURRENT_DOMAIN_NAME } from '../utils/constants';
+import {
+  CURRENT_DOMAIN_NAME,
+  DELETION_WARNING_MESSAGE,
+} from '../utils/constants';
 
 import {
   loadDomains,
@@ -21,10 +24,14 @@ export class ManageDomain extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      deleteModalVisible: false,
       chkFlag: false,
       domainList: props.domainList || [],
+      selectedRealmName: '',
+      selectedRealmIndex: -1,
     };
     this.handleIconClick = this.handleIconClick.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
   }
 
   handleIconClick(realm) {
@@ -48,9 +55,30 @@ export class ManageDomain extends Component {
     });
   }
 
+  confirmDelete(index, realm) {
+    this.setState({
+      selectedRealmName: realm,
+      selectedRealmIndex: index,
+      deleteModalVisible: true,
+    });
+  }
+
+  cancelDelete() {
+    this.setState({
+      selectedRealmName: '',
+      selectedRealmIndex: -1,
+      deleteModalVisible: false,
+    });
+  }
+
   removeRealm(i, realmName) {
     const domains = Object.assign([], this.state.domainList);
     this.props.dispatch(handleRealmDeletion(i, realmName)).then(() => {
+      this.setState({
+        selectedRealmName: '',
+        selectedRealmIndex: 0,
+        deleteModalVisible: false,
+      });
       domains.splice(i, 1);
       this.setState({ domainList: domains });
     });
@@ -77,7 +105,7 @@ export class ManageDomain extends Component {
       return (
         <div className="ManageDomainPage">
           <h1 className="ManageDomainPage__domain-name">Manage Domains</h1>
-          <Card className="card-block-centered">
+          <Card id="manageDomain" className="card-block-centered">
             <div className="ManageDomainPage__domain-numbers">
               <h3 className="ManageDomain__domain-text">
                 {domainList.length} DOMAINS
@@ -100,6 +128,7 @@ export class ManageDomain extends Component {
                       users={realm.users || '0' || 'fetching...'}
                       roles={realm.roles || '0' || 'fetching...'}
                       handleIconClick={this.handleIconClick}
+                      confirmDelete={this.confirmDelete}
                       removeRealm={() => this.removeRealm(i, realm.realm)}
                       handleChange={() => this.handleChange()}
                       chkFlag={this.state.chkFlag}
@@ -109,6 +138,47 @@ export class ManageDomain extends Component {
               </TableBody>
             </DataTable>
           </Card>
+          <DialogContainer
+            id="deleteModal"
+            height="250px"
+            width="350px"
+            visible={this.state.deleteModalVisible}
+            title="DELETE DOMAINS"
+            onHide={() => {
+              this.setState({ deleteModalVisible: false });
+            }}
+            aria-describedby="deleteModalDescription"
+          >
+            <p id="deleteModalDescription">
+              {DELETION_WARNING_MESSAGE}
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <Button
+                className="ManageDomain__button--delete-yes"
+                flat
+                onClick={() => {
+                  this.removeRealm(
+                    this.state.selectedRealmIndex,
+                    this.state.selectedRealmName
+                  );
+                }}
+              >
+                YES
+              </Button>
+              <Button
+                className="ManageDomain__button--delete-no"
+                flat
+                onClick={() => {
+                  this.cancelDelete();
+                }}
+              >
+                NO
+              </Button>
+            </p>
+          </DialogContainer>
         </div>
       );
     } else if (!requesting) {
