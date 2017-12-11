@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 
 import ClientForm from '../components/ClientForm';
 
-import { loadClients } from '../store/client/action';
+import { loadClients, saveClient, addClient } from '../store/client/action';
 import { loadRoles, saveRole } from '../store/roles/action';
-import { CURRENT_DOMAIN_NAME, IGNORED_CLIENTS, IGNORED_ROLES } from '../utils/constants';
+import { CURRENT_DOMAIN_NAME, IGNORED_CLIENTS, IGNORED_ROLES, CLIENT_TYPES } from '../utils/constants';
 
 import Roles from '../components/Roles';
 import '../assets/stylesheets/DomainPage.css';
@@ -38,22 +38,42 @@ class DomainPage extends Component {
       let clients = [];
       const { clientList } = this.props;
 
-      clientList.forEach(client => {
+      clientList.forEach((client) => {
         if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
           if (currentdomainName === 'master') {
             if (client.clientId.substr(client.clientId.length - 6, 6) !== '-realm') {
               let clientObj = {
                 clientId: client.clientId,
-                rootUrl: client.rootUrl,
-                description: client.description,
+                rootUrl: client.rootUrl || '',
+                description: client.description || '',
+                redirectUris: client.redirectUris,
+                webOrigins: client.webOrigins,
+                implicitFlowEnabled: client.implicitFlowEnabled,
+                directAccessGrantsEnabled: client.directAccessGrantsEnabled,
+                bearerOnly: client.bearerOnly,
+                consentRequired: client.consentRequired,
+                publicClient: client.publicClient,
+                protocol: client.protocol,
+                standardFlowEnabled: client.standardFlowEnabled,
+                id: client.id,
               };
               clients = clients.concat([clientObj]);
             }
           } else {
             let clientObj = {
               clientId: client.clientId,
-              rootUrl: client.rootUrl,
-              description: client.description,
+              rootUrl: client.rootUrl || '',
+              description: client.description || '',
+              redirectUris: client.redirectUris,
+              webOrigins: client.webOrigins,
+              implicitFlowEnabled: client.implicitFlowEnabled,
+              directAccessGrantsEnabled: client.directAccessGrantsEnabled,
+              bearerOnly: client.bearerOnly,
+              consentRequired: client.consentRequired,
+              publicClient: client.publicClient,
+              protocol: client.protocol,
+              standardFlowEnabled: client.standardFlowEnabled,
+              id: client.id,
             };
             clients = clients.concat([clientObj]);
           }
@@ -80,8 +100,11 @@ class DomainPage extends Component {
   }
 
   componentDidUpdate() {
-    if (this.inputElement) {
-      this.inputElement.focus();
+    if (this.newRoleElement) {
+      this.newRoleElement.focus();
+    }
+    if (this.newClientElement) {
+      this.newClientElement.focus();
     }
   }
 
@@ -100,8 +123,27 @@ class DomainPage extends Component {
   handlePlusClick() {
 		const { clients, roles, users, activeTab } = this.state;
 		if (activeTab === 0) {
-			var client = {};
-			this.setState({ clients: clients.concat([client]) });
+			if(this.state.clients.length === 0 || this.state.clients[0].id !== undefined) {
+        this.props.dispatch(addClient()).then(() => {
+          var client = {
+            clientId: '',
+            rootUrl: '',
+            redirectUris: [],
+            webOrigins: [],
+            description: '',
+            implicitFlowEnabled: false,
+            directAccessGrantsEnabled: true,
+            bearerOnly: false,
+            consentRequired: false,
+            publicClient: true,
+            protocol: 'openid-connect',
+            standardFlowEnabled: true,
+            isClientSaved: this.props.isClientSaved,
+          };
+          clients.splice(0, 0, client);
+          this.setState({ clients });
+        });
+      }
 		} else if (activeTab === 1) {
       let role = {
         id: '',
@@ -123,7 +165,59 @@ class DomainPage extends Component {
 			var user = {};
 			this.setState({ users: users.concat([user]) });
 		}
-	}
+  }
+  
+  handleFieldChange(name, value, i) {
+    this.setState(() => {
+      let currClients = this.state.clients;
+      let newClient = this.state.clients[i];
+
+      if (name === 'rootUrl') {
+        newClient['redirectUris'] = [`${value}/*`];
+        newClient['webOrigins'] = [`${value}`];
+      }
+      newClient[name] = value;
+      newClient.isClientSaved = false;
+
+      if (name === 'description' && value === CLIENT_TYPES[1]) {
+        newClient['standardFlowEnabled'] = false;
+      } else if (name === 'description' && value !== CLIENT_TYPES[1]) {
+        newClient['standardFlowEnabled'] = true;
+      }
+      currClients[i] = newClient;
+
+      return {
+        clients: currClients,
+      };
+    });
+  }
+
+  onClientSave(index) {
+    var clientObject = Object.assign({}, this.state.clients[index]);
+    delete clientObject['isClientSaved'];
+    delete clientObject['id'];
+    this.props.dispatch(saveClient(clientObject)).then(() => {
+      let clients = this.state.clients;
+      let currentclient = clients[index];
+      currentclient.isClientSaved = true;
+      if(!this.props.isError) {
+      currentclient.id = this.props.clientId;
+      }
+      this.setState({ clients });
+    });
+  }
+
+  validateClientForm(index) {
+    return (
+      this.validatePresence(this.state.clients[index].clientId) &&
+      this.validatePresence(this.state.clients[index].rootUrl) &&
+      this.validatePresence(this.state.clients[index].description)
+    );
+  }
+
+  validatePresence(value) {
+    return value.toString().length > 0;
+  }
 
   checkRole(index) {
     const { message } = this.props;
@@ -173,8 +267,7 @@ class DomainPage extends Component {
     return (
       <div className="DomainPage">
         <h1 className="DomainPage__domain-name">
-          {currentdomainName !== null ? currentdomainName : 'Heartbeat 3.0'}
-        </h1>
+          {currentdomainName !== null && currentdomainName}</h1>
         <Card className="card-centered">
           <TabsContainer
             panelClassName="md-grid"
@@ -183,15 +276,22 @@ class DomainPage extends Component {
           >
             <Tabs tabId="domain-tab" className="DomainPage__tabs">
               <Tab label="CLIENTS" className="DomainPage__clients-tab">
-                {clients.length !== 0 ? (
-                  clients.map((client, i) => (
-                    <ClientForm key={i} index={i} client={client} />
-                  ))
-                ) : (
-                  <div className="DomainPage__clients-msg">
-                    No Clients Added Yet
-                  </div>
-                )}
+              {clients.length !== 0 ? clients.map((client, i) => (
+                <ClientForm
+                  key={i}
+                  index={i}
+                  client={client}
+                  handleFieldChange={(name, value) =>
+                    this.handleFieldChange(name, value, i)}
+                  handleSave={this.onClientSave.bind(this)}
+                  validateClientForm={this.validateClientForm.bind(this)}
+                  isClientSaved={this.state.clients[i].isClientSaved}
+                  isError={this.props.isError}
+                  feedbackMessage={this.props.feedbackMessage}
+                  inputRef={el => (this.newClientElement = el)}
+                />
+              )) : <div className="DomainPage__clients-msg">No Clients Added Yet</div>
+              }
               </Tab>
               <Tab label="ROLES" className="DomainPage__roles-tab">
                 <div 
@@ -211,7 +311,7 @@ class DomainPage extends Component {
                         onSave={this.onSave}
                         focusOnText={this.focusOnText}
                         blurOnText={this.blurOnText}
-                        inputRef={el => (this.inputElement = el)}
+                        inputRef={el => (this.newRoleElement = el)}
                       />
                     ))
                   ) : (
@@ -273,6 +373,10 @@ DomainPage.propTypes = {
   loading: PropTypes.bool,
   clientList: PropTypes.array,
   roleList: PropTypes.array,
+  isClientSaved: PropTypes.bool,
+  isError: PropTypes.bool,
+  feedbackMessage: PropTypes.string,
+  clientId: PropTypes.string,
   saving: PropTypes.bool,
   message: PropTypes.string,
   roleId: PropTypes.string,
@@ -284,6 +388,10 @@ function mapStateToProps(state) {
     requesting: state.client.requesting,
     clientList: state.client.clientList,
     roleList: state.role.roleList,
+    isClientSaved: state.client.isClientSaved,
+    isError: state.client.isError,
+    feedbackMessage: state.client.feedbackMessage,
+    clientId: state.client.clientId,
     saving: state.role.saving,
     message: state.role.message,
     roleId: state.role.roleId,

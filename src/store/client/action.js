@@ -15,3 +15,22 @@ export const loadClients = (currentdomainName) => ({
     }
   },
 });
+
+export const saveClient = clientObject => ({
+  types: [
+    ActionTypes.CREATE_CLIENT_REQUEST,
+    ActionTypes.CREATE_CLIENT_SUCCESS,
+    ActionTypes.CREATE_CLIENT_FAILURE,
+  ],
+  callAPI: async () => {
+    try {
+      return await Clients.createClient(clientObject);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+});
+
+export function addClient() {
+  return { type: ActionTypes.ADD_CLIENT };
+}

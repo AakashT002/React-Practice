@@ -4,12 +4,13 @@ import { shallow } from 'enzyme';
 import ClientForm from './ClientForm';
 
 describe('Component: ClientForm', () => {
+  const spy = jest.fn();
   const client = {
     clientId: '',
     description: '',
     rootUrl: '',
   };
-  const wrapper = shallow(<ClientForm client={client}/>);  
+  const wrapper = shallow(<ClientForm client={client} validateClientForm={spy}/>);  
 
   it('renders a Client form', () => {
     expect(wrapper.find('.ClientForm').exists()).toBe(true);

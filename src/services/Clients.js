@@ -1,7 +1,8 @@
 class Clients {
   static async get(currentdomainName) {
     const token = sessionStorage.kctoken;
-    const API_URL = `${process.env.REACT_APP_AUTH_URL}/admin/realms/${currentdomainName}/clients`;
+    const API_URL = `${process.env
+      .REACT_APP_AUTH_URL}/admin/realms/${currentdomainName}/clients`;
     const response = await fetch(API_URL, {
       method: 'GET',
       headers: {
@@ -13,6 +14,31 @@ class Clients {
       return data;
     } else {
       throw new Error('Clients could not be fetched.');
+    }
+  }
+
+  static async createClient(clientObject) {
+    const token = sessionStorage.kctoken;
+    const response = await fetch(
+      `${process.env
+        .REACT_APP_AUTH_URL}/admin/realms/${sessionStorage.currentdomainName}/clients`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(clientObject),
+      }
+    );
+    if (response.status === 201) {
+      var responseHeader = response.headers.get('Location');
+      var clientId = responseHeader.substr(responseHeader.length - 36, 36);
+      return clientId;
+    } else if (response.status === 409) {
+      throw new Error('Client name already exists.');
+    } else {
+      throw new Error('Unable to save - Retry after sometime.');
     }
   }
 }

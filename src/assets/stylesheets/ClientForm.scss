@@ -29,6 +29,10 @@
   .ClientForm__save {
     color: $light-pink;
     font-weight: bold;
+
+    &:disabled {
+      color: $grey-text;
+    }
   }
 
   .ClientForm__remove {
@@ -37,19 +41,35 @@
     font-weight: bold;
   }
 
-  .ClientForm__registered {
+  .ClientForm__register-pass {
     color: $light-green;
-    margin-left: -465px;   
-    display: none; 
+    margin-left: -465px;
+    padding-right: 390px;  
+
+    .md-avatar {
+      border: 2px solid $light-green;
+      height: 20px;
+      width: 20px;
+    }
   }
 
-  .md-avatar {
-    border: 2px solid $light-green;
-    height: 20px;
-    width: 20px;
+  .ClientForm__register-fail {
+    color: $red;
+    margin-left: -465px;
+    padding-right: 260px;
+
+    .md-avatar {
+      border: 2px solid $red;
+      height: 20px;
+      width: 20px;
+    }
   }
 
   .ClientForm__saved-icon {
     font-size: 12px;
+  }
+
+  .ClientForm__buttons {
+    margin-left: 10px;
   }
 }

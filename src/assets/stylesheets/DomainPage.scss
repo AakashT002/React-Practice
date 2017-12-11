@@ -29,7 +29,7 @@
     margin: -2px auto -30px auto;
     width: 731px;
     max-height: 470px;
-    min-height: 465px;
+    min-height: 480px;
     background-color: $grey-white;    
   }
 
@@ -56,10 +56,11 @@
   .DomainPage__domain-name {
     color: $white;
     text-align: center;
-    margin-top: -30px;
+    margin-top: -35px;
   }
+  
   .DomainPage__plus-icon {
-    margin-top: 20px;
+    margin-top: 7px;
     margin-left: -16px;
     position: relative;
     left: 977px;
