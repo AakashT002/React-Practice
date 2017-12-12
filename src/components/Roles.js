@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardText, TextField, Button, Paper } from 'react-md';
+import { CardActions, TextField, Button } from 'react-md';
 import '../assets/stylesheets/Roles.css';
 
 const Roles = ({
   handleChange,
   index,
   onRoleSave,
-  checkRole,
+  renderFeedbackMessage,
   roleName,
   roleId,
   isDirty,
@@ -16,54 +16,57 @@ const Roles = ({
   confirmRoleDelete,
 }) => {
   return (
-    <Paper className="Roles_rectangle">
-      <div className="Roles__form" id="Roles_div">
-        <CardText>
-          <TextField
-            disabled={!!roleId || disableButton === true}
-            id="role"
-            required
-            value={roleName}
-            ref={index === 0 ? inputRef : null}
-            onChange={value => handleChange(value, index)}
-          />
-        </CardText>
-        <div className="Roles__message">
-          {isDirty === false ? checkRole(index) : null}
-        </div>
-        <div className="Roles__buttons">
-          <Button
-            className="Roles__button"
-            disabled={
-              !!roleId ||
-              !(!!roleName && roleName.length > 0) ||
-              disableButton === true
-            }
-            flat
-            primary
-            onClick={() => onRoleSave(index)}
-          >
-            SAVE
-          </Button>
-          <Button
-            className="Roles__button"
-            flat
-            primary
-            onClick={() => confirmRoleDelete(index, roleId)}
-          >
-            REMOVE
-          </Button>
-        </div>
+    <div className="RolesForm">
+      <div className="RolesForm__forms-section">
+        <section className="RolesForm__role-section">
+          <CardActions className="RolesForm__role--detail" id="Roles_div">
+            <TextField
+              disabled={disableButton === undefined || disableButton === true}
+              id="role"
+              required
+              label={isDirty ? 'New Role Name' : ''}
+              value={roleName}
+              ref={index === 0 ? inputRef : null}
+              onChange={value => handleChange(value, index)}
+            />
+          </CardActions>
+          <div className="Roles__message">
+            {isDirty === false ? renderFeedbackMessage(index) : null}
+          </div>
+          <CardActions className="RolesForm__bottom-section">
+            <Button
+              className="RolesForm__save"
+              disabled={
+                roleName === '' ||
+                disableButton === undefined ||
+                disableButton === true
+              }
+              flat
+              primary
+              onClick={() => onRoleSave(index)}
+            >
+              SAVE
+            </Button>
+            <Button
+              className="RolesForm__remove"
+              flat
+              primary
+              onClick={() => confirmRoleDelete(index, roleId)}
+            >
+              REMOVE
+            </Button>
+          </CardActions>
+        </section>
       </div>
-    </Paper>
+    </div>
   );
 };
 
 Roles.propTypes = {
   handleChange: PropTypes.func,
   index: PropTypes.number,
+  renderFeedbackMessage: PropTypes.func,
   onRoleSave: PropTypes.func,
-  checkRole: PropTypes.func,
   roleValid: PropTypes.bool,
   roleName: PropTypes.string,
   roleId: PropTypes.string,

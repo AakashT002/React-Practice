@@ -10,9 +10,7 @@ import {
   DialogContainer,
 } from 'react-md';
 import PropTypes from 'prop-types';
-
 import ClientForm from '../components/ClientForm';
-
 import { loadClients, saveClient, addClient, updateClient } from '../store/client/action';
 import { loadRoles, saveRole, handleRoleDeletion } from '../store/roles/action';
 import {
@@ -34,6 +32,7 @@ class DomainPage extends Component {
       clients: [],
       roles: [],
       users: [],
+      checkIcon: false,
       focusOnNewElement: false,
       deleteRoleObj: {
         selectedRoleId: '',
@@ -46,7 +45,7 @@ class DomainPage extends Component {
     this.handlePlusClick = this.handlePlusClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onRoleSave = this.onRoleSave.bind(this);
-    this.checkRole = this.checkRole.bind(this);
+    this.renderFeedbackMessage = this.renderFeedbackMessage.bind(this);
     this.confirmRoleDelete = this.confirmRoleDelete.bind(this);
   }
 
@@ -144,6 +143,7 @@ class DomainPage extends Component {
     role.name = value;
     roles[i] = role;
     this.setState({ roles });
+    this.setState({ checkIcon: false });
   }
 
   handleTabChange(index) {
@@ -270,9 +270,10 @@ class DomainPage extends Component {
     return value.toString().length > 0;
   }
 
-  checkRole(index) {
+  renderFeedbackMessage(index) {
     const { showMessageForRole } = this.props;
-    if (index === 0) {
+    const { checkIcon } = this.state;
+    if (index === 0 && checkIcon === true) {
       if (showMessageForRole === 'Registered') {
         return (
           <div className="DomainPage__icon">
@@ -300,14 +301,19 @@ class DomainPage extends Component {
   onRoleSave(index) {
     const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
     const { roles } = this.state;
-    var roleObject = {
-      name: this.state.roles[index].name,
-    };
+    if (roles[index].name !== '') {
+      var roleObject = {
+        name: this.state.roles[index].name,
+      };
+    }
     this.props.dispatch(saveRole(roleObject, currentdomainName)).then(() => {
-      roles[index].id = this.props.roleId;
+      if (this.props.saving === true) {
+        roles[index].id = this.props.roleId;
+      }
       roles[index].isDirty = false;
       roles[index].disableButton = this.props.saving;
       this.setState({ roles });
+      this.setState({ checkIcon: true });
     });
   }
 
@@ -316,9 +322,9 @@ class DomainPage extends Component {
     newRoleObj.selectedRoleId = roleid;
     newRoleObj.selectedRoleIndex = index;
     newRoleObj.deleteRoleModalVisible = true;
-      this.setState({
-        deleteRoleObj: newRoleObj,
-      });
+    this.setState({
+      deleteRoleObj: newRoleObj,
+    });
   }
 
   removeRole(index, roleId) {
@@ -329,9 +335,9 @@ class DomainPage extends Component {
     newRoleObj.selectedRoleId = '';
     newRoleObj.selectedRoleIndex = 0;
     newRoleObj.deleteRoleModalVisible = false;
-      this.setState({
-        deleteRoleObj: newRoleObj,
-      });
+    this.setState({
+      deleteRoleObj: newRoleObj,
+    });
     roles.splice(index, 1);
     this.setState({ roles });
   }
@@ -341,9 +347,9 @@ class DomainPage extends Component {
     newRoleObj.selectedRoleId = '';
     newRoleObj.selectedRoleIndex = -1;
     newRoleObj.deleteRoleModalVisible = false;
-      this.setState({
-        deleteRoleObj: newRoleObj,
-      });
+    this.setState({
+      deleteRoleObj: newRoleObj,
+    });
   }
 
   render() {
@@ -382,9 +388,6 @@ class DomainPage extends Component {
                 }
               </Tab>
               <Tab label="ROLES" className="DomainPage__roles-tab">
-                <div
-                  className="DomainPage__roles--card"
-                >
                   {roles.length > 0 ? (
                     roles.map((role, i) => (
                       <Roles
@@ -392,8 +395,8 @@ class DomainPage extends Component {
                         index={i}
                         roleId={role.id}
                         roleName={role.name}
+                        renderFeedbackMessage={this.renderFeedbackMessage}
                         disableButton={role.disableButton}
-                        checkRole={this.checkRole}
                         isDirty={role.isDirty}
                         handleChange={this.handleChange}
                         onRoleSave={this.onRoleSave}
@@ -406,11 +409,10 @@ class DomainPage extends Component {
                   ) : (
                       <div>
                         <h1 className="DomainPage__roles--no-data">
-                          No Roles<br />Added Yet
+                          No Roles Added Yet
                       </h1>
                       </div>
                     )}
-                </div>
               </Tab>
               <Tab label="USERS" className="DomainPage__users-tab">
                 <h3>USERS Tab</h3>
@@ -452,9 +454,9 @@ class DomainPage extends Component {
             newRoleObj.selectedRoleId = '';
             newRoleObj.selectedRoleIndex = -1;
             newRoleObj.deleteRoleModalVisible = false;
-              this.setState({
-                deleteRoleObj: newRoleObj,
-              });
+            this.setState({
+              deleteRoleObj: newRoleObj,
+            });
           }}
         >
           <br />

@@ -1,35 +1,60 @@
 @import './variables';
 
-.Roles__form {
-	margin-top :20px;
-	width: 100%;
-	overflow-x: hidden;
-}
+.RolesForm {
+  padding-top: 40px;
+  width: 686px;
+  margin-left: 15px;
+  background-color: $grey-white;
+  padding-bottom: 20px;
 
-.Roles_rectangle {
-	background-color: $white;
-	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
-}
+  .RolesForm__forms-section {
+	  background-color: $white;
+  }
 
-.Roles__buttons {
-	float: right;
-}
+  .RolesForm__role-section {
+    height: 135px;
+  }
 
-.Roles__button { 
-	display: inline;
-}
+  .RolesForm__role--detail {
+    margin-top: -40px;
+    margin-bottom: 70px;
+  }
 
-.Roles__message {
-	margin-left: -192px !important;
-}
+  .RolesForm__bottom-section {
+    margin-top: -70px;
+    margin-bottom: 40px;
+    margin-left: 470px;
+  }
 
-#Roles_div {
-	.md-text-field {
-		color: $black;
-		font-size: 1.5em;
+  .RolesForm__save { 
+	  display: inline;
+    color: $light-pink;
+    font-weight: bold;
+
+      &:disabled {
+      color: $grey-text;
+     } 
+  }
+
+  .RolesForm__remove { 
+	  display: inline;
+    color: $light-pink;
+    font-weight: bold
+  }
+
+  .Roles__message {
+    margin-top: -69px;
+	  margin-left: -192px !important;
+  }
+
+  #Roles_div {
+	  .md-text-field {
+		  color: $black;
+		  font-size: 1.5em;
 		}
 			
 		.md-divider {
 			background-color: black;
 		} 
+  }
 }

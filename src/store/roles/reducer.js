@@ -3,6 +3,7 @@ import * as ActionTypes from '../actionTypes';
 
 const initialDomainsState = {
   roleList: [],
+  message: '',
   requesting: false,
   showMessageForRole: '',
   saving: false,
