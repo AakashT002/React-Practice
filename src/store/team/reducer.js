@@ -9,7 +9,7 @@ const initialTeamsState = {
   teamId: '',
 };
 
-export const role = createReducer(initialTeamsState, {
+export const team = createReducer(initialTeamsState, {
   [ActionTypes.CREATE_TEAM_REQUEST](state) {
     return { ...state, requesting: true, message: '' };
   },
