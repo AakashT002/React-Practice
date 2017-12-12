@@ -121,40 +121,35 @@
     margin-left: 250px;
   }
   
-  .DomainPage__roles--card {
-    background-color: $grey-white;
-    margin-top: -20px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: 350px;
-    margin-left: 15px;
-		width: 717px;
-  }
-
-  .DomainPage_roles--no-data {
-	  color: $text-grey;
-    word-break: break-word;
-    word-wrap: break-word;
+  .DomainPage__roles--no-data {
+    height: 27.34%;
+    width: 31.46%;
+    color: $text-grey;
+    font-family: Muli;
+    font-size: 36px;
+    line-height: 45px;
     text-align: center;
+    margin-top: 110px;
+    margin-left: 250px;
   } 
 
   .DomainPage__red {
-    color: $red;
+    color: $indianred;
     margin-left: 211px;
   }
 
   .DomainPage__green {
-    color: $green;
+    color: $light-green;
     margin-left: 211px;
   }
 
   .DomainPage__message-green {
-   color: $green;
+   color: $light-green;
    margin: 8px;
   }
 
   .DomainPage__message-red {
-   color: $red;
+   color: $indianred;
    margin: 8px;
   }
 
@@ -180,4 +175,39 @@
   .DomainPage__navigate {
     margin-top: -10px;
    }
+
+   .DomainPage__roles--modal-delete {
+    font-family: Muli;
+    font-size: 16px;
+    border-radius: 5px;
+    position: fixed;
+    max-height: 250px;
+    min-height: 250px;
+  } 
+  
+  .DomainPage__roles--delete-yes {
+    float: right;
+    color: $lighter-pink;
+    position: relative;
+  }
+
+  .DomainPage__roles--delete-no {
+    float: left;
+    color: $lighter-pink;
+    position: relative;
+    margin-left: 56px;
+  }
+
+  .DomainPage__roles--delete {
+    color: $black;
+    font-weight: 600;
+  }
+
+  .DomainPage__roles--delete-label-yes {
+     font-weight: 600;
+  }
+
+  .DomainPage__roles--delete-label-no {
+     font-weight: 600;
+  }
 }

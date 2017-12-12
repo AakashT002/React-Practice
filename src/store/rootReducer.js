@@ -8,6 +8,7 @@ import addUser from './addUser/reducer';
 import domain from './domain/reducer';
 import client from './client/reducer';
 import role from './roles/reducer';
+import team from './team/reducer';
 
 const root = combineReducers({
   router: routerReducer,
@@ -18,6 +19,7 @@ const root = combineReducers({
   domain,
   client,
   role,
+  team,
   ...loginReducer('loginForm'),
 });
 

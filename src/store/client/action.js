@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actionTypes';
 import Clients from '../../services/Clients';
 
-export const loadClients = (currentdomainName) => ({
+export const loadClients = currentdomainName => ({
   types: [
     ActionTypes.FETCH_CLIENTS_REQUEST,
     ActionTypes.FETCH_CLIENTS_SUCCESS,
@@ -34,3 +34,18 @@ export const saveClient = clientObject => ({
 export function addClient() {
   return { type: ActionTypes.ADD_CLIENT };
 }
+
+export const updateClient = (clientObject, id) => ({
+  types: [
+    ActionTypes.UPDATE_CLIENT_REQUEST,
+    ActionTypes.UPDATE_CLIENT_SUCCESS,
+    ActionTypes.UPDATE_CLIENT_FAILURE,
+  ],
+  callAPI: async () => {
+    try {
+      return await Clients.updateClient(clientObject, id);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+});

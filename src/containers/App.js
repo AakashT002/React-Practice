@@ -17,8 +17,8 @@ export class App extends Component {
     return this.props.isAuthenticated ? (
       <Redirect to="/dashboard" />
     ) : (
-        <Component to={path} />
-      );
+      <Component to={path} />
+    );
   }
 
   render() {
@@ -38,11 +38,7 @@ export class App extends Component {
               component={() => this.checkAuthenticated(LoginPage)}
             />
             <Route path="/domains" component={ManageDomain} />
-            <Route path="/register-domain" component={DomainPage} />
-            <Route
-              path="/manage-users"
-              component={CreateUserPage}
-            />
+            <Route path="/manage-users" component={CreateUserPage} />
             <Route path="/manage-domain" component={DomainPage} />
           </Switch>
         </div>
