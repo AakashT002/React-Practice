@@ -38,7 +38,6 @@ export class App extends Component {
               component={() => this.checkAuthenticated(LoginPage)}
             />
             <Route path="/domains" component={ManageDomain} />
-            <Route path="/register-domain" component={DomainPage} />
             <Route
               path="/manage-users"
               component={CreateUserPage}

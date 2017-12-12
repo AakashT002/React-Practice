@@ -36,7 +36,7 @@ export class ManageDomain extends Component {
 
   handleIconClick(realm) {
     sessionStorage.setItem(CURRENT_DOMAIN_NAME, realm);
-    this.props.history.push('./register-domain');
+    this.props.history.push('./manage-domain');
   }
 
   componentWillMount() {

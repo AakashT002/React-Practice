@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 
 import ClientForm from '../components/ClientForm';
 
-import { loadClients, saveClient, addClient } from '../store/client/action';
+import { loadClients, saveClient, addClient, updateClient } from '../store/client/action';
 import { loadRoles, saveRole, handleRoleDeletion } from '../store/roles/action';
 import {
   CURRENT_DOMAIN_NAME,
@@ -34,6 +34,7 @@ class DomainPage extends Component {
       clients: [],
       roles: [],
       users: [],
+      focusOnNewElement: false,
       deleteRoleObj: {
         selectedRoleId: '',
         selectedRoleIndex: -1,
@@ -77,6 +78,8 @@ class DomainPage extends Component {
                 protocol: client.protocol,
                 standardFlowEnabled: client.standardFlowEnabled,
                 id: client.id,
+                showAsSaved: false,
+                isClientSaved: true,
               };
               clients = clients.concat([clientObj]);
             }
@@ -95,6 +98,8 @@ class DomainPage extends Component {
               protocol: client.protocol,
               standardFlowEnabled: client.standardFlowEnabled,
               id: client.id,
+              showAsSaved: false,
+              isClientSaved: true,
             };
             clients = clients.concat([clientObj]);
           }
@@ -121,11 +126,15 @@ class DomainPage extends Component {
   }
 
   componentDidUpdate() {
-    if (this.newRoleElement) {
-      this.newRoleElement.focus();
+    const { activeTab, focusOnNewElement } = this.state;
+    
+    if (this.clientElement && activeTab === 0 && focusOnNewElement ) {
+      this.clientElement.focus();
+      this.setState({focusOnNewElement: false });
     }
-    if (this.newClientElement) {
-      this.newClientElement.focus();
+    
+    if (this.roleElement && activeTab === 1) {
+      this.roleElement.focus();
     }
   }
 
@@ -143,6 +152,7 @@ class DomainPage extends Component {
 
   handlePlusClick() {
     const { clients, roles, users, activeTab } = this.state;
+    this.setState({ focusOnNewElement: true });
     if (activeTab === 0) {
       if (
         this.state.clients.length === 0 ||
@@ -163,8 +173,12 @@ class DomainPage extends Component {
             protocol: 'openid-connect',
             standardFlowEnabled: true,
             isClientSaved: this.props.isClientSaved,
+            showAsSaved: false,
           };
           clients.splice(0, 0, client);
+          clients.forEach((client) => {
+            client.showAsSaved = false;
+          });
           this.setState({ clients });
         });
       }
@@ -207,7 +221,9 @@ class DomainPage extends Component {
         newClient['standardFlowEnabled'] = true;
       }
       currClients[i] = newClient;
-
+      currClients.forEach((client) => {
+        client.showAsSaved = false;
+      });
       return {
         clients: currClients,
       };
@@ -216,17 +232,30 @@ class DomainPage extends Component {
 
   onClientSave(index) {
     var clientObject = Object.assign({}, this.state.clients[index]);
+    var id = clientObject.id;
     delete clientObject['isClientSaved'];
     delete clientObject['id'];
-    this.props.dispatch(saveClient(clientObject)).then(() => {
-      let clients = this.state.clients;
-      let currentclient = clients[index];
-      currentclient.isClientSaved = true;
-      if (!this.props.isError) {
-        currentclient.id = this.props.clientId;
-      }
-      this.setState({ clients });
-    });
+    delete clientObject['showAsSaved'];
+    if (id !== undefined) {
+      this.props.dispatch(updateClient(clientObject, id)).then(() => {
+        let clients = this.state.clients;
+        let currentclient = clients[index];
+        currentclient.isClientSaved = true;
+        currentclient.showAsSaved = true;
+        this.setState({ clients });
+      });
+    } else {
+      this.props.dispatch(saveClient(clientObject)).then(() => {
+        let clients = this.state.clients;
+        let currentclient = clients[index];
+        currentclient.isClientSaved = true;
+        currentclient.showAsSaved = true;
+        if (!this.props.isError) {
+          currentclient.id = this.props.clientId;
+        }
+        this.setState({ clients });
+      });
+    }
   }
 
   validateClientForm(index) {
@@ -284,9 +313,9 @@ class DomainPage extends Component {
 
   confirmRoleDelete(index, roleid) {
     const newRoleObj = this.state.deleteRoleObj;
-    (newRoleObj.selectedRoleId = roleid),
-      (newRoleObj.selectedRoleIndex = index),
-      (newRoleObj.deleteRoleModalVisible = true),
+    newRoleObj.selectedRoleId = roleid;
+    newRoleObj.selectedRoleIndex = index;
+    newRoleObj.deleteRoleModalVisible = true;
       this.setState({
         deleteRoleObj: newRoleObj,
       });
@@ -297,9 +326,9 @@ class DomainPage extends Component {
     this.props.dispatch(handleRoleDeletion(roleId, currentdomainName));
     const { roles } = this.state;
     const newRoleObj = this.state.deleteRoleObj;
-    (newRoleObj.selectedRoleId = ''),
-      (newRoleObj.selectedRoleIndex = 0),
-      (newRoleObj.deleteRoleModalVisible = false),
+    newRoleObj.selectedRoleId = '';
+    newRoleObj.selectedRoleIndex = 0;
+    newRoleObj.deleteRoleModalVisible = false;
       this.setState({
         deleteRoleObj: newRoleObj,
       });
@@ -309,9 +338,9 @@ class DomainPage extends Component {
 
   cancelDelete() {
     const newRoleObj = this.state.deleteRoleObj;
-    (newRoleObj.selectedRoleId = ''),
-      (newRoleObj.selectedRoleIndex = -1),
-      (newRoleObj.deleteRoleModalVisible = false),
+    newRoleObj.selectedRoleId = '';
+    newRoleObj.selectedRoleIndex = -1;
+    newRoleObj.deleteRoleModalVisible = false;
       this.setState({
         deleteRoleObj: newRoleObj,
       });
@@ -334,31 +363,28 @@ class DomainPage extends Component {
           >
             <Tabs tabId="domain-tab" className="DomainPage__tabs">
               <Tab label="CLIENTS" className="DomainPage__clients-tab">
-                {clients.length !== 0 ? (
-                  clients.map((client, i) => (
-                    <ClientForm
-                      key={i}
-                      index={i}
-                      client={client}
-                      handleFieldChange={(name, value) =>
-                        this.handleFieldChange(name, value, i)
-                      }
-                      handleSave={this.onClientSave.bind(this)}
-                      validateClientForm={this.validateClientForm.bind(this)}
-                      isClientSaved={this.state.clients[i].isClientSaved}
-                      isError={this.props.isError}
-                      feedbackMessage={this.props.feedbackMessage}
-                      inputRef={el => (this.newClientElement = el)}
-                    />
-                  ))
-                ) : (
-                  <div className="DomainPage__clients-msg">
-                    No Clients Added Yet
-                  </div>
-                )}
+                {clients.length !== 0 ? clients.map((client, i) => (
+                  <ClientForm
+                    key={i}
+                    index={i}
+                    client={client}
+                    handleFieldChange={(name, value) =>
+                      this.handleFieldChange(name, value, i)}
+                    handleSave={this.onClientSave.bind(this)}
+                    validateClientForm={this.validateClientForm.bind(this)}
+                    isClientSaved={this.state.clients[i].isClientSaved}
+                    showAsSaved={this.state.clients[i].showAsSaved}
+                    isError={this.props.isError}
+                    feedbackMessage={this.props.feedbackMessage}
+                    inputRef={el => (this.clientElement = el)}
+                  />
+                )) : <div className="DomainPage__clients-msg">No Clients Added Yet</div>
+                }
               </Tab>
               <Tab label="ROLES" className="DomainPage__roles-tab">
-                <div className="DomainPage__roles--card">
+                <div
+                  className="DomainPage__roles--card"
+                >
                   {roles.length > 0 ? (
                     roles.map((role, i) => (
                       <Roles
@@ -373,17 +399,17 @@ class DomainPage extends Component {
                         onRoleSave={this.onRoleSave}
                         focusOnText={this.focusOnText}
                         blurOnText={this.blurOnText}
-                        inputRef={el => (this.inputElement = el)}
+                        inputRef={el => (this.roleElement = el)}
                         confirmRoleDelete={this.confirmRoleDelete}
                       />
                     ))
                   ) : (
-                    <div>
-                      <h1 className="DomainPage__roles--no-data">
-                        No Roles<br />Added Yet
+                      <div>
+                        <h1 className="DomainPage__roles--no-data">
+                          No Roles<br />Added Yet
                       </h1>
-                    </div>
-                  )}
+                      </div>
+                    )}
                 </div>
               </Tab>
               <Tab label="USERS" className="DomainPage__users-tab">
@@ -423,9 +449,9 @@ class DomainPage extends Component {
           title="REMOVE ROLE"
           onHide={() => {
             const newRoleObj = this.state.deleteRoleObj;
-            (newRoleObj.selectedRoleId = ''),
-              (newRoleObj.selectedRoleIndex = -1),
-              (newRoleObj.deleteRoleModalVisible = false),
+            newRoleObj.selectedRoleId = '';
+            newRoleObj.selectedRoleIndex = -1;
+            newRoleObj.deleteRoleModalVisible = false;
               this.setState({
                 deleteRoleObj: newRoleObj,
               });
