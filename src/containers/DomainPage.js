@@ -448,7 +448,7 @@ function mapStateToProps(state) {
     requesting: state.client.requesting,
     clientList: state.client.clientList,
     roleList: state.role.roleList,
-    teamList: state.role.roleList,
+    teamList: state.team.teamList,
     isClientSaved: state.client.isClientSaved,
     isError: state.client.isError,
     feedbackMessage: state.client.feedbackMessage,

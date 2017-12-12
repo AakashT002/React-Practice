@@ -9,7 +9,7 @@ const initialTeamsState = {
   teamId: '',
 };
 
-export const role = createReducer(initialDomainsState, {
+export const role = createReducer(initialTeamsState, {
   [ActionTypes.CREATE_TEAM_REQUEST](state) {
     return { ...state, requesting: true, message: '' };
   },
@@ -34,11 +34,11 @@ export const role = createReducer(initialDomainsState, {
     return { ...state, requesting: true };
   },
   [ActionTypes.FETCH_TEAMS_SUCCESS](state, action) {
-    return { ...state, roleList: action.response, requesting: false };
+    return { ...state, teamList: action.response, requesting: false };
   },
   [ActionTypes.FETCH_TEAMS_FAILURE](state) {
     return { ...state, requesting: false };
   },
 });
 
-export default role;
+export default team;
