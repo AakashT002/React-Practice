@@ -7,41 +7,51 @@ import ClientForm from '../components/ClientForm';
 
 import { loadClients, saveClient, addClient } from '../store/client/action';
 import { loadRoles, saveRole } from '../store/roles/action';
-import { CURRENT_DOMAIN_NAME, IGNORED_CLIENTS, IGNORED_ROLES, CLIENT_TYPES } from '../utils/constants';
+import {
+  CURRENT_DOMAIN_NAME,
+  IGNORED_CLIENTS,
+  IGNORED_ROLES,
+  CLIENT_TYPES,
+} from '../utils/constants';
 
 import Roles from '../components/Roles';
 import '../assets/stylesheets/DomainPage.css';
 
-class DomainPage extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			activeTab: this.props.activeTab || 0,
-			clients: [],
-			roles: [],
-			users: [],
-      checkIcon: false,
-		};
+const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
+const maxTabs = currentdomainName === 'master' ? 2 : 3;
 
-		this.handleTabChange = this.handleTabChange.bind(this);
-		this.handlePlusClick = this.handlePlusClick.bind(this);
+class DomainPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: this.props.activeTab || 0,
+      clients: [],
+      roles: [],
+      users: [],
+      teams: [],
+      checkIcon: false,
+    };
+
+    this.handleTabChange = this.handleTabChange.bind(this);
+    this.handlePlusClick = this.handlePlusClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onSave = this.onSave.bind(this);
     this.checkRole = this.checkRole.bind(this);
-	}
+  }
 
-	componentWillMount() {
+  componentWillMount() {
     const { dispatch } = this.props;
-    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
 
     dispatch(loadClients(currentdomainName)).then(() => {
       let clients = [];
       const { clientList } = this.props;
 
-      clientList.forEach((client) => {
+      clientList.forEach(client => {
         if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
           if (currentdomainName === 'master') {
-            if (client.clientId.substr(client.clientId.length - 6, 6) !== '-realm') {
+            if (
+              client.clientId.substr(client.clientId.length - 6, 6) !== '-realm'
+            ) {
               let clientObj = {
                 clientId: client.clientId,
                 rootUrl: client.rootUrl || '',
@@ -116,14 +126,17 @@ class DomainPage extends Component {
     this.setState({ roles });
   }
 
-	handleTabChange(index) {
-		this.setState({ activeTab: index });
+  handleTabChange(index) {
+    this.setState({ activeTab: index });
   }
 
   handlePlusClick() {
-		const { clients, roles, users, activeTab } = this.state;
-		if (activeTab === 0) {
-			if(this.state.clients.length === 0 || this.state.clients[0].id !== undefined) {
+    const { clients, roles, users, activeTab } = this.state;
+    if (activeTab === 0) {
+      if (
+        this.state.clients.length === 0 ||
+        this.state.clients[0].id !== undefined
+      ) {
         this.props.dispatch(addClient()).then(() => {
           var client = {
             clientId: '',
@@ -144,7 +157,7 @@ class DomainPage extends Component {
           this.setState({ clients });
         });
       }
-		} else if (activeTab === 1) {
+    } else if (activeTab === 1) {
       let role = {
         id: '',
         name: '',
@@ -152,21 +165,19 @@ class DomainPage extends Component {
         disableButton: '',
       };
 
-			if(roles.length===0)
-			{
-			roles.splice(0, 0, role);
-      this.setState({ roles });
-			}
-      else if (roles[0].id.length > 0 ) {
-      roles.splice(0, 0, role);
-      this.setState({ roles });
+      if (roles.length === 0) {
+        roles.splice(0, 0, role);
+        this.setState({ roles });
+      } else if (roles[0].id.length > 0) {
+        roles.splice(0, 0, role);
+        this.setState({ roles });
       }
-		} else if (activeTab === 2) {
-			var user = {};
-			this.setState({ users: users.concat([user]) });
-		}
+    } else if (activeTab === 2) {
+      var user = {};
+      this.setState({ users: users.concat([user]) });
+    }
   }
-  
+
   handleFieldChange(name, value, i) {
     this.setState(() => {
       let currClients = this.state.clients;
@@ -200,8 +211,8 @@ class DomainPage extends Component {
       let clients = this.state.clients;
       let currentclient = clients[index];
       currentclient.isClientSaved = true;
-      if(!this.props.isError) {
-      currentclient.id = this.props.clientId;
+      if (!this.props.isError) {
+        currentclient.id = this.props.clientId;
       }
       this.setState({ clients });
     });
@@ -247,7 +258,6 @@ class DomainPage extends Component {
   }
 
   onSave(index) {
-    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
     const { roles } = this.state;
     var roleObject = {
       name: this.state.roles[index].name,
@@ -260,73 +270,122 @@ class DomainPage extends Component {
     });
   }
 
+  renderTeamsTab() {
+    return (
+      <Tab label="TEAMS" className="DomainPage__users-tab">
+        <h3>TEAMS Tab</h3>
+      </Tab>
+    );
+  }
+
+  renderClientsTab() {
+    const { clients } = this.state;
+    return (
+      <Tab label="CLIENTS" className="DomainPage__clients-tab">
+        {clients.length !== 0 ? (
+          clients.map((client, i) => (
+            <ClientForm
+              key={i}
+              index={i}
+              client={client}
+              handleFieldChange={(name, value) =>
+                this.handleFieldChange(name, value, i)}
+              handleSave={this.onClientSave.bind(this)}
+              validateClientForm={this.validateClientForm.bind(this)}
+              isClientSaved={this.state.clients[i].isClientSaved}
+              isError={this.props.isError}
+              feedbackMessage={this.props.feedbackMessage}
+              inputRef={el => (this.newClientElement = el)}
+            />
+          ))
+        ) : (
+          <div className="DomainPage__clients-msg">No Clients Added Yet</div>
+        )}
+      </Tab>
+    );
+  }
+
+  renderRolesTab() {
+    const { roles } = this.state;
+    return (
+      <Tab label="ROLES" className="DomainPage__roles-tab">
+        <div className="DomainPage__roles--card">
+          {roles.length > 0 ? (
+            roles.map((role, i) => (
+              <Roles
+                key={role.id}
+                index={i}
+                roleId={role.id}
+                roleName={role.name}
+                disableButton={role.disableButton}
+                checkRole={this.checkRole}
+                isDirty={role.isDirty}
+                handleChange={this.handleChange}
+                onSave={this.onSave}
+                focusOnText={this.focusOnText}
+                blurOnText={this.blurOnText}
+                inputRef={el => (this.newRoleElement = el)}
+              />
+            ))
+          ) : (
+            <div>
+              <h1 className="DomainPage__roles--no-data">
+                No Roles<br />Added Yet
+              </h1>
+            </div>
+          )}
+        </div>
+      </Tab>
+    );
+  }
+
+  renderUsersTab() {
+    return (
+      <Tab label="USERS" className="DomainPage__users-tab">
+        <h3>USERS Tab</h3>
+      </Tab>
+    );
+  }
+
+  renderApplicationTabs() {
+    return (
+      <Tabs tabId="domain-tab" className="DomainPage__tabs">
+        {this.renderClientsTab()}
+        {this.renderRolesTab()}
+        {this.renderUsersTab()}
+      </Tabs>
+    );
+  }
+
+  renderMasterDomainTabs() {
+    return (
+      <Tabs tabId="domain-tab" className="DomainPage__tabs">
+        {this.renderTeamsTab()}
+        {this.renderUsersTab()}
+      </Tabs>
+    );
+  }
+
   render() {
     const { activeTab, clients, roles } = this.state;
-    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
-
+    let applicableTabs = null;
+    if (currentdomainName === 'master') {
+      applicableTabs = this.renderMasterDomainTabs();
+    } else {
+      applicableTabs = this.renderApplicationTabs();
+    }
     return (
       <div className="DomainPage">
         <h1 className="DomainPage__domain-name">
-          {currentdomainName !== null && currentdomainName}</h1>
+          {currentdomainName !== null && currentdomainName}
+        </h1>
         <Card className="card-centered">
           <TabsContainer
             panelClassName="md-grid"
             activeTabIndex={activeTab}
             onTabChange={this.handleTabChange}
           >
-            <Tabs tabId="domain-tab" className="DomainPage__tabs">
-              <Tab label="CLIENTS" className="DomainPage__clients-tab">
-              {clients.length !== 0 ? clients.map((client, i) => (
-                <ClientForm
-                  key={i}
-                  index={i}
-                  client={client}
-                  handleFieldChange={(name, value) =>
-                    this.handleFieldChange(name, value, i)}
-                  handleSave={this.onClientSave.bind(this)}
-                  validateClientForm={this.validateClientForm.bind(this)}
-                  isClientSaved={this.state.clients[i].isClientSaved}
-                  isError={this.props.isError}
-                  feedbackMessage={this.props.feedbackMessage}
-                  inputRef={el => (this.newClientElement = el)}
-                />
-              )) : <div className="DomainPage__clients-msg">No Clients Added Yet</div>
-              }
-              </Tab>
-              <Tab label="ROLES" className="DomainPage__roles-tab">
-                <div 
-								className="DomainPage__roles--card"
-								>
-                  {roles.length > 0 ? (
-                    roles.map((role, i) => (
-                      <Roles
-                        key={role.id}
-                        index={i}
-                        roleId={role.id}
-                        roleName={role.name}
-                        disableButton={role.disableButton}
-                        checkRole={this.checkRole}
-                        isDirty={role.isDirty}
-                        handleChange={this.handleChange}
-                        onSave={this.onSave}
-                        focusOnText={this.focusOnText}
-                        blurOnText={this.blurOnText}
-                        inputRef={el => (this.newRoleElement = el)}
-                      />
-                    ))
-                  ) : (
-                    <div>
-                      <h1 className="DomainPage__roles--no-data">
-                        No Roles<br />Added Yet
-                      </h1>
-                    </div>
-                  )}
-                </div>
-              </Tab>
-              <Tab label="USERS" className="DomainPage__users-tab">
-                <h3>USERS Tab</h3>
-              </Tab>
-            </Tabs>
+            {applicableTabs}
           </TabsContainer>
           <div className="DomainPage__navigate">
             <hr className="DomainPage__line" />
@@ -342,7 +401,7 @@ class DomainPage extends Component {
             </Button>
             <Button
               flat
-              disabled={activeTab === 2}
+              disabled={activeTab === maxTabs - 1}
               key="next"
               label="Next"
               iconBefore={false}
@@ -373,6 +432,7 @@ DomainPage.propTypes = {
   loading: PropTypes.bool,
   clientList: PropTypes.array,
   roleList: PropTypes.array,
+  teamList: PropTypes.array,
   isClientSaved: PropTypes.bool,
   isError: PropTypes.bool,
   feedbackMessage: PropTypes.string,
@@ -388,6 +448,7 @@ function mapStateToProps(state) {
     requesting: state.client.requesting,
     clientList: state.client.clientList,
     roleList: state.role.roleList,
+    teamList: state.role.roleList,
     isClientSaved: state.client.isClientSaved,
     isError: state.client.isError,
     feedbackMessage: state.client.feedbackMessage,
