@@ -3,7 +3,7 @@ class Clients {
     const token = sessionStorage.kctoken;
     const API_URL = `${
       process.env.REACT_APP_AUTH_URL
-    }/admin/realms/${currentdomainName}/clients`;
+      }/admin/realms/${currentdomainName}/clients`;
     const response = await fetch(API_URL, {
       method: 'GET',
       headers: {
@@ -22,7 +22,7 @@ class Clients {
     const token = sessionStorage.kctoken;
     const response = await fetch(
       `${process.env.REACT_APP_AUTH_URL}/admin/realms/${
-        sessionStorage.currentdomainName
+      sessionStorage.currentdomainName
       }/clients`,
       {
         method: 'POST',
@@ -64,6 +64,25 @@ class Clients {
       throw new Error('Client name already exists.');
     } else {
       throw new Error('Unable to save - Retry after sometime.');
+    }
+  }
+
+  static async delete(id, currentdomainName) {
+    const API_URL = `${
+      process.env.REACT_APP_AUTH_URL
+      }/admin/realms/${currentdomainName}/clients/${id}`;
+    const token = sessionStorage.kctoken;
+    const response = await fetch(API_URL, {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    if (response.ok) {
+      return id;
+    } else {
+      throw new Error('Client cannot be removed.');
     }
   }
 }

@@ -55,6 +55,15 @@ export const client = createReducer(initialClientsState, {
   [ActionTypes.UPDATE_CLIENT_FAILURE](state, action) {
     return { ...state, requesting: false, isError: true, feedbackMessage: action.error.message };
   },
+  [ActionTypes.DELETE_CLIENT_REQUEST](state) {
+    return { ...state, requesting: true };
+  },
+  [ActionTypes.DELETE_CLIENT_SUCCESS](state) {
+    return { ...state, requesting: true };
+  },
+  [ActionTypes.DELETE_CLIENT_FAILURE](state) {
+    return { ...state, requesting: false };
+  },
 });
 
 export default client;

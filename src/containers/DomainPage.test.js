@@ -6,7 +6,7 @@ import SessionStorage from '../__mocks__/mockSessionStorage';
 describe('Component: DomainPage', () => {
   window.sessionStorage = new SessionStorage();
   const dispatchStub = () => {
-    return new Promise(() => {});
+    return new Promise(() => { });
   };
 
   let wrapper;
@@ -101,6 +101,6 @@ describe('Component: DomainPage', () => {
     const wrapper = shallow(
       <DomainPage.WrappedComponent activeTab={2} dispatch={dispatchStub} />
     );
-    expect(wrapper.find('.DomainPage__deleteModal-roles').exists()).toBe(true);
+    expect(wrapper.find('#deleteModal-roles').exists()).toBe(true);
   });
 });

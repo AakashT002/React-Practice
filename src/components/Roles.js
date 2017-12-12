@@ -42,7 +42,6 @@ const Roles = ({
                 disableButton === true
               }
               flat
-              primary
               onClick={() => onRoleSave(index)}
             >
               SAVE
@@ -50,7 +49,6 @@ const Roles = ({
             <Button
               className="RolesForm__remove"
               flat
-              primary
               onClick={() => confirmRoleDelete(index, roleId)}
             >
               REMOVE

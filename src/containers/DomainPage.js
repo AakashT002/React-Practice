@@ -11,7 +11,13 @@ import {
 } from 'react-md';
 import PropTypes from 'prop-types';
 import ClientForm from '../components/ClientForm';
-import { loadClients, saveClient, addClient, updateClient } from '../store/client/action';
+import {
+  loadClients,
+  saveClient,
+  addClient,
+  updateClient,
+  handleClientDeletion,
+} from '../store/client/action';
 import { loadRoles, saveRole, handleRoleDeletion } from '../store/roles/action';
 import {
   CURRENT_DOMAIN_NAME,
@@ -19,6 +25,7 @@ import {
   IGNORED_ROLES,
   CLIENT_TYPES,
   DELETE_ROLE_MESSAGE,
+  DELETE_CLIENT_MESSAGE,
 } from '../utils/constants';
 
 import Roles from '../components/Roles';
@@ -34,10 +41,10 @@ class DomainPage extends Component {
       users: [],
       checkIcon: false,
       focusOnNewElement: false,
-      deleteRoleObj: {
-        selectedRoleId: '',
-        selectedRoleIndex: -1,
-        deleteRoleModalVisible: false,
+      deleteObj: {
+        selectedId: '',
+        selectedIndex: -1,
+        deleteModalVisible: false,
       },
     };
 
@@ -47,6 +54,7 @@ class DomainPage extends Component {
     this.onRoleSave = this.onRoleSave.bind(this);
     this.renderFeedbackMessage = this.renderFeedbackMessage.bind(this);
     this.confirmRoleDelete = this.confirmRoleDelete.bind(this);
+    this.confirmClientDelete = this.confirmClientDelete.bind(this);
   }
 
   componentWillMount() {
@@ -126,12 +134,12 @@ class DomainPage extends Component {
 
   componentDidUpdate() {
     const { activeTab, focusOnNewElement } = this.state;
-    
-    if (this.clientElement && activeTab === 0 && focusOnNewElement ) {
+
+    if (this.clientElement && activeTab === 0 && focusOnNewElement) {
       this.clientElement.focus();
-      this.setState({focusOnNewElement: false });
+      this.setState({ focusOnNewElement: false });
     }
-    
+
     if (this.roleElement && activeTab === 1) {
       this.roleElement.focus();
     }
@@ -176,7 +184,7 @@ class DomainPage extends Component {
             showAsSaved: false,
           };
           clients.splice(0, 0, client);
-          clients.forEach((client) => {
+          clients.forEach(client => {
             client.showAsSaved = false;
           });
           this.setState({ clients });
@@ -221,7 +229,7 @@ class DomainPage extends Component {
         newClient['standardFlowEnabled'] = true;
       }
       currClients[i] = newClient;
-      currClients.forEach((client) => {
+      currClients.forEach(client => {
         client.showAsSaved = false;
       });
       return {
@@ -318,44 +326,113 @@ class DomainPage extends Component {
   }
 
   confirmRoleDelete(index, roleid) {
-    const newRoleObj = this.state.deleteRoleObj;
-    newRoleObj.selectedRoleId = roleid;
-    newRoleObj.selectedRoleIndex = index;
-    newRoleObj.deleteRoleModalVisible = true;
+    const newRoleObj = this.state.deleteObj;
+    newRoleObj.selectedId = roleid;
+    newRoleObj.selectedIndex = index;
+    newRoleObj.deleteModalVisible = true;
     this.setState({
-      deleteRoleObj: newRoleObj,
+      deleteObj: newRoleObj,
     });
   }
 
-  removeRole(index, roleId) {
-    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
-    this.props.dispatch(handleRoleDeletion(roleId, currentdomainName));
-    const { roles } = this.state;
-    const newRoleObj = this.state.deleteRoleObj;
-    newRoleObj.selectedRoleId = '';
-    newRoleObj.selectedRoleIndex = 0;
-    newRoleObj.deleteRoleModalVisible = false;
+  confirmClientDelete(index, clientId) {
+    const newObj = this.state.deleteObj;
+    newObj.selectedId = clientId;
+    newObj.selectedIndex = index;
+    newObj.deleteModalVisible = true;
     this.setState({
-      deleteRoleObj: newRoleObj,
+      deleteObj: newObj,
     });
+  }
+
+  _removeClient(index) {
+    const { clients } = this.state;
+    this.resetDeleteObj();
+    clients.splice(index, 1);
+    this.setState({ clients });
+  }
+
+  _removeRole(index) {
+    const { roles } = this.state;
+    this.resetDeleteObj();
     roles.splice(index, 1);
     this.setState({ roles });
   }
 
-  cancelDelete() {
-    const newRoleObj = this.state.deleteRoleObj;
-    newRoleObj.selectedRoleId = '';
-    newRoleObj.selectedRoleIndex = -1;
-    newRoleObj.deleteRoleModalVisible = false;
+  remove(activeTab, deleteObj) {
+    const index = deleteObj.selectedIndex;
+    const id = deleteObj.selectedId;
+
+    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
+    if (activeTab === 0) {
+      if (id !== '') {
+        this.props
+          .dispatch(handleClientDeletion(id, currentdomainName))
+          .then(this._removeClient(index));
+      } else {
+        this._removeClient(index);
+      }
+    } else if (activeTab === 1) {
+      if (id !== '') {
+        this.props
+          .dispatch(handleRoleDeletion(id, currentdomainName))
+          .then(this._removeRole(index));
+      } else {
+        this._removeRole(index);
+      }
+    }
+  }
+
+  resetDeleteObj() {
+    const newObj = this.state.deleteObj;
+    newObj.selectedId = '';
+    newObj.selectedIndex = 0;
+    newObj.deleteModalVisible = false;
     this.setState({
-      deleteRoleObj: newRoleObj,
+      deleteObj: newObj,
     });
+    return newObj;
+  }
+
+  cancelDelete() {
+    const newObj = this.state.deleteObj;
+    newObj.selectedId = '';
+    newObj.selectedIndex = -1;
+    newObj.deleteModalVisible = false;
+    this.setState({
+      deleteObj: newObj,
+    });
+  }
+
+  determineModalMessage(activeTab) {
+    let modalMessage;
+    if (activeTab === 0) {
+      modalMessage = DELETE_CLIENT_MESSAGE;
+    } else if (activeTab === 1) {
+      modalMessage = DELETE_ROLE_MESSAGE;
+    } else if (activeTab === 2) {
+      modalMessage = 'Users Remove';
+    }
+    return modalMessage;
+  }
+
+  determineTitle(activeTab) {
+    let titleMessage;
+    if (activeTab === 0) {
+      titleMessage = 'Remove Client';
+    } else if (activeTab === 1) {
+      titleMessage = 'Remove Role';
+    } else if (activeTab === 2) {
+      titleMessage = 'Remove User';
+    }
+    return titleMessage;
   }
 
   render() {
     const { activeTab, clients, roles } = this.state;
     const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
-
+    let modalMessage = this.determineModalMessage(activeTab);
+    let titleMessage = this.determineTitle(activeTab);
     return (
       <div className="DomainPage">
         <h1 className="DomainPage__domain-name">
@@ -369,50 +446,56 @@ class DomainPage extends Component {
           >
             <Tabs tabId="domain-tab" className="DomainPage__tabs">
               <Tab label="CLIENTS" className="DomainPage__clients-tab">
-                {clients.length !== 0 ? clients.map((client, i) => (
-                  <ClientForm
-                    key={i}
-                    index={i}
-                    client={client}
-                    handleFieldChange={(name, value) =>
-                      this.handleFieldChange(name, value, i)}
-                    handleSave={this.onClientSave.bind(this)}
-                    validateClientForm={this.validateClientForm.bind(this)}
-                    isClientSaved={this.state.clients[i].isClientSaved}
-                    showAsSaved={this.state.clients[i].showAsSaved}
-                    isError={this.props.isError}
-                    feedbackMessage={this.props.feedbackMessage}
-                    inputRef={el => (this.clientElement = el)}
-                  />
-                )) : <div className="DomainPage__clients-msg">No Clients Added Yet</div>
-                }
+                {clients.length !== 0 ? (
+                  clients.map((client, i) => (
+                    <ClientForm
+                      key={i}
+                      index={i}
+                      client={client}
+                      handleFieldChange={(name, value) =>
+                        this.handleFieldChange(name, value, i)}
+                      handleSave={this.onClientSave.bind(this)}
+                      validateClientForm={this.validateClientForm.bind(this)}
+                      isClientSaved={this.state.clients[i].isClientSaved}
+                      showAsSaved={this.state.clients[i].showAsSaved}
+                      isError={this.props.isError}
+                      feedbackMessage={this.props.feedbackMessage}
+                      inputRef={el => (this.clientElement = el)}
+                      confirmClientDelete={this.confirmClientDelete}
+                    />
+                  ))
+                ) : (
+                  <div className="DomainPage__clients-msg">
+                    No Clients Added Yet
+                  </div>
+                )}
               </Tab>
               <Tab label="ROLES" className="DomainPage__roles-tab">
-                  {roles.length > 0 ? (
-                    roles.map((role, i) => (
-                      <Roles
-                        key={role.id}
-                        index={i}
-                        roleId={role.id}
-                        roleName={role.name}
-                        renderFeedbackMessage={this.renderFeedbackMessage}
-                        disableButton={role.disableButton}
-                        isDirty={role.isDirty}
-                        handleChange={this.handleChange}
-                        onRoleSave={this.onRoleSave}
-                        focusOnText={this.focusOnText}
-                        blurOnText={this.blurOnText}
-                        inputRef={el => (this.roleElement = el)}
-                        confirmRoleDelete={this.confirmRoleDelete}
-                      />
-                    ))
-                  ) : (
-                      <div>
-                        <h1 className="DomainPage__roles--no-data">
-                          No Roles Added Yet
-                      </h1>
-                      </div>
-                    )}
+                {roles.length > 0 ? (
+                  roles.map((role, i) => (
+                    <Roles
+                      key={role.id}
+                      index={i}
+                      roleId={role.id}
+                      roleName={role.name}
+                      renderFeedbackMessage={this.renderFeedbackMessage}
+                      disableButton={role.disableButton}
+                      isDirty={role.isDirty}
+                      handleChange={this.handleChange}
+                      onRoleSave={this.onRoleSave}
+                      focusOnText={this.focusOnText}
+                      blurOnText={this.blurOnText}
+                      inputRef={el => (this.roleElement = el)}
+                      confirmRoleDelete={this.confirmRoleDelete}
+                    />
+                  ))
+                ) : (
+                  <div>
+                    <h1 className="DomainPage__roles--no-data">
+                      No Roles Added Yet
+                    </h1>
+                  </div>
+                )}
               </Tab>
               <Tab label="USERS" className="DomainPage__users-tab">
                 <h3>USERS Tab</h3>
@@ -446,22 +529,25 @@ class DomainPage extends Component {
         </Card>
         <DialogContainer
           id="deleteModal-roles"
-          className="DomainPage__deleteModal-roles"
-          visible={this.state.deleteRoleObj.deleteRoleModalVisible}
-          title="REMOVE ROLE"
+          dialogClassName="deleteModal-modal"
+          visible={this.state.deleteObj.deleteModalVisible}
+          title={titleMessage}
           onHide={() => {
-            const newRoleObj = this.state.deleteRoleObj;
-            newRoleObj.selectedRoleId = '';
-            newRoleObj.selectedRoleIndex = -1;
-            newRoleObj.deleteRoleModalVisible = false;
+            const newObj = this.state.deleteObj;
+            newObj.selectedId = '';
+            newObj.selectedIndex = -1;
+            newObj.deleteModalVisible = false;
             this.setState({
-              deleteRoleObj: newRoleObj,
+              deleteObj: newObj,
             });
           }}
+          aria-describedby="deleteModalDescription"
         >
           <br />
-          <p>
-            {DELETE_ROLE_MESSAGE}
+          <p id="deleteModalDescription">
+            {modalMessage}
+            <br />
+            <br />
             <br />
             <br />
             <br />
@@ -481,10 +567,7 @@ class DomainPage extends Component {
                 className="DomainPage__roles--delete-yes"
                 flat
                 onClick={() => {
-                  this.removeRole(
-                    this.state.deleteRoleObj.selectedRoleIndex,
-                    this.state.deleteRoleObj.selectedRoleId
-                  );
+                  this.remove(activeTab, this.state.deleteObj);
                 }}
               >
                 <label className="DomainPage__roles--delete-label-yes">

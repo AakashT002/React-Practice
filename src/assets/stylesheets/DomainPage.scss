@@ -195,7 +195,7 @@
     float: left;
     color: $lighter-pink;
     position: relative;
-    margin-left: 56px;
+    margin-left: 126px;
   }
 
   .DomainPage__roles--delete {
@@ -210,4 +210,10 @@
   .DomainPage__roles--delete-label-no {
      font-weight: 600;
   }
+
+  .deleteModal-modal {
+     border-radius: 5px;
+     height: 250px;
+     width: 350px;
+  }  
 }
