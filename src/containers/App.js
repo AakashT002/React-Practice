@@ -17,15 +17,14 @@ export class App extends Component {
     return this.props.isAuthenticated ? (
       <Redirect to="/dashboard" />
     ) : (
-        <Component to={path} />
-      );
+      <Component to={path} />
+    );
   }
 
   render() {
     return (
       <div className="App">
-        <Header />
-
+        <Header history={this.props.history} />
         <div className="App-content">
           <Switch>
             <Route
@@ -52,6 +51,7 @@ export class App extends Component {
 
 App.propTypes = {
   isAuthenticated: PropTypes.bool,
+  history: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
