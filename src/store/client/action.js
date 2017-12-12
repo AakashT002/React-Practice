@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actionTypes';
 import Clients from '../../services/Clients';
 
-export const loadClients = (currentdomainName) => ({
+export const loadClients = currentdomainName => ({
   types: [
     ActionTypes.FETCH_CLIENTS_REQUEST,
     ActionTypes.FETCH_CLIENTS_SUCCESS,

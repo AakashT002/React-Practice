@@ -1,36 +1,55 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, TabsContainer, Tabs, Tab, Button, FontIcon } from 'react-md';
+import {
+  Card,
+  TabsContainer,
+  Tabs,
+  Tab,
+  Button,
+  FontIcon,
+  DialogContainer,
+} from 'react-md';
 import PropTypes from 'prop-types';
 
 import ClientForm from '../components/ClientForm';
 
 import { loadClients, saveClient, addClient } from '../store/client/action';
-import { loadRoles, saveRole } from '../store/roles/action';
-import { CURRENT_DOMAIN_NAME, IGNORED_CLIENTS, IGNORED_ROLES, CLIENT_TYPES } from '../utils/constants';
+import { loadRoles, saveRole, handleRoleDeletion } from '../store/roles/action';
+import {
+  CURRENT_DOMAIN_NAME,
+  IGNORED_CLIENTS,
+  IGNORED_ROLES,
+  CLIENT_TYPES,
+  DELETE_ROLE_MESSAGE,
+} from '../utils/constants';
 
 import Roles from '../components/Roles';
 import '../assets/stylesheets/DomainPage.css';
 
 class DomainPage extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			activeTab: this.props.activeTab || 0,
-			clients: [],
-			roles: [],
-			users: [],
-      checkIcon: false,
-		};
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: this.props.activeTab || 0,
+      clients: [],
+      roles: [],
+      users: [],
+      deleteRoleObj: {
+        selectedRoleId: '',
+        selectedRoleIndex: -1,
+        deleteRoleModalVisible: false,
+      },
+    };
 
-		this.handleTabChange = this.handleTabChange.bind(this);
-		this.handlePlusClick = this.handlePlusClick.bind(this);
+    this.handleTabChange = this.handleTabChange.bind(this);
+    this.handlePlusClick = this.handlePlusClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.onSave = this.onSave.bind(this);
+    this.onRoleSave = this.onRoleSave.bind(this);
     this.checkRole = this.checkRole.bind(this);
-	}
+    this.confirmRoleDelete = this.confirmRoleDelete.bind(this);
+  }
 
-	componentWillMount() {
+  componentWillMount() {
     const { dispatch } = this.props;
     const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
 
@@ -38,10 +57,12 @@ class DomainPage extends Component {
       let clients = [];
       const { clientList } = this.props;
 
-      clientList.forEach((client) => {
+      clientList.forEach(client => {
         if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
           if (currentdomainName === 'master') {
-            if (client.clientId.substr(client.clientId.length - 6, 6) !== '-realm') {
+            if (
+              client.clientId.substr(client.clientId.length - 6, 6) !== '-realm'
+            ) {
               let clientObj = {
                 clientId: client.clientId,
                 rootUrl: client.rootUrl || '',
@@ -116,14 +137,17 @@ class DomainPage extends Component {
     this.setState({ roles });
   }
 
-	handleTabChange(index) {
-		this.setState({ activeTab: index });
+  handleTabChange(index) {
+    this.setState({ activeTab: index });
   }
 
   handlePlusClick() {
-		const { clients, roles, users, activeTab } = this.state;
-		if (activeTab === 0) {
-			if(this.state.clients.length === 0 || this.state.clients[0].id !== undefined) {
+    const { clients, roles, users, activeTab } = this.state;
+    if (activeTab === 0) {
+      if (
+        this.state.clients.length === 0 ||
+        this.state.clients[0].id !== undefined
+      ) {
         this.props.dispatch(addClient()).then(() => {
           var client = {
             clientId: '',
@@ -144,7 +168,7 @@ class DomainPage extends Component {
           this.setState({ clients });
         });
       }
-		} else if (activeTab === 1) {
+    } else if (activeTab === 1) {
       let role = {
         id: '',
         name: '',
@@ -152,21 +176,19 @@ class DomainPage extends Component {
         disableButton: '',
       };
 
-			if(roles.length===0)
-			{
-			roles.splice(0, 0, role);
-      this.setState({ roles });
-			}
-      else if (roles[0].id.length > 0 ) {
-      roles.splice(0, 0, role);
-      this.setState({ roles });
+      if (roles.length === 0) {
+        roles.splice(0, 0, role);
+        this.setState({ roles });
+      } else if (roles[0].id.length > 0) {
+        roles.splice(0, 0, role);
+        this.setState({ roles });
       }
-		} else if (activeTab === 2) {
-			var user = {};
-			this.setState({ users: users.concat([user]) });
-		}
+    } else if (activeTab === 2) {
+      var user = {};
+      this.setState({ users: users.concat([user]) });
+    }
   }
-  
+
   handleFieldChange(name, value, i) {
     this.setState(() => {
       let currClients = this.state.clients;
@@ -200,8 +222,8 @@ class DomainPage extends Component {
       let clients = this.state.clients;
       let currentclient = clients[index];
       currentclient.isClientSaved = true;
-      if(!this.props.isError) {
-      currentclient.id = this.props.clientId;
+      if (!this.props.isError) {
+        currentclient.id = this.props.clientId;
       }
       this.setState({ clients });
     });
@@ -220,9 +242,9 @@ class DomainPage extends Component {
   }
 
   checkRole(index) {
-    const { message } = this.props;
+    const { showMessageForRole } = this.props;
     if (index === 0) {
-      if (message === 'Registered') {
+      if (showMessageForRole === 'Registered') {
         return (
           <div className="DomainPage__icon">
             <FontIcon
@@ -246,7 +268,7 @@ class DomainPage extends Component {
     }
   }
 
-  onSave(index) {
+  onRoleSave(index) {
     const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
     const { roles } = this.state;
     var roleObject = {
@@ -260,6 +282,41 @@ class DomainPage extends Component {
     });
   }
 
+  confirmRoleDelete(index, roleid) {
+    const newRoleObj = this.state.deleteRoleObj;
+    (newRoleObj.selectedRoleId = roleid),
+      (newRoleObj.selectedRoleIndex = index),
+      (newRoleObj.deleteRoleModalVisible = true),
+      this.setState({
+        deleteRoleObj: newRoleObj,
+      });
+  }
+
+  removeRole(index, roleId) {
+    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
+    this.props.dispatch(handleRoleDeletion(roleId, currentdomainName));
+    const { roles } = this.state;
+    const newRoleObj = this.state.deleteRoleObj;
+    (newRoleObj.selectedRoleId = ''),
+      (newRoleObj.selectedRoleIndex = 0),
+      (newRoleObj.deleteRoleModalVisible = false),
+      this.setState({
+        deleteRoleObj: newRoleObj,
+      });
+    roles.splice(index, 1);
+    this.setState({ roles });
+  }
+
+  cancelDelete() {
+    const newRoleObj = this.state.deleteRoleObj;
+    (newRoleObj.selectedRoleId = ''),
+      (newRoleObj.selectedRoleIndex = -1),
+      (newRoleObj.deleteRoleModalVisible = false),
+      this.setState({
+        deleteRoleObj: newRoleObj,
+      });
+  }
+
   render() {
     const { activeTab, clients, roles } = this.state;
     const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
@@ -267,7 +324,8 @@ class DomainPage extends Component {
     return (
       <div className="DomainPage">
         <h1 className="DomainPage__domain-name">
-          {currentdomainName !== null && currentdomainName}</h1>
+          {currentdomainName !== null && currentdomainName}
+        </h1>
         <Card className="card-centered">
           <TabsContainer
             panelClassName="md-grid"
@@ -276,27 +334,31 @@ class DomainPage extends Component {
           >
             <Tabs tabId="domain-tab" className="DomainPage__tabs">
               <Tab label="CLIENTS" className="DomainPage__clients-tab">
-              {clients.length !== 0 ? clients.map((client, i) => (
-                <ClientForm
-                  key={i}
-                  index={i}
-                  client={client}
-                  handleFieldChange={(name, value) =>
-                    this.handleFieldChange(name, value, i)}
-                  handleSave={this.onClientSave.bind(this)}
-                  validateClientForm={this.validateClientForm.bind(this)}
-                  isClientSaved={this.state.clients[i].isClientSaved}
-                  isError={this.props.isError}
-                  feedbackMessage={this.props.feedbackMessage}
-                  inputRef={el => (this.newClientElement = el)}
-                />
-              )) : <div className="DomainPage__clients-msg">No Clients Added Yet</div>
-              }
+                {clients.length !== 0 ? (
+                  clients.map((client, i) => (
+                    <ClientForm
+                      key={i}
+                      index={i}
+                      client={client}
+                      handleFieldChange={(name, value) =>
+                        this.handleFieldChange(name, value, i)
+                      }
+                      handleSave={this.onClientSave.bind(this)}
+                      validateClientForm={this.validateClientForm.bind(this)}
+                      isClientSaved={this.state.clients[i].isClientSaved}
+                      isError={this.props.isError}
+                      feedbackMessage={this.props.feedbackMessage}
+                      inputRef={el => (this.newClientElement = el)}
+                    />
+                  ))
+                ) : (
+                  <div className="DomainPage__clients-msg">
+                    No Clients Added Yet
+                  </div>
+                )}
               </Tab>
               <Tab label="ROLES" className="DomainPage__roles-tab">
-                <div 
-								className="DomainPage__roles--card"
-								>
+                <div className="DomainPage__roles--card">
                   {roles.length > 0 ? (
                     roles.map((role, i) => (
                       <Roles
@@ -308,10 +370,11 @@ class DomainPage extends Component {
                         checkRole={this.checkRole}
                         isDirty={role.isDirty}
                         handleChange={this.handleChange}
-                        onSave={this.onSave}
+                        onRoleSave={this.onRoleSave}
                         focusOnText={this.focusOnText}
                         blurOnText={this.blurOnText}
-                        inputRef={el => (this.newRoleElement = el)}
+                        inputRef={el => (this.inputElement = el)}
+                        confirmRoleDelete={this.confirmRoleDelete}
                       />
                     ))
                   ) : (
@@ -353,6 +416,56 @@ class DomainPage extends Component {
             </Button>
           </div>
         </Card>
+        <DialogContainer
+          id="deleteModal-roles"
+          className="DomainPage__deleteModal-roles"
+          visible={this.state.deleteRoleObj.deleteRoleModalVisible}
+          title="REMOVE ROLE"
+          onHide={() => {
+            const newRoleObj = this.state.deleteRoleObj;
+            (newRoleObj.selectedRoleId = ''),
+              (newRoleObj.selectedRoleIndex = -1),
+              (newRoleObj.deleteRoleModalVisible = false),
+              this.setState({
+                deleteRoleObj: newRoleObj,
+              });
+          }}
+        >
+          <br />
+          <p>
+            {DELETE_ROLE_MESSAGE}
+            <br />
+            <br />
+            <br />
+            <div>
+              <Button
+                className="DomainPage__roles--delete-no"
+                flat
+                onClick={() => {
+                  this.cancelDelete();
+                }}
+              >
+                <label className="DomainPage__roles--delete-label-no">NO</label>
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="DomainPage__roles--delete-yes"
+                flat
+                onClick={() => {
+                  this.removeRole(
+                    this.state.deleteRoleObj.selectedRoleIndex,
+                    this.state.deleteRoleObj.selectedRoleId
+                  );
+                }}
+              >
+                <label className="DomainPage__roles--delete-label-yes">
+                  YES
+                </label>
+              </Button>
+            </div>
+          </p>
+        </DialogContainer>
         <Button
           floating
           className="fa fa-2x DomainPage__plus-icon"
@@ -378,7 +491,7 @@ DomainPage.propTypes = {
   feedbackMessage: PropTypes.string,
   clientId: PropTypes.string,
   saving: PropTypes.bool,
-  message: PropTypes.string,
+  showMessageForRole: PropTypes.string,
   roleId: PropTypes.string,
 };
 
@@ -393,7 +506,7 @@ function mapStateToProps(state) {
     feedbackMessage: state.client.feedbackMessage,
     clientId: state.client.clientId,
     saving: state.role.saving,
-    message: state.role.message,
+    showMessageForRole: state.role.showMessageForRole,
     roleId: state.role.roleId,
   };
 }

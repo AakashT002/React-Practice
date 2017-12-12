@@ -10,7 +10,9 @@ describe('Component: ClientForm', () => {
     description: '',
     rootUrl: '',
   };
-  const wrapper = shallow(<ClientForm client={client} validateClientForm={spy}/>);  
+  const wrapper = shallow(
+    <ClientForm client={client} validateClientForm={spy} />
+  );
 
   it('renders a Client form', () => {
     expect(wrapper.find('.ClientForm').exists()).toBe(true);

@@ -6,7 +6,7 @@ import SessionStorage from '../__mocks__/mockSessionStorage';
 describe('Component: DomainPage', () => {
   window.sessionStorage = new SessionStorage();
   const dispatchStub = () => {
-    return new Promise(() => { });
+    return new Promise(() => {});
   };
 
   let wrapper;
@@ -28,8 +28,9 @@ describe('Component: DomainPage', () => {
   });
 
   it('renders the domain name', () => {
-    expect(wrapper.find('.DomainPage__domain-name').text()
-    ).toContain('sample domain');
+    expect(wrapper.find('.DomainPage__domain-name').text()).toContain(
+      'sample domain'
+    );
   });
 
   it('renders the Previous navigation button', () => {
@@ -41,36 +42,65 @@ describe('Component: DomainPage', () => {
   });
 
   it('renders the CLIENTS tab', () => {
-    const wrapper = shallow(<DomainPage.WrappedComponent dispatch={dispatchStub} />);
-    expect(wrapper.find('.DomainPage__clients-tab').prop('label')).toBe('CLIENTS');
+    const wrapper = shallow(
+      <DomainPage.WrappedComponent dispatch={dispatchStub} />
+    );
+    expect(wrapper.find('.DomainPage__clients-tab').prop('label')).toBe(
+      'CLIENTS'
+    );
     expect(wrapper.find('.DomainPage__clients-tab').exists()).toBe(true);
   });
 
   it('renders the ROLES tab', () => {
-    const wrapper = shallow(<DomainPage.WrappedComponent dispatch={dispatchStub} />);
+    const wrapper = shallow(
+      <DomainPage.WrappedComponent dispatch={dispatchStub} />
+    );
     expect(wrapper.find('.DomainPage__roles-tab').prop('label')).toBe('ROLES');
     expect(wrapper.find('.DomainPage__roles-tab').exists()).toBe(true);
   });
 
   it('renders the USERS tab', () => {
-    const wrapper = shallow(<DomainPage.WrappedComponent dispatch={dispatchStub} />);
+    const wrapper = shallow(
+      <DomainPage.WrappedComponent dispatch={dispatchStub} />
+    );
     expect(wrapper.find('.DomainPage__users-tab').prop('label')).toBe('USERS');
     expect(wrapper.find('.DomainPage__users-tab').exists()).toBe(true);
   });
 
   it('renders the disabled Previous button on clients tab', () => {
-    const wrapper = shallow(<DomainPage.WrappedComponent activeTab={0} dispatch={dispatchStub} />);
-    expect(wrapper.find('.DomainPage__button-prev').props().disabled).toEqual(true);
+    const wrapper = shallow(
+      <DomainPage.WrappedComponent activeTab={0} dispatch={dispatchStub} />
+    );
+    expect(wrapper.find('.DomainPage__button-prev').props().disabled).toEqual(
+      true
+    );
   });
 
   it('renders the disabled Next button on users tab', () => {
-    const wrapper = shallow(<DomainPage.WrappedComponent activeTab={1} dispatch={dispatchStub} />);
-    expect(wrapper.find('.DomainPage__button-prev').props().disabled).toEqual(false);
-    expect(wrapper.find('.DomainPage__button-next').props().disabled).toEqual(false);
+    const wrapper = shallow(
+      <DomainPage.WrappedComponent activeTab={1} dispatch={dispatchStub} />
+    );
+    expect(wrapper.find('.DomainPage__button-prev').props().disabled).toEqual(
+      false
+    );
+    expect(wrapper.find('.DomainPage__button-next').props().disabled).toEqual(
+      false
+    );
   });
 
   it('renders the disabled Next button on users tab', () => {
-    const wrapper = shallow(<DomainPage.WrappedComponent activeTab={2} dispatch={dispatchStub} />);
-    expect(wrapper.find('.DomainPage__button-next').props().disabled).toEqual(true);
+    const wrapper = shallow(
+      <DomainPage.WrappedComponent activeTab={2} dispatch={dispatchStub} />
+    );
+    expect(wrapper.find('.DomainPage__button-next').props().disabled).toEqual(
+      true
+    );
+  });
+
+  it('renders the popup after remove button is clicked', () => {
+    const wrapper = shallow(
+      <DomainPage.WrappedComponent activeTab={2} dispatch={dispatchStub} />
+    );
+    expect(wrapper.find('.DomainPage__deleteModal-roles').exists()).toBe(true);
   });
 });

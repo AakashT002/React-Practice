@@ -180,4 +180,39 @@
   .DomainPage__navigate {
     margin-top: -10px;
    }
+
+   .DomainPage__roles--modal-delete {
+    font-family: Muli;
+    font-size: 16px;
+    border-radius: 5px;
+    position: fixed;
+    max-height: 250px;
+    min-height: 250px;
+  } 
+  
+  .DomainPage__roles--delete-yes {
+    float: right;
+    color: $lighter-pink;
+    position: relative;
+  }
+
+  .DomainPage__roles--delete-no {
+    float: left;
+    color: $lighter-pink;
+    position: relative;
+    margin-left: 56px;
+  }
+
+  .DomainPage__roles--delete {
+    color: $black;
+    font-weight: 600;
+  }
+
+  .DomainPage__roles--delete-label-yes {
+     font-weight: 600;
+  }
+
+  .DomainPage__roles--delete-label-no {
+     font-weight: 600;
+  }
 }

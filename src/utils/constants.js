@@ -14,6 +14,13 @@ export const IGNORED_CLIENTS = [
   'master-realm',
 ];
 export const CURRENT_DOMAIN_NAME = 'currentdomainName';
-export const IGNORED_ROLES = ['offline_access', 'uma_authorization'];
+export const IGNORED_ROLES = [
+  'offline_access',
+  'uma_authorization',
+  'create-realm',
+  'admin',
+];
+export const DELETE_ROLE_MESSAGE = 'Do you want to remove this role?';
+
 export const DELETION_WARNING_MESSAGE = `Are you sure you want to get rid of this domain ?
                                          Once deleted, your domain will be gone forever.`;
