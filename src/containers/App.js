@@ -7,7 +7,7 @@ import DomainPage from './DomainPage';
 import LoginPage from './LoginPage';
 import ManageDomain from './ManageDomain';
 import CreateUserPage from './CreateUserPage';
-
+import { CURRENT_DOMAIN_NAME } from '../utils/constants';
 import '../assets/stylesheets/App.css';
 import 'material-design-icons/iconfont/material-icons.css';
 
@@ -19,6 +19,16 @@ export class App extends Component {
     ) : (
       <Component to={path} />
     );
+  }
+
+  checkSessionStorage(component, path) {
+    const Component = component;
+    const domainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
+    if (domainName === null) {
+      return <Redirect to="/domains" />;
+    } else {
+      return <Component to={path} />;
+    }
   }
 
   render() {
@@ -37,11 +47,11 @@ export class App extends Component {
               component={() => this.checkAuthenticated(LoginPage)}
             />
             <Route path="/domains" component={ManageDomain} />
+            <Route path="/manage-users" component={CreateUserPage} />
             <Route
-              path="/manage-users"
-              component={CreateUserPage}
+              path="/manage-domain"
+              component={() => this.checkSessionStorage(DomainPage)}
             />
-            <Route path="/manage-domain" component={DomainPage} />
           </Switch>
         </div>
       </div>
