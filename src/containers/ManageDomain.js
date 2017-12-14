@@ -6,6 +6,7 @@ import { Card, Button, DataTable, TableBody, DialogContainer } from 'react-md';
 
 import Domain from '../components/Domain';
 import {
+  CLIENT_TYPES,
   CURRENT_DOMAIN_NAME,
   DELETION_WARNING_MESSAGE,
 } from '../utils/constants';
@@ -27,11 +28,20 @@ export class ManageDomain extends Component {
       deleteModalVisible: false,
       chkFlag: false,
       domainList: props.domainList || [],
-      selectedRealmName: '',
-      selectedRealmIndex: -1,
+      selectedDomainName: '',
+      selectedDomainIndex: -1,
+      tabIndexInPreview: 0,
+      domainPreview: {
+        header: '',
+        content: []
+      },
     };
-    this.handleIconClick = this.handleIconClick.bind(this);
+
     this.confirmDelete = this.confirmDelete.bind(this);
+    this.handlePreviewClick = this.handlePreviewClick.bind(this);
+    this.handleIconClick = this.handleIconClick.bind(this);
+    this.handleDomainPreviewNext = this.handleDomainPreviewNext.bind(this);
+    this.handleDomainPreviewPrevious = this.handleDomainPreviewPrevious.bind(this);
   }
 
   handleIconClick(realm) {
@@ -57,16 +67,16 @@ export class ManageDomain extends Component {
 
   confirmDelete(index, realm) {
     this.setState({
-      selectedRealmName: realm,
-      selectedRealmIndex: index,
+      selectedDomainName: realm,
+      selectedDomainIndex: index,
       deleteModalVisible: true,
     });
   }
 
   cancelDelete() {
     this.setState({
-      selectedRealmName: '',
-      selectedRealmIndex: -1,
+      selectedDomainName: '',
+      selectedDomainIndex: -1,
       deleteModalVisible: false,
     });
   }
@@ -75,8 +85,8 @@ export class ManageDomain extends Component {
     const domains = Object.assign([], this.state.domainList);
     this.props.dispatch(handleRealmDeletion(i, realmName)).then(() => {
       this.setState({
-        selectedRealmName: '',
-        selectedRealmIndex: 0,
+        selectedDomainName: '',
+        selectedDomainIndex: 0,
         deleteModalVisible: false,
       });
       domains.splice(i, 1);
@@ -97,9 +107,111 @@ export class ManageDomain extends Component {
     this.setState({ chkFlag: true });
   }
 
+  getDomainPreview(index, tabIndexInPreview) {
+    const { domainList } = this.state;
+    let { domainPreview } = this.state;
+    let domain = domainList[index];
+
+    if (tabIndexInPreview === 1) {
+      let content = [];
+
+      domain.roles.forEach(role => {
+        content.push({id: role.id, value: role.name});
+      });
+      domainPreview.content = content;
+      domainPreview.header = `Roles (${domain.roles.length})`;
+
+    } else if (tabIndexInPreview === 2) {
+      let content = [];
+
+      domain.users.forEach(user => {
+        content.push({id: user.id, value: user.username});
+      });
+      domainPreview.content = content;
+      domainPreview.header = `Users (${domain.users.length})`;
+
+    } else {
+      let content = [];
+      let spa = 0, api = 0, web = 0, others = 0;
+      let typeSPA = CLIENT_TYPES[0];
+      let typeAPI = CLIENT_TYPES[1];
+      let typeWeb = CLIENT_TYPES[2];
+      let otherApps = 'Others';
+
+      domain.clients.forEach(client => {
+        if (!!client.description &&
+          client.description === CLIENT_TYPES[0]) {
+          spa++;
+        } else if (!!client.description &&
+          client.description === CLIENT_TYPES[1]) {
+          api++;
+        } else if (!!client.description &&
+          client.description === CLIENT_TYPES[2]) {
+          web++;
+        } else {
+          others++;
+        }
+      });
+      /* eslint-disable no-unused-expressions */
+      spa > 0 ? spa > 1 ?
+        content.push(
+          {id: 0, value:`${typeSPA.substr(0, typeSPA.length - 6)} (${spa})`}) :
+        content.push(
+          {id: 0, value:`${typeSPA.substr(0, typeSPA.length - 6)}`}) : null;
+      api > 0 ? api > 1 ?
+        content.push(
+          {id: 1, value:`${typeAPI.substr(0, typeAPI.length - 6)} (${api})`}) :
+        content.push(
+          {id: 1, value:`${typeAPI.substr(0, typeAPI.length - 6)}`}) : null;
+      web > 0 ? web > 1 ?
+        content.push(
+          {id: 2, value:`${typeWeb.substr(0, typeWeb.length - 10)} (${web})`}) :
+        content.push(
+          {id: 2, value:`${typeWeb.substr(0, typeWeb.length - 10)}`}) : null;
+      others > 0 ? others > 1 ?
+        content.push({id: 3, value:`${otherApps} (${others})`}) :
+        content.push({id: 3, value:`${otherApps}`}) : null;
+      /* eslint-enable no-unused-expressions */
+
+      domainPreview.content = content;
+      domainPreview.header = `Clients (${domain.clients.length})`;
+    }
+
+    return domainPreview;
+  }
+
+  handlePreviewClick(index) {
+    let { tabIndexInPreview, domainPreview } = this.state;
+
+    tabIndexInPreview = 0;
+    domainPreview = this.getDomainPreview(index, tabIndexInPreview);
+    this.setState({ selectedDomainIndex: index, tabIndexInPreview, domainPreview });
+  }
+
+  handleDomainPreviewPrevious(index) {
+    let { tabIndexInPreview, domainPreview } = this.state;
+
+    tabIndexInPreview -= 1;
+    domainPreview = this.getDomainPreview(index, tabIndexInPreview);
+    this.setState({ tabIndexInPreview, domainPreview });
+  }
+
+  handleDomainPreviewNext(index) {
+    let { tabIndexInPreview, domainPreview } = this.state;
+
+    tabIndexInPreview += 1;
+    domainPreview = this.getDomainPreview(index, tabIndexInPreview);
+    this.setState({ tabIndexInPreview, domainPreview });
+  }
+
+
   render() {
     const { requesting } = this.props;
-    const { domainList } = this.state;
+    const {
+      domainList,
+      selectedDomainIndex,
+      tabIndexInPreview,
+      domainPreview } = this.state;
 
     if (domainList && domainList.length > 0) {
       return (
@@ -124,13 +236,22 @@ export class ManageDomain extends Component {
                       index={i}
                       key={realm.realm}
                       realm={realm.realm}
-                      clients={realm.clients || '0' || 'fetching...'}
-                      users={realm.users || '0' || 'fetching...'}
-                      roles={realm.roles || '0' || 'fetching...'}
+                      clients={realm.clients ? realm.clients : []}
+                      users={realm.users ? realm.users : []}
+                      roles={realm.roles ? realm.roles : []}
                       handleIconClick={this.handleIconClick}
                       confirmDelete={this.confirmDelete}
                       removeRealm={() => this.removeRealm(i, realm.realm)}
                       handleChange={() => this.handleChange()}
+                      domainPreview={domainPreview}
+                      handlePreviewClick={this.handlePreviewClick}
+                      handleDomainPreviewClose={() => {
+                        this.setState({ selectedDomainIndex: -1 });
+                      }}
+                      handleDomainPreviewPrevious={this.handleDomainPreviewPrevious}
+                      handleDomainPreviewNext={this.handleDomainPreviewNext}
+                      previewIndex={selectedDomainIndex}
+                      tabIndexInPreview={tabIndexInPreview}
                       chkFlag={this.state.chkFlag}
                     />
                   );
@@ -161,8 +282,8 @@ export class ManageDomain extends Component {
                 flat
                 onClick={() => {
                   this.removeRealm(
-                    this.state.selectedRealmIndex,
-                    this.state.selectedRealmName
+                    this.state.selectedDomainIndex,
+                    this.state.selectedDomainName
                   );
                 }}
               >
