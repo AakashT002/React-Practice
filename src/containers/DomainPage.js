@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { SyncLoader } from 'react-spinners';
 import {
   Card,
   TabsContainer,
@@ -17,8 +18,14 @@ import {
   addClient,
   updateClient,
   handleClientDeletion,
+  stopClientSpinner,
 } from '../store/client/action';
-import { loadRoles, saveRole, handleRoleDeletion } from '../store/roles/action';
+import {
+  loadRoles,
+  saveRole,
+  handleRoleDeletion,
+  stopRoleSpinner,
+} from '../store/roles/action';
 import {
   CURRENT_DOMAIN_NAME,
   IGNORED_CLIENTS,
@@ -114,6 +121,7 @@ class DomainPage extends Component {
       });
 
       this.setState({ clients });
+      dispatch(stopClientSpinner());
     });
 
     dispatch(loadRoles(currentdomainName)).then(() => {
@@ -129,6 +137,7 @@ class DomainPage extends Component {
         }
       }
       this.setState({ roles });
+      dispatch(stopRoleSpinner());
     });
   }
 
@@ -430,6 +439,7 @@ class DomainPage extends Component {
 
   render() {
     const { activeTab, clients, roles } = this.state;
+    const { loadingClients, loadingRoles } = this.props;
     const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
     let modalMessage = this.determineModalMessage(activeTab);
     let titleMessage = this.determineTitle(activeTab);
@@ -446,14 +456,19 @@ class DomainPage extends Component {
           >
             <Tabs tabId="domain-tab" className="DomainPage__tabs">
               <Tab label="CLIENTS" className="DomainPage__clients-tab">
-                {clients.length !== 0 ? (
+                {loadingClients ? (
+                  <span className="DomainPage__spinner-span">
+                    <SyncLoader color={'#BC477B'} loading={true} />
+                  </span>
+                ) : clients.length !== 0 ? (
                   clients.map((client, i) => (
                     <ClientForm
                       key={i}
                       index={i}
                       client={client}
                       handleFieldChange={(name, value) =>
-                        this.handleFieldChange(name, value, i)}
+                        this.handleFieldChange(name, value, i)
+                      }
                       handleSave={this.onClientSave.bind(this)}
                       validateClientForm={this.validateClientForm.bind(this)}
                       isClientSaved={this.state.clients[i].isClientSaved}
@@ -471,7 +486,11 @@ class DomainPage extends Component {
                 )}
               </Tab>
               <Tab label="ROLES" className="DomainPage__roles-tab">
-                {roles.length > 0 ? (
+                {loadingRoles ? (
+                  <span className="DomainPage__spinner-span">
+                    <SyncLoader color={'#BC477B'} loading={true} />
+                  </span>
+                ) : roles.length > 0 ? (
                   roles.map((role, i) => (
                     <Roles
                       key={role.id}
@@ -593,7 +612,8 @@ DomainPage.propTypes = {
   dispatch: PropTypes.func,
   history: PropTypes.object,
   activeTab: PropTypes.number,
-  requesting: PropTypes.bool,
+  loadingRoles: PropTypes.bool,
+  loadingClients: PropTypes.bool,
   loading: PropTypes.bool,
   clientList: PropTypes.array,
   roleList: PropTypes.array,
@@ -609,8 +629,9 @@ DomainPage.propTypes = {
 function mapStateToProps(state) {
   return {
     loading: state.domain.loading,
-    requesting: state.client.requesting,
+    loadingClients: state.client.requesting,
     clientList: state.client.clientList,
+    loadingRoles: state.role.requesting,
     roleList: state.role.roleList,
     isClientSaved: state.client.isClientSaved,
     isError: state.client.isError,

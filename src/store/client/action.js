@@ -50,7 +50,6 @@ export const updateClient = (clientObject, id) => ({
   },
 });
 
-
 export const handleClientDeletion = (id, currentdomainName) => ({
   types: [
     ActionTypes.DELETE_CLIENT_REQUEST,
@@ -66,3 +65,7 @@ export const handleClientDeletion = (id, currentdomainName) => ({
   },
   type: '',
 });
+
+export function stopClientSpinner() {
+  return { type: ActionTypes.STOP_CLIENT_SPINNER };
+}

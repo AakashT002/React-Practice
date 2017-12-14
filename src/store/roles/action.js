@@ -47,3 +47,7 @@ export const handleRoleDeletion = (roleId, currentdomainName) => ({
   },
   type: '',
 });
+
+export function stopRoleSpinner() {
+  return { type: ActionTypes.STOP_ROLE_SPINNER };
+}

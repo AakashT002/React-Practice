@@ -8,7 +8,6 @@ import LoginPage from './LoginPage';
 import ManageDomain from './ManageDomain';
 import CreateUserPage from './CreateUserPage';
 import NotFound from '../components/NotFound';
-
 import { CURRENT_DOMAIN_NAME } from '../utils/constants';
 import '../assets/stylesheets/App.css';
 import 'material-design-icons/iconfont/material-icons.css';
