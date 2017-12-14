@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import keycloak from '../keycloak-config';
 import '../assets/stylesheets/Header.css';
 import keyfob_logo from '../assets/images/keyfob_logo.jpg';
-import default_user from '../assets/images/default_user.jpg';
+import Home_logo from '../assets/images/Home_logo.jpg';
+import { Avatar } from 'react-md';
 
 class Header extends Component {
   constructor(props) {
@@ -20,7 +21,13 @@ class Header extends Component {
     return (
       <div>
         <div className="Header_username-img">
-          <img src={default_user} className="Header__user-icon" alt="logo" />
+          <div className="Header__username-avatar">
+            <Avatar key={username} suffix="grey">
+              {username && username.length > 0
+                ? username.charAt(0).toUpperCase()
+                : '?'}
+            </Avatar>
+          </div>
           <div className="Header__username">
             <label>{username}</label>
           </div>
@@ -40,11 +47,8 @@ class Header extends Component {
   renderTitle() {
     return (
       <div className="Header__info">
-        <Button
-          primary
-          className="fa fa-wrench Header_home"
-          onClick={this.handleClick}
-        >
+        <Button primary className="Header_home" onClick={this.handleClick}>
+          <img src={Home_logo} className="Header__home-logo" alt="logo" />
           <h4 className="Header_home-text">Home</h4>
         </Button>
         <div className="Header__title">
