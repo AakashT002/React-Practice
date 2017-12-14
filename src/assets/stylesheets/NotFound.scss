@@ -1,0 +1,42 @@
+@import './variables';
+
+.NotFoundPage {
+  min-height: 598px;
+  max-height: 598px;
+  padding-top: 50px;
+  padding-bottom: 8px;
+  font-family: Muli;
+
+  .NotFoundPage__notfound-img {
+    margin-top: 81px;
+    margin-left: 148px;
+  }
+
+  .img {
+    width: 435px;
+  }
+
+  .card-block-centered {
+    border-radius: 5px;
+    margin: 10px auto;
+    width: 731px;
+    max-height: 470px;
+    min-height: 470px;
+  }
+  
+  .NotFoundPage__notfound-text {
+    background-color: $blue-grey;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 50px;
+    
+    .NotFoundPage__text {
+      color: $white;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 25px;
+    }   
+    
+  }
+
+}
