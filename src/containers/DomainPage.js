@@ -29,6 +29,7 @@ import {
   handleClientDeletion,
   stopClientSpinner,
 } from '../store/client/action';
+import { loadTeams } from '../store/team/action';
 
 import {
   loadRoles,
@@ -182,6 +183,20 @@ class DomainPage extends Component {
       }
       this.setState({ roles });
       dispatch(stopRoleSpinner());
+    });
+
+    dispatch(loadTeams(this.state.currentdomainName)).then(() => {
+      let { teamList } = this.props;
+      console.log('response ==> ' + JSON.stringify(teamList));
+      let teams = [];
+      for (var j = 0; j < teamList.length; j++) {
+        let teamObj = {
+          id: teamList[j].id,
+          name: teamList[j].name,
+        };
+        teams = teams.concat([teamObj]);
+      }
+      this.setState({ teams });
     });
   }
 
@@ -506,14 +521,10 @@ class DomainPage extends Component {
   }
 
   renderTeamsTab() {
-    /*return (
-      <Tab label="TEAMS" className="DomainPage__users-tab">
-        <h3>TEAMS Tab</h3>
-      </Tab>
-    );*/
-
+    const { teams } = this.state;
     return (
       <Tab label="TEAMS" className="DomainPage__roles-tab">
+        <div>{teams.map(team => <h1>{team.name}</h1>)}</div>
         <TeamForm />
       </Tab>
     );
