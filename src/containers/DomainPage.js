@@ -28,6 +28,7 @@ import {
   handleClientDeletion,
   stopClientSpinner,
 } from '../store/client/action';
+import { loadTeams } from '../store/team/action';
 
 import {
   loadRoles,
@@ -36,7 +37,7 @@ import {
   stopRoleSpinner,
 } from '../store/roles/action';
 
-import {
+import {  
   CURRENT_DOMAIN_NAME,
   IGNORED_CLIENTS,
   IGNORED_ROLES,
@@ -181,6 +182,20 @@ class DomainPage extends Component {
       }
       this.setState({ roles });
       dispatch(stopRoleSpinner());
+    });
+
+    dispatch(loadTeams(this.state.currentdomainName)).then(() => {
+      let { teamList } = this.props;
+      console.log('response ==> ' + JSON.stringify(teamList));
+      let teams = [];
+      for (var j = 0; j < teamList.length; j++) {
+        let teamObj = {
+          id: teamList[j].id,
+          name: teamList[j].name,
+        };
+        teams = teams.concat([teamObj]);
+      }
+      this.setState({ teams });
     });
   }
 
@@ -505,9 +520,10 @@ class DomainPage extends Component {
   }
 
   renderTeamsTab() {
+    const { teams } = this.state;
     return (
       <Tab label="TEAMS" className="DomainPage__users-tab">
-        <h3>TEAMS Tab</h3>
+        <div>{teams.map(team => <h1>{team.name}</h1>)}</div>
       </Tab>
     );
   }
@@ -528,7 +544,8 @@ class DomainPage extends Component {
               index={i}
               client={client}
               handleFieldChange={(name, value) =>
-                this.handleFieldChange(name, value, i)}
+                this.handleFieldChange(name, value, i)
+              }
               handleSave={this.onClientSave.bind(this)}
               validateClientForm={this.validateClientForm.bind(this)}
               isClientSaved={this.state.clients[i].isClientSaved}
@@ -594,7 +611,8 @@ class DomainPage extends Component {
               index={i}
               user={user}
               handleUserFieldChange={(name, value) =>
-                this.handleUserFieldChange(name, value, i)}
+                this.handleUserFieldChange(name, value, i)
+              }
               removeUser={i => this.removeUser(i)}
               validateUserForm={this.validateUserForm.bind(this)}
               saveUser={() => this.onUserSave(i)}
@@ -610,7 +628,8 @@ class DomainPage extends Component {
                   value_two,
                   value_three,
                   i
-                )}
+                )
+              }
               confirmUserDelete={this.confirmUserDelete}
               inputRef={el => (this.userElement = el)}
               ischecked={this.state.ischecked}
