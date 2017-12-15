@@ -11,15 +11,17 @@ describe('Component: ManageDomain', () => {
 
   let wrapper;
   let domains = [
-    { realm: 'team-a', clients: 3, roles: 2, users: 2 },
-    { realm: 'team-b', clients: 2, roles: 1, users: 3 },
-    { realm: 'team-c', clients: 3, roles: 2, users: 5 }];
+    { realm: 'team-a', clients: ['1', '2'], roles: ['1'], users: ['1'] },
+    { realm: 'team-b', clients: ['1'], roles: ['2'], users: ['1', '2', '3'] },
+    { realm: 'team-c', clients: ['2'], roles: ['1'], users: ['1', '2'] },
+  ];
 
   beforeEach(() => {
     wrapper = shallow(
       <ManageDomain.WrappedComponent
         dispatch={dispatchStub}
-        domainList={domains} />
+        domainList={domains}
+      />
     );
   });
 

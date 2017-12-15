@@ -18,6 +18,7 @@ const ClientForm = ({
   feedbackMessage,
   showAsSaved,
   inputRef,
+  confirmClientDelete,
 }) => {
   const renderMessageForClient = () => {
     if (!isError) {
@@ -96,7 +97,11 @@ const ClientForm = ({
                   !validateClientForm(index) || client.isClientSaved !== false
                 }
               />
-              <Button className="ClientForm__remove" label="REMOVE" />
+              <Button
+                className="ClientForm__remove"
+                label="REMOVE"
+                onClick={() => confirmClientDelete(index, client.id)}
+              />
             </div>
           </CardActions>
         </section>
@@ -116,6 +121,7 @@ ClientForm.propTypes = {
   isError: PropTypes.bool,
   feedbackMessage: PropTypes.string,
   inputRef: PropTypes.func,
+  confirmClientDelete: PropTypes.func,
 };
 
 export default ClientForm;

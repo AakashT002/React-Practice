@@ -1,0 +1,113 @@
+@import './variables';
+
+.DomainPreview--featured {
+  display: flex;
+  justify-content: center;
+  margin: -12% 0 0 22%;
+  position: relative;
+}
+
+.DomainPreview {
+  .DomainPreview__dialog-box {
+    background-color: $white;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.4);
+    height: 160px;
+    padding: 2%;
+    width: 252px;
+    z-index: 1;
+
+    &:after {		
+      content: "";
+      border-color: transparent transparent $white $white;
+      border-style: solid;
+      border-width: 10px;
+      margin: -120px 0 0 240px;
+      position: absolute;
+      transform-origin: 0 0;
+      transform: rotate(-135deg);
+      box-shadow: -2px 2px 2px 0 rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .DomainPreview__header {
+    font-family: Muli;
+    font-size: 20px;
+    line-height: 25px;
+  }
+
+  .DomainPreview__button-close {
+    color: $pink;
+    cursor: pointer;
+    float: right;
+    margin-top: -18%;
+  }
+
+  .DomainPreview__content {
+    color: $black;
+    font-family: Muli;
+    font-size: 12px;
+    height: 55%;
+    line-height: 21px;
+    margin: -5% 0 25% -10%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 110%;
+  }
+
+  .DomainPreview__footer {
+    bottom: 0;
+    background-color: $white;
+    position: absolute;
+    width: 42%;
+  }
+  
+  .DomainPreview__divider {
+    border: 1px solid $grey-text;
+    margin-bottom: -1%;
+    width: 95%;
+  }
+
+  .DomainPreview__button-prev {
+    color: $lighter-pink;
+    font-family: Muli;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: -7%;
+
+    &:disabled {
+      color: $grey-text;
+    }
+  }
+
+  .DomainPreview__dots {
+    display: inline-block;
+    margin: 0 0 0 15%;
+    transform: rotate(270deg);
+    
+  }
+
+  .DomainPreview__dot {
+    border: 1px solid $text-grey;
+    border-radius: 50%;
+    height: 7px;
+    margin-bottom: 25%;
+    width: 7px;
+
+    &.selected {
+      background-color: $lighter-pink;
+    }
+  }
+
+  .DomainPreview__button-next {
+    color: $lighter-pink;
+    float: right;
+    font-family: Muli;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 -8% 2% 0;
+
+    &:disabled {
+      color: $grey-text;
+    }
+  }
+}

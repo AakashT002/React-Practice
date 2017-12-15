@@ -1,43 +1,48 @@
 class User {
   static async add(realm, userObj) {
-    const API_URL = `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realm}/users`;
+    const API_URL = `${process.env
+      .REACT_APP_AUTH_URL}/admin/realms/${realm}/users`;
     const token = sessionStorage.kctoken;
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        Authorization: 'Bearer ' + token,
       },
       body: JSON.stringify(userObj),
     });
-    if (!response.ok) {
+    if (response.status === 201) {
       var responseHeader = response.headers.get('Location');
-      return responseHeader;
+      var userId = responseHeader.substr(responseHeader.length - 36, 36);
+      return userId;
+    } else if (response.status === 409) {
+      throw new Error('Username/email already exists.');
     } else {
-      responseHeader = response.headers.get('Location');
-      return responseHeader;
+      throw new Error('Unable to save - Retry after sometime.');
     }
   }
 
-  static async delete(str, index) {
+  static async delete(currentdomainName, id) {
     const token = sessionStorage.kctoken;
-    const response = await fetch(str, {
+    const API_URL = `${process.env
+      .REACT_APP_AUTH_URL}/admin/realms/${currentdomainName}/users/${id}`;
+    const response = await fetch(API_URL, {
       method: 'DELETE',
       headers: {
-        'Authorization': 'Bearer ' + token,
+        Authorization: 'Bearer ' + token,
       },
     });
 
     if (response.ok) {
-      return index;
-    }
-    else {
-      throw new Error('User cannot be added.');
+      return id;
+    } else {
+      throw new Error('User cannot be deleted');
     }
   }
 
   static async handleUserValidation(userName, realmName) {
-    const API_URL = `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realmName}/users`;
+    const API_URL = `${process.env
+      .REACT_APP_AUTH_URL}/admin/realms/${realmName}/users`;
     const token = sessionStorage.kctoken;
     const response = await fetch(API_URL, {
       method: 'GET',
@@ -59,25 +64,30 @@ class User {
   }
 
   static async getRoles() {
-    const API_URL = `${process.env.REACT_APP_AUTH_URL}/realms/${process.env.REACT_APP_AUTH_REALM}/protocol/openid-connect/userinfo`;
+    const API_URL = `${process.env.REACT_APP_AUTH_URL}/realms/${process.env
+      .REACT_APP_AUTH_REALM}/protocol/openid-connect/userinfo`;
     const token = sessionStorage.kctoken;
     const response = await fetch(API_URL, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        Authorization: 'Bearer ' + token,
       },
     });
     if (response.ok) {
       const data = await response.json();
       var roleId = data['sub'];
-      const API_URL_role = `${process.env.REACT_APP_AUTH_URL}/admin/realms/${process.env.REACT_APP_AUTH_REALM}/users/` + roleId + '/role-mappings';
+      const API_URL_role =
+        `${process.env.REACT_APP_AUTH_URL}/admin/realms/${process.env
+          .REACT_APP_AUTH_REALM}/users/` +
+        roleId +
+        '/role-mappings';
       const token_role = sessionStorage.kctoken;
       const response_role = await fetch(API_URL_role, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token_role,
+          Authorization: 'Bearer ' + token_role,
         },
       });
       if (response_role.ok) {
@@ -85,13 +95,15 @@ class User {
         var obj_data = data_role['realmMappings'];
         var rolenames = [];
         for (var i = 0; i < obj_data.length; i++) {
-          if (obj_data[i].name !== 'uma_authorization' && obj_data[i].name !== 'offline_access') {
+          if (
+            obj_data[i].name !== 'uma_authorization' &&
+            obj_data[i].name !== 'offline_access'
+          ) {
             rolenames.push(obj_data[i].name);
           }
         }
         return rolenames;
-      }
-      else {
+      } else {
         throw new Error('User Role cannot be fetched');
       }
     } else {
@@ -99,8 +111,30 @@ class User {
     }
   }
 
+  static async updateUser(realm, userObj, id) {
+    const API_URL = `${process.env
+      .REACT_APP_AUTH_URL}/admin/realms/${realm}/users/${id}`;
+    const token = sessionStorage.kctoken;
+    const response = await fetch(API_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify(userObj),
+    });
+    if (response.status === 204) {
+      return response;
+    } else if (response.status === 409) {
+      throw new Error('Username/email already exists.');
+    } else {
+      throw new Error('Unable to save - Retry after sometime.');
+    }
+  }
+
   static async handleEmailValidation(email, realmName) {
-    const API_URL = `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realmName}/users`;
+    const API_URL = `${process.env
+      .REACT_APP_AUTH_URL}/admin/realms/${realmName}/users`;
     const token = sessionStorage.kctoken;
     const response = await fetch(API_URL, {
       method: 'GET',

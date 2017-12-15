@@ -34,7 +34,7 @@ class Domains {
     const token = sessionStorage.kctoken;
     // calling the api to fetch number of users for each realm
     const users = await fetch(
-      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realm}/users/count`,
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${realm}/users`,
       {
         method: 'GET',
         headers: {
@@ -78,20 +78,15 @@ class Domains {
       const res = Object.assign([], list);
       res.map(item => {
         if (item.realm === realm) {
-          let count = 0;
-          clientsData.forEach(client => {
-            if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
-              if (
-                item.realm === 'master' &&
-                !client.clientId.substr(-6, 6) === '-realm'
-              ) {
-                count++;
-              } else {
-                count++;
-              }
-            }
+          let clients = clientsData.filter(client => {
+            return !IGNORED_CLIENTS.includes(client.clientId.toString())
+              ? item.realm === 'master'
+                ? client.clientId.substr(-6) !== '-realm' ? true : false
+                : true
+              : false;
           });
-          item.clients = count;
+
+          item.clients = clients;
         }
         return item;
       });
@@ -120,13 +115,9 @@ class Domains {
 
       res.map(item => {
         if (item.realm === realm) {
-          let count = 0;
-          rolesData.forEach(role => {
-            if (!IGNORED_ROLES.includes(role.name.toString())) {
-              count++;
-            }
+          item.roles = rolesData.filter(role => {
+            return !IGNORED_ROLES.includes(role.name.toString());
           });
-          item.roles = count;
         }
 
         return item;

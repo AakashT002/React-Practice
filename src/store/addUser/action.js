@@ -2,7 +2,6 @@ import * as ActionTypes from '../actionTypes';
 import User from '../../services/User';
 
 export const handleUserCreation = (realm, userObj) => ({
-
   types: [
     ActionTypes.CREATE_USER_REQUEST,
     ActionTypes.CREATE_USER_SUCCESS,
@@ -18,7 +17,6 @@ export const handleUserCreation = (realm, userObj) => ({
 });
 
 export const handleUserDeletion = (str, index) => ({
-
   types: [
     ActionTypes.DELETE_USER_REQUEST,
     ActionTypes.DELETE_USER_SUCCESS,
@@ -27,7 +25,6 @@ export const handleUserDeletion = (str, index) => ({
   callAPI: async () => {
     try {
       return await User.delete(str, index);
-
     } catch (error) {
       throw new Error(error.message);
     }
@@ -49,6 +46,21 @@ export const handleUserValidation = (userName, realmName) => ({
   },
 });
 
+export const handleUserUpdate = (realm, userObj, id) => ({
+  types: [
+    ActionTypes.UPDATE_USER_REQUEST,
+    ActionTypes.UPDATE_USER_SUCCESS,
+    ActionTypes.UPDATE_USER_FAILURE,
+  ],
+  callAPI: async () => {
+    try {
+      return await User.updateUser(realm, userObj, id);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+});
+
 export const handleEmailValidation = (email, realmName) => ({
   types: [
     ActionTypes.VALIDATE_EMAIL_REQUEST,
@@ -63,7 +75,6 @@ export const handleEmailValidation = (email, realmName) => ({
     }
   },
 });
-
 
 export function setResponseHeader() {
   return { type: ActionTypes.SET_RESPONSEHEADER };

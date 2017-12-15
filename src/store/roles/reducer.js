@@ -12,7 +12,7 @@ const initialDomainsState = {
 
 export const role = createReducer(initialDomainsState, {
   [ActionTypes.CREATE_ROLE_REQUEST](state) {
-    return { ...state, requesting: true, showMessageForRole: '' };
+    return { ...state, showMessageForRole: '' };
   },
   [ActionTypes.CREATE_ROLE_SUCCESS](state, action) {
     return {
@@ -41,12 +41,15 @@ export const role = createReducer(initialDomainsState, {
     return { ...state, requesting: false };
   },
   [ActionTypes.DELETE_ROLE_REQUEST](state) {
-    return { ...state, requesting: true };
+    return { ...state };
   },
   [ActionTypes.DELETE_ROLE_SUCCESS](state) {
-    return { ...state, requesting: true };
+    return { ...state, requesting: false };
   },
   [ActionTypes.DELETE_ROLE_FAILURE](state) {
+    return { ...state, requesting: false };
+  },
+  [ActionTypes.STOP_ROLE_SPINNER](state) {
     return { ...state, requesting: false };
   },
 });

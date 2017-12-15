@@ -64,6 +64,24 @@ class Clients {
       throw new Error('Unable to save - Retry after sometime.');
     }
   }
+
+  static async delete(id, currentdomainName) {
+    const API_URL = `${process.env
+      .REACT_APP_AUTH_URL}/admin/realms/${currentdomainName}/clients/${id}`;
+    const token = sessionStorage.kctoken;
+    const response = await fetch(API_URL, {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    if (response.ok) {
+      return id;
+    } else {
+      throw new Error('Client cannot be removed.');
+    }
+  }
 }
 
 export default Clients;

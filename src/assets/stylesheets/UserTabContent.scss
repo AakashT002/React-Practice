@@ -1,0 +1,132 @@
+@import './variables';
+
+.button__addUser {
+  position: relative;
+  float: right;
+  margin-right: 10px;
+  margin-top: 6px;
+}
+
+.CreateUser__button-save {
+  margin-left: 301px !important; 
+
+  .CreateUser__button-AddUser {
+    margin-left: 30px;
+    margin-top: 20px;
+  }
+}
+
+.createUser__check-icon {
+  margin-top: -31px;
+}
+
+.createUser__check-email-icon {
+  margin-top: -30px;
+}
+
+.createUser__check-email-text {
+  margin-top: -66px;
+}
+
+.md-tabs-content {
+  background: #F4F4F4
+}
+
+#domain-tab-panel-2 {
+  height: 320px;
+}
+
+.user-widget-text-fields {
+  display: inline-block;
+  background: white;
+  margin: 12px;
+  width: 680px;
+}
+
+.section__user {
+  border-radius: 10px !important;  
+  margin: 0px;
+
+  .UserWidget__register-pass {
+    color: $light-green;
+    margin-left: -515px;
+    padding-right: 435px;
+
+    .md-avatar {
+      border: 2px solid $light-green;
+      height: 20px;
+      width: 20px;
+    }
+  }
+  
+  .UserWidget__saved-icon {
+    font-size: 12px;
+  }
+  
+  .UserWidget__register-fail {
+    color: $red;
+    margin-left: -515px;
+    padding-right: 280px;
+  
+    .md-avatar {
+      border: 2px solid $red;
+      height: 20px;
+      width: 20px;
+    }
+
+    .md-icon-text:last-child {
+      padding-left: 13px;
+  }
+  }
+
+  .third-fields {
+    .md-text--inherit.md-text--inherit {
+      color: $lighter-pink;
+    }
+  }
+}
+
+.md-card {
+  width: initial;
+}
+
+.user-attributes {
+  display: flex;
+  justify-content: center;
+  justify-content: space-around;
+}
+
+.half-fields {
+  width: 100% !important;
+  padding: 5px;
+}
+
+.third-fields {
+  width: 100% !important;
+  padding: 5px;
+  margin-top: -20px !important;
+}
+
+.UserWidget__save {
+  color: $light-pink !important;
+  font-weight: bold;
+
+  &:disabled {
+    color: $grey-text !important;
+  }
+}
+
+.UserWidget__remove {
+  color: $light-pink !important;
+  margin-left: 35px;   
+  font-weight: bold;
+}
+
+.UserWidget__buttons {
+  margin-bottom: 10px;
+  margin-left: 520px;
+}
+
+.md-list--menu {
+  min-width: 180px !important;
+}

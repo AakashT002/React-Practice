@@ -14,6 +14,18 @@
   }
 }
 
+@mixin no-data() {
+  height: 27.34%;
+  width: 31.46%;
+  color: $text-grey;
+  font-family: Muli;
+  font-size: 36px;
+  line-height: 45px;
+  text-align: center;
+  margin-top: 110px;
+  margin-left: 250px;
+}
+
 .DomainPage {
   max-height: 598px;
   padding-top: 65px;
@@ -61,9 +73,9 @@
   
   .DomainPage__plus-icon {
     margin-top: 7px;
-    margin-left: -16px;
+    margin-left: -65px;
     position: relative;
-    left: 977px;
+    left: 1030px;
     bottom: 440px;
     color: $white;
     background-color: $lighter-pink;
@@ -107,18 +119,11 @@
   #domain-tab-panel-2 {
     max-height: 355px;
     min-height: 355px;
+    overflow-x: hidden;
   }
 
   .DomainPage__clients-msg {
-    height: 27.34%;
-    width: 31.46%;
-    color: $text-grey;
-    font-family: Muli;
-    font-size: 36px;
-    line-height: 45px;
-    text-align: center;
-    margin-top: 110px;
-    margin-left: 250px;
+    @include no-data();
   }
   
   .DomainPage__roles--no-data {
@@ -195,7 +200,7 @@
     float: left;
     color: $lighter-pink;
     position: relative;
-    margin-left: 56px;
+    margin-left: 126px;
   }
 
   .DomainPage__roles--delete {
@@ -210,4 +215,20 @@
   .DomainPage__roles--delete-label-no {
      font-weight: 600;
   }
+
+  .deleteModal-modal {
+     border-radius: 5px;
+     height: 250px;
+     width: 350px;
+  }  
+
+  .DomainPage__users-msg {
+    @include no-data();    
+  }
+
+  .DomainPage__spinner-span {
+    position: relative;
+    left: 45%;
+    top: 50px;
+  } 
 }

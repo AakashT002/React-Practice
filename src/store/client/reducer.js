@@ -17,13 +17,13 @@ export const client = createReducer(initialClientsState, {
     return { ...state, requesting: true };
   },
   [ActionTypes.FETCH_CLIENTS_SUCCESS](state, action) {
-    return { ...state, clientList: action.response, requesting: false };
+    return { ...state, clientList: action.response };
   },
   [ActionTypes.FETCH_CLIENTS_FAILURE](state) {
     return { ...state, requesting: false };
   },
   [ActionTypes.CREATE_CLIENT_REQUEST](state) {
-    return { ...state, requesting: true, isError: false };
+    return { ...state, isError: false };
   },
   [ActionTypes.CREATE_CLIENT_SUCCESS](state, action) {
     return {
@@ -47,7 +47,7 @@ export const client = createReducer(initialClientsState, {
     return { ...state, isClientSaved: false };
   },
   [ActionTypes.UPDATE_CLIENT_REQUEST](state) {
-    return { ...state, requesting: true, isError: false };
+    return { ...state, isError: false };
   },
   [ActionTypes.UPDATE_CLIENT_SUCCESS](state) {
     return {
@@ -65,6 +65,18 @@ export const client = createReducer(initialClientsState, {
       isError: true,
       feedbackMessage: action.error.message,
     };
+  },
+  [ActionTypes.DELETE_CLIENT_REQUEST](state) {
+    return { ...state };
+  },
+  [ActionTypes.DELETE_CLIENT_SUCCESS](state) {
+    return { ...state, requesting: false };
+  },
+  [ActionTypes.DELETE_CLIENT_FAILURE](state) {
+    return { ...state, requesting: false };
+  },
+  [ActionTypes.STOP_CLIENT_SPINNER](state) {
+    return { ...state, requesting: false };
   },
 });
 

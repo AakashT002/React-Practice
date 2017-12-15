@@ -1,24 +1,34 @@
 import React from 'react';
-import { Avatar, TextField } from 'react-md';
-
 import PropTypes from 'prop-types';
+
+import { Avatar, TextField } from 'react-md';
 import { TableRow, TableColumn } from 'react-md';
 
+import DomainPreview from '../components/DomainPreview';
+
 import '../assets/stylesheets/Domain.css';
+import '../assets/stylesheets/DomainPreview.css';
 import saveIcon from '../assets/images/Save.png';
 import editONIcon from '../assets/images/Edit_ON.png';
 import infoONIcon from '../assets/images/Info_ON.png';
 import trashIcon from '../assets/images/TrashCan.png';
 
 const Domain = ({
-  realm,
-  index,
-  handleIconClick,
   clients,
-  users,
-  roles,
-  handleChange,
   confirmDelete,
+  domainPreview,
+  handleChange,
+  handleDomainPreviewClose,
+  handleDomainPreviewNext,
+  handleDomainPreviewPrevious,
+  handleIconClick,
+  handlePreviewClick,
+  index,
+  previewIndex,
+  realm,
+  roles,
+  tabIndexInPreview,
+  users,
 }) => {
   return (
     <div className="Domain">
@@ -41,11 +51,11 @@ const Domain = ({
             customSize="title"
             onChange={() => handleChange()}
             helpText={
-              (clients ? clients : 0) +
+              (clients ? clients.length : 0) +
               ' clients \u2022 ' +
-              (roles ? roles : 0) +
+              (roles ? roles.length : 0) +
               ' roles \u2022 ' +
-              (users ? users : 0) +
+              (users ? users.length : 0) +
               ' users'
             }
           />
@@ -66,6 +76,7 @@ const Domain = ({
               src={infoONIcon}
               alt="Preview"
               className="Domain__buttons--all Domain__button--info"
+              onClick={handlePreviewClick.bind(this, index)}
             />
             <img
               src={trashIcon}
@@ -84,20 +95,37 @@ const Domain = ({
           </div>
         </TableColumn>
       </TableRow>
+      {index === previewIndex && (
+        <DomainPreview
+          index={index}
+          domainPreview={domainPreview}
+          handleDomainPreviewClose={handleDomainPreviewClose}
+          handleDomainPreviewPrevious={handleDomainPreviewPrevious}
+          handleDomainPreviewNext={handleDomainPreviewNext}
+          tabIndexInPreview={tabIndexInPreview}
+        />
+      )}
       <hr className="Domain__divider" />
     </div>
   );
 };
 
 Domain.propTypes = {
-  realm: PropTypes.string,
-  handleIconClick: PropTypes.func,
-  clients: PropTypes.number,
-  users: PropTypes.number,
-  roles: PropTypes.number,
+  clients: PropTypes.array,
   confirmDelete: PropTypes.func,
-  index: PropTypes.number,
+  domainPreview: PropTypes.object,
   handleChange: PropTypes.func,
+  handleDomainPreviewClose: PropTypes.func,
+  handleDomainPreviewNext: PropTypes.func,
+  handleDomainPreviewPrevious: PropTypes.func,
+  handleIconClick: PropTypes.func,
+  handlePreviewClick: PropTypes.func,
+  index: PropTypes.number,
+  previewIndex: PropTypes.number,
+  realm: PropTypes.string,
+  roles: PropTypes.array,
+  tabIndexInPreview: PropTypes.number,
+  users: PropTypes.array,
 };
 
 export default Domain;

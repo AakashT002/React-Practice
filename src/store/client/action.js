@@ -49,3 +49,23 @@ export const updateClient = (clientObject, id) => ({
     }
   },
 });
+
+export const handleClientDeletion = (id, currentdomainName) => ({
+  types: [
+    ActionTypes.DELETE_CLIENT_REQUEST,
+    ActionTypes.DELETE_CLIENT_SUCCESS,
+    ActionTypes.DELETE_CLIENT_FAILURE,
+  ],
+  callAPI: async () => {
+    try {
+      return await Clients.delete(id, currentdomainName);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  type: '',
+});
+
+export function stopClientSpinner() {
+  return { type: ActionTypes.STOP_CLIENT_SPINNER };
+}
