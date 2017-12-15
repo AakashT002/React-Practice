@@ -7,6 +7,10 @@ const initialUsersState = {
   requesting: false,
   userValid: false,
   emailValid: false,
+  isErrorForUser: false,
+  UserFeedbackMessage: '',
+  isUserSaved: false,
+  userId: '',
 };
 
 
@@ -15,19 +19,22 @@ export const addUser = createReducer(initialUsersState, {
 
   [ActionTypes.CREATE_USER_REQUEST](state) {
 
-    return { ...state, responseHeader: '', requesting: false };
+    return { ...state, responseHeader: '', requesting: false, isErrorForUser: false };
   },
 
   [ActionTypes.CREATE_USER_SUCCESS](state, action) {
-    newState = Object.assign({}, state);
-    newState.responseHeaderArray.push(action.response);
-    newState.responseHeader = action.response;
-    newState.requesting = false;
-    return newState;
+    return {
+      ...state,
+      requesting: false,
+      isUserSaved: true,
+      isErrorForUser: false,
+      UserFeedbackMessage: 'Saved',
+      userId: action.response,
+    };
   },
 
   [ActionTypes.CREATE_USER_FAILURE](state, action) {
-    return { ...state, responseHeader: action.response, requesting: false };
+    return { ...state, responseHeader: action.response, requesting: false, isErrorForUser: true, UserFeedbackMessage: action.error.message };
   },
 
   [ActionTypes.DELETE_USER_REQUEST](state) {
@@ -73,6 +80,24 @@ export const addUser = createReducer(initialUsersState, {
       userValid: false,
       emailValid: false,
     });
+  },
+  [ActionTypes.UPDATE_USER_REQUEST](state) {
+    return { ...state, requesting: false, isErrorForUser: false };
+  },
+    
+  [ActionTypes.UPDATE_USER_SUCCESS](state, action) {
+    return {
+      ...state,
+      requesting: false,
+      isUserSaved: true,
+      isErrorForUser: false,
+      UserFeedbackMessage: 'Saved',
+      userId: action.response,
+    };
+  },
+
+  [ActionTypes.UPDATE_USER_FAILURE](state, action) {
+    return { ...state, requesting: false, isErrorForUser: true, UserFeedbackMessage: action.error.message };
   },
 });
 

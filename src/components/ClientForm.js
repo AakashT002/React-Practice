@@ -87,13 +87,15 @@ const ClientForm = ({
             />
           </CardActions>
           <CardActions className="ClientForm__bottom-section">
-            {(showAsSaved === true) && renderMessageForClient()}
+            {showAsSaved === true && renderMessageForClient()}
             <div className="ClientForm__buttons">
               <Button
                 className="ClientForm__save"
                 label="SAVE"
                 onClick={() => handleSave(index)}
-                disabled={!validateClientForm(index) || client.isClientSaved !== false}
+                disabled={
+                  !validateClientForm(index) || client.isClientSaved !== false
+                }
               />
               <Button
                 className="ClientForm__remove"
@@ -104,7 +106,6 @@ const ClientForm = ({
           </CardActions>
         </section>
       </div>
-
     </div>
   );
 };

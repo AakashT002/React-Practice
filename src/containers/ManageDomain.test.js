@@ -19,7 +19,8 @@ describe('Component: ManageDomain', () => {
     wrapper = shallow(
       <ManageDomain.WrappedComponent
         dispatch={dispatchStub}
-        domainList={domains} />
+        domainList={domains}
+      />
     );
   });
 

@@ -6,7 +6,6 @@ import Header from '../components/Header';
 import DomainPage from './DomainPage';
 import LoginPage from './LoginPage';
 import ManageDomain from './ManageDomain';
-import CreateUserPage from './CreateUserPage';
 import NotFound from '../components/NotFound';
 import { CURRENT_DOMAIN_NAME } from '../utils/constants';
 import '../assets/stylesheets/App.css';
@@ -49,7 +48,6 @@ export class App extends Component {
               component={() => this.checkAuthenticated(LoginPage)}
             />
             <Route exact path="/domains" component={ManageDomain} />
-            <Route exact path="/manage-users" component={CreateUserPage} />
             <Route
               exact
               path="/manage-domain"

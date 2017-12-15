@@ -3,7 +3,7 @@ class Clients {
     const token = sessionStorage.kctoken;
     const API_URL = `${
       process.env.REACT_APP_AUTH_URL
-      }/admin/realms/${currentdomainName}/clients`;
+    }/admin/realms/${currentdomainName}/clients`;
     const response = await fetch(API_URL, {
       method: 'GET',
       headers: {
@@ -22,7 +22,7 @@ class Clients {
     const token = sessionStorage.kctoken;
     const response = await fetch(
       `${process.env.REACT_APP_AUTH_URL}/admin/realms/${
-      sessionStorage.currentdomainName
+        sessionStorage.currentdomainName
       }/clients`,
       {
         method: 'POST',
@@ -47,8 +47,9 @@ class Clients {
   static async updateClient(clientObject, id) {
     const token = sessionStorage.kctoken;
     const response = await fetch(
-      `${process.env
-        .REACT_APP_AUTH_URL}/admin/realms/${sessionStorage.currentdomainName}/clients/${id}`,
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${
+        sessionStorage.currentdomainName
+      }/clients/${id}`,
       {
         method: 'PUT',
         headers: {
@@ -70,7 +71,7 @@ class Clients {
   static async delete(id, currentdomainName) {
     const API_URL = `${
       process.env.REACT_APP_AUTH_URL
-      }/admin/realms/${currentdomainName}/clients/${id}`;
+    }/admin/realms/${currentdomainName}/clients/${id}`;
     const token = sessionStorage.kctoken;
     const response = await fetch(API_URL, {
       method: 'DELETE',

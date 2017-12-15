@@ -63,8 +63,9 @@ class Domains {
     const token = sessionStorage.kctoken;
     // calling the api to fetch number of Clients for each realm
     const clients = await fetch(
-      `${process.env
-        .REACT_APP_AUTH_URL}/admin/realms/${realm}/clients?viewableOnly=true`,
+      `${process.env.REACT_APP_AUTH_URL}/admin/realms/${
+        realm
+      }/clients?viewableOnly=true`,
       {
         method: 'GET',
         headers: {

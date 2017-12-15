@@ -6,6 +6,7 @@ import items from './items/reducer';
 import user from './user/reducer';
 import addUser from './addUser/reducer';
 import domain from './domain/reducer';
+import users from './users/reducer';
 import client from './client/reducer';
 import role from './roles/reducer';
 
@@ -14,6 +15,7 @@ const root = combineReducers({
   count,
   items,
   user,
+  users,
   addUser,
   domain,
   client,

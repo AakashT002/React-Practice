@@ -6,7 +6,7 @@ import SessionStorage from '../__mocks__/mockSessionStorage';
 describe('Component: DomainPage', () => {
   window.sessionStorage = new SessionStorage();
   const dispatchStub = () => {
-    return new Promise(() => { });
+    return new Promise(() => {});
   };
 
   let wrapper;
