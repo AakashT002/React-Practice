@@ -19,6 +19,7 @@ import {
 } from '../store/addUser/action';
 
 import ClientForm from '../components/ClientForm';
+import TeamForm from '../components/TeamForm';
 import UserWidget from '../components/UserWidget';
 import {
   loadClients,
@@ -505,9 +506,15 @@ class DomainPage extends Component {
   }
 
   renderTeamsTab() {
-    return (
+    /*return (
       <Tab label="TEAMS" className="DomainPage__users-tab">
         <h3>TEAMS Tab</h3>
+      </Tab>
+    );*/
+
+    return (
+      <Tab label="TEAMS" className="DomainPage__roles-tab">
+        <TeamForm />
       </Tab>
     );
   }
@@ -528,7 +535,8 @@ class DomainPage extends Component {
               index={i}
               client={client}
               handleFieldChange={(name, value) =>
-                this.handleFieldChange(name, value, i)}
+                this.handleFieldChange(name, value, i)
+              }
               handleSave={this.onClientSave.bind(this)}
               validateClientForm={this.validateClientForm.bind(this)}
               isClientSaved={this.state.clients[i].isClientSaved}
@@ -594,7 +602,8 @@ class DomainPage extends Component {
               index={i}
               user={user}
               handleUserFieldChange={(name, value) =>
-                this.handleUserFieldChange(name, value, i)}
+                this.handleUserFieldChange(name, value, i)
+              }
               removeUser={i => this.removeUser(i)}
               validateUserForm={this.validateUserForm.bind(this)}
               saveUser={() => this.onUserSave(i)}
@@ -610,7 +619,8 @@ class DomainPage extends Component {
                   value_two,
                   value_three,
                   i
-                )}
+                )
+              }
               confirmUserDelete={this.confirmUserDelete}
               inputRef={el => (this.userElement = el)}
               ischecked={this.state.ischecked}
