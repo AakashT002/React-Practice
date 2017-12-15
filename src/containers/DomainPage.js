@@ -523,7 +523,15 @@ class DomainPage extends Component {
     const { teams } = this.state;
     return (
       <Tab label="TEAMS" className="DomainPage__roles-tab">
-        {teams.map((team, i) => <TeamForm key={i} index={i} team={team} />)}
+        {teams.length > 0 ?
+         (teams.map((team, i) => <TeamForm
+           key={i} 
+           index={i} 
+           team={team} 
+         />)) :         
+           (
+          <div className="DomainPage__teams--no-data">No Teams Added Yet</div>
+        )}
       </Tab>
     );
   }
