@@ -29,9 +29,6 @@ import {
 import Roles from '../components/Roles';
 import '../assets/stylesheets/DomainPage.css';
 
-const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
-const maxTabs = currentdomainName === 'master' ? 2 : 3;
-
 class DomainPage extends Component {
   constructor(props) {
     super(props);
@@ -58,15 +55,24 @@ class DomainPage extends Component {
     this.confirmRoleDelete = this.confirmRoleDelete.bind(this);
   }
 
+  getCurrentDomainName() {
+    return sessionStorage.getItem(CURRENT_DOMAIN_NAME);
+  }
+
+  getMaxTabs() {
+    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
+    return currentdomainName === 'master' ? 2 : 3;
+  }
+
   componentWillMount() {
     const { dispatch } = this.props;
-    dispatch(loadClients(currentdomainName)).then(() => {
+    dispatch(loadClients(this.getCurrentDomainName())).then(() => {
       let clients = [];
       const { clientList } = this.props;
 
       clientList.forEach(client => {
         if (!IGNORED_CLIENTS.includes(client.clientId.toString())) {
-          if (currentdomainName === 'master') {
+          if (this.getCurrentDomainName() === 'master') {
             if (
               client.clientId.substr(client.clientId.length - 6, 6) !== '-realm'
             ) {
@@ -115,7 +121,7 @@ class DomainPage extends Component {
       this.setState({ clients });
     });
 
-    dispatch(loadRoles(currentdomainName)).then(() => {
+    dispatch(loadRoles(this.getCurrentDomainName())).then(() => {
       let { roleList } = this.props;
       let roles = [];
       for (var j = 0; j < roleList.length; j++) {
@@ -306,22 +312,23 @@ class DomainPage extends Component {
   }
 
   onRoleSave(index) {
-    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
     const { roles } = this.state;
     if (roles[index].name !== '') {
       var roleObject = {
         name: this.state.roles[index].name,
       };
     }
-    this.props.dispatch(saveRole(roleObject, currentdomainName)).then(() => {
-      if (this.props.saving === true) {
-        roles[index].id = this.props.roleId;
-      }
-      roles[index].isDirty = false;
-      roles[index].disableButton = this.props.saving;
-      this.setState({ roles });
-      this.setState({ checkIcon: true });
-    });
+    this.props
+      .dispatch(saveRole(roleObject, this.getCurrentDomainName()))
+      .then(() => {
+        if (this.props.saving === true) {
+          roles[index].id = this.props.roleId;
+        }
+        roles[index].isDirty = false;
+        roles[index].disableButton = this.props.saving;
+        this.setState({ roles });
+        this.setState({ checkIcon: true });
+      });
   }
 
   confirmRoleDelete(index, roleid) {
@@ -335,8 +342,9 @@ class DomainPage extends Component {
   }
 
   removeRole(index, roleId) {
-    const currentdomainName = sessionStorage.getItem(CURRENT_DOMAIN_NAME);
-    this.props.dispatch(handleRoleDeletion(roleId, currentdomainName));
+    this.props.dispatch(
+      handleRoleDeletion(roleId, this.getCurrentDomainName())
+    );
     const { roles } = this.state;
     const newRoleObj = this.state.deleteRoleObj;
     newRoleObj.selectedRoleId = '';
@@ -456,7 +464,7 @@ class DomainPage extends Component {
   render() {
     const { activeTab, clients, roles } = this.state;
     let applicableTabs = null;
-    if (currentdomainName === 'master') {
+    if (this.getCurrentDomainName() === 'master') {
       applicableTabs = this.renderMasterDomainTabs();
     } else {
       applicableTabs = this.renderApplicationTabs();
@@ -464,7 +472,7 @@ class DomainPage extends Component {
     return (
       <div className="DomainPage">
         <h1 className="DomainPage__domain-name">
-          {currentdomainName !== null && currentdomainName}
+          {this.getCurrentDomainName() !== null && this.getCurrentDomainName()}
         </h1>
         <Card className="card-centered">
           <TabsContainer
@@ -488,7 +496,7 @@ class DomainPage extends Component {
             </Button>
             <Button
               flat
-              disabled={activeTab === maxTabs - 1}
+              disabled={activeTab === this.getMaxTabs() - 1}
               key="next"
               label="Next"
               iconBefore={false}
