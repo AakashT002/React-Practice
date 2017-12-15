@@ -32,16 +32,18 @@ class Header extends Component {
             <label>{username}</label>
           </div>
           <div className="Header__sign-out">
-            <Button
-              className="Header__sign-out-button"
-              onClick={() => keycloak.logout()}
-            >
+            <Button className="Header__sign-out-button" onClick={this.logout}>
               Logout&gt;
             </Button>
           </div>
         </div>
       </div>
     );
+  }
+
+  logout() {
+    sessionStorage.clear();
+    keycloak.logout();
   }
 
   renderTitle() {
