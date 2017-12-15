@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { CardActions, TextField, Button, SelectField } from 'react-md';
 import '../assets/stylesheets/TeamForm.css';
 
-const TeamForm = () => {
+const TeamForm = ({ team }) => {
   return (
     <div className="TeamForm">
       <div className="TeamForm__forms-section">
@@ -15,9 +15,9 @@ const TeamForm = () => {
               required
               //label={isDirty ? 'New Team Name' : ''}
               className="md-cell  TeamForm__team-name"
-              value=""
+              value={team.name}
               //ref={index === 0 ? inputRef : null}
-              //onChange={value => handleChange(value, index)}
+              //onChange={value => handleTeamChange(value, index)}
             />
             <SelectField
               id="description"
@@ -59,6 +59,8 @@ const TeamForm = () => {
   );
 };
 
-TeamForm.propTypes = {};
+TeamForm.propTypes = {
+  team: PropTypes.object,
+};
 
 export default TeamForm;

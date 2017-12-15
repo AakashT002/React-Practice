@@ -187,7 +187,6 @@ class DomainPage extends Component {
 
     dispatch(loadTeams(this.state.currentdomainName)).then(() => {
       let { teamList } = this.props;
-      console.log('response ==> ' + JSON.stringify(teamList));
       let teams = [];
       for (var j = 0; j < teamList.length; j++) {
         let teamObj = {
@@ -524,8 +523,7 @@ class DomainPage extends Component {
     const { teams } = this.state;
     return (
       <Tab label="TEAMS" className="DomainPage__roles-tab">
-        <div>{teams.map(team => <h1>{team.name}</h1>)}</div>
-        <TeamForm />
+        {teams.map((team, i) => <TeamForm key={i} index={i} team={team} />)}
       </Tab>
     );
   }
