@@ -28,3 +28,8 @@ export const DELETION_WARNING_MESSAGE = `Are you sure you want to get rid of thi
 export const DELETE_CLIENT_MESSAGE = 'Do you want to remove this Client?';
 
 export const DELETE_USER_MESSAGE = 'Are you sure you want to remove this user?';
+
+export const ASSIGN_DOMAINS = [
+  'master',
+  'user',
+];

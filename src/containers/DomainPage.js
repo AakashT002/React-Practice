@@ -29,7 +29,7 @@ import {
   handleClientDeletion,
   stopClientSpinner,
 } from '../store/client/action';
-import { loadTeams } from '../store/team/action';
+import { loadTeams, saveTeam } from '../store/team/action';
 
 import {
   loadRoles,
@@ -50,6 +50,7 @@ import {
 
 import Roles from '../components/Roles';
 import '../assets/stylesheets/DomainPage.css';
+import { team } from '../store/team/reducer';
 
 class DomainPage extends Component {
   constructor(props) {
@@ -80,6 +81,7 @@ class DomainPage extends Component {
     this.confirmRoleDelete = this.confirmRoleDelete.bind(this);
     this.confirmClientDelete = this.confirmClientDelete.bind(this);
     this.confirmUserDelete = this.confirmUserDelete.bind(this);
+    this.handleTeamChange = this.handleTeamChange.bind(this);
   }
 
   getMaxTabs() {
@@ -192,6 +194,8 @@ class DomainPage extends Component {
         let teamObj = {
           id: teamList[j].id,
           name: teamList[j].name,
+          showAsSaved: false,
+          isTeamSaved: true,
         };
         teams = teams.concat([teamObj]);
       }
@@ -236,7 +240,7 @@ class DomainPage extends Component {
   }
 
   handlePlusClick() {
-    const { clients, roles, activeTab } = this.state;
+    const { clients, roles, activeTab, teams } = this.state;
     this.setState({ focusOnNewElement: true });
     const isClientsTab = !this.isMasterDomain() && activeTab === 0;
     const isTeamsTab = this.isMasterDomain() && activeTab === 0;
@@ -296,7 +300,16 @@ class DomainPage extends Component {
           this.setState({ users: this.props.users });
         });
     } else if (isTeamsTab) {
-      this.setState({ teams: [] }); // TODO : Pending...
+      let team = {
+        id: '',
+        name: '',
+        showAsSaved: false,
+        isTeamSaved: this.props.isTeamSaved,
+      };
+      if (teams.length === 0 || teams[0].id !== undefined) {
+        teams.splice(0, 0, team);
+        this.setState({ teams }); // TODO : Pending...          
+      }
     }
   }
 
@@ -524,14 +537,21 @@ class DomainPage extends Component {
     return (
       <Tab label="TEAMS" className="DomainPage__roles-tab">
         {teams.length > 0 ?
-         (teams.map((team, i) => <TeamForm
-           key={i} 
-           index={i} 
-           team={team} 
-         />)) :         
-           (
-          <div className="DomainPage__teams--no-data">No Teams Added Yet</div>
-        )}
+          (teams.map((team, i) => <TeamForm
+            key={i}
+            index={i}
+            team={team}
+            handleTeamChange={this.handleTeamChange}
+            validateTeamForm={this.validateTeamForm.bind(this)}
+            isTeamSaved={team.isTeamSaved}
+            onTeamSave={this.onTeamSave.bind(this)}
+            showAsSaved={team.showAsSaved}
+            isError={this.props.isError}
+            teamFeedbackjMessage={this.props.teamFeedbackjMessage}
+          />)) :
+          (
+            <div className="DomainPage__teams--no-data">No Teams Added Yet</div>
+          )}
       </Tab>
     );
   }
@@ -565,8 +585,8 @@ class DomainPage extends Component {
             />
           ))
         ) : (
-          <div className="DomainPage__clients-msg">No Clients Added Yet</div>
-        )}
+              <div className="DomainPage__clients-msg">No Clients Added Yet</div>
+            )}
       </Tab>
     );
   }
@@ -600,10 +620,10 @@ class DomainPage extends Component {
             />
           ))
         ) : (
-          <div>
-            <h1 className="DomainPage__roles--no-data">No Roles Added Yet</h1>
-          </div>
-        )}
+              <div>
+                <h1 className="DomainPage__roles--no-data">No Roles Added Yet</h1>
+              </div>
+            )}
       </Tab>
     );
   }
@@ -645,8 +665,8 @@ class DomainPage extends Component {
             />
           ))
         ) : (
-          <div className="DomainPage__users-msg">No Users Added Yet</div>
-        )}
+            <div className="DomainPage__users-msg">No Users Added Yet</div>
+          )}
       </Tab>
     );
   }
@@ -766,6 +786,48 @@ class DomainPage extends Component {
 
   validateUserForm(index) {
     return this.validatePresence(this.state.users[index].username);
+  }
+
+  handleTeamChange(value, i) {
+    const { teams } = this.state;
+    let team = teams[i];
+    team.name = value;
+    teams[i] = team;
+    this.setState({ teams });
+    //this.setState({ checkIcon: false });
+  }
+
+  validateTeamForm(index) {
+    return this.validatePresence(this.state.teams[index].name);
+  }
+
+  onTeamSave(index) {
+   // debugger;
+    var teamObject = Object.assign({}, this.state.teams[index]);
+    var id = teamObject.id;
+    delete teamObject['isTeamSaved'];
+    delete teamObject['id'];
+    delete teamObject['showAsSaved'];
+    // if (id !== undefined) {
+    //   this.props.dispatch(updateClient(clientObject, id)).then(() => {
+    //     let clients = this.state.clients;
+    //     let currentclient = clients[index];
+    //     currentclient.isClientSaved = true;
+    //     currentclient.showAsSaved = true;
+    //     this.setState({ clients });
+    //   });
+    //} 
+
+    this.props.dispatch(saveTeam(teamObject)).then(() => {
+      let teams = this.state.teams;
+      let currentTeam = teams[index];
+      currentTeam.isTeamSaved = true;
+      currentTeam.showAsSaved = true;
+      // if (!this.props.isError) {
+      //   currentTeam.id = this.props.teamId;
+      // }
+      this.setState({ teams });
+    });
   }
 
   render() {
@@ -911,6 +973,8 @@ function mapStateToProps(state) {
     loadingRoles: state.role.requesting,
     roleList: state.role.roleList,
     teamList: state.team.teamList,
+    isTeamSaved: state.team.isTeamSaved,
+    teamFeedbackjMessage: state.team.message,
     isClientSaved: state.client.isClientSaved,
     isError: state.client.isError,
     feedbackMessage: state.client.feedbackMessage,

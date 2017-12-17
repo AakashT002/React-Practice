@@ -16,3 +16,19 @@ export const loadTeams = domainName => ({
   },
   type: '',
 });
+
+export const saveTeam = teamObject => ({
+  types: [
+    ActionTypes.CREATE_TEAM_REQUEST,
+    ActionTypes.CREATE_TEAM_SUCCESS,
+    ActionTypes.CREATE_TEAM_FAILURE,
+  ],
+  callAPI: async () => {
+    try {
+      return await Teams.createTeam(teamObject);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+});
+

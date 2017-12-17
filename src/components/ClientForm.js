@@ -5,6 +5,7 @@ import TextField from 'react-md/lib/TextFields';
 import Button from 'react-md/lib/Buttons/Button';
 
 import { CLIENT_TYPES } from '../utils/constants';
+
 import 'font-awesome/css/font-awesome.min.css';
 import '../assets/stylesheets/ClientForm.css';
 

@@ -6,27 +6,32 @@ const initialTeamsState = {
   requesting: false,
   message: '',
   saving: false,
+  isError: false,
+  isTeamSaved: false,
   teamId: '',
 };
 
 export const team = createReducer(initialTeamsState, {
   [ActionTypes.CREATE_TEAM_REQUEST](state) {
-    return { ...state, requesting: true, message: '' };
+    return { ...state, requesting: true, isError: false, };
   },
   [ActionTypes.CREATE_TEAM_SUCCESS](state, action) {
     return {
       ...state,
       requesting: false,
-      message: 'Registered',
+      message: 'Saved',
+      isError: false,
       saving: true,
+      isTeamSaved: true,
       teamId: action.response,
     };
   },
-  [ActionTypes.CREATE_TEAM_FAILURE](state) {
+  [ActionTypes.CREATE_TEAM_FAILURE](state, action) {
     return {
       ...state,
       requesting: false,
-      message: 'Bussiness Error',
+      isError: true,
+      message: action.error.message,
       saving: false,
     };
   },
