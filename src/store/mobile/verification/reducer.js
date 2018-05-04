@@ -1,6 +1,10 @@
 import createReducer from '../../createReducer';
 import * as ActionTypes from '../../actionTypes';
 import { RETURNED_BY, SHIPPED_BY } from '../../../utils/constants';
+import {
+  ALL_STATUS,
+  ONE_DAY
+} from '../../../utils/constants';
 
 const initialState = {
   verificationResult: [],
@@ -12,6 +16,8 @@ const initialState = {
   isDuplicate: false,
   filterRequesting: false,
   deviceType: sessionStorage.getItem('deviceType'),
+  selectedStatus: ALL_STATUS,
+  selectedRequestTime: ONE_DAY
 };
 
 export const verification = createReducer(initialState, {
@@ -48,13 +54,17 @@ export const verification = createReducer(initialState, {
         RETURNED_BY[(Math.random() * RETURNED_BY.length) | 0];
       action.response.result[0]['shippedBy'] =
         SHIPPED_BY[(Math.random() * SHIPPED_BY.length) | 0];
-      state.verificationList.unshift(action.response.result[0]);
+      if (state.selectedStatus === action.response.result[0].status ||
+        state.selectedStatus === ALL_STATUS) {
+        state.verificationList.unshift(action.response.result[0]);
+      }
     }
 
     return Object.assign({}, state, {
       verificationResult: action.response.result,
       piRequesting: false,
       verificationList: state.verificationList,
+      isDuplicate: false,
     });
   },
   [ActionTypes.VERIFY_PI_FAILURE](state) {
@@ -107,6 +117,13 @@ export const verification = createReducer(initialState, {
   },
   [ActionTypes.FETCH_VERIFICATIONS_FAILURE](state) {
     return { ...state, requesting: false, filterRequesting: false };
+  },
+  [ActionTypes.UPDATE_SELECTED_DETAILS](state = initialState, action) {
+    return {
+      ...state,
+      selectedStatus: action.selectedStatus,
+      selectedRequestTime: action.selectedRequestTime,
+    };
   },
 });
 

@@ -18,7 +18,10 @@ import {
   getVerifications,
 } from '../../store/mobile/verification/action';
 
-import { setVerificationPerformed } from '../../store/desktop/dashboard/action';
+import {
+  setVerificationPerformed,
+  updateSelectedDetails
+} from '../../store/desktop/dashboard/action';
 
 import DateFormat from '../../utils/dateFormat';
 
@@ -74,20 +77,18 @@ export class VerificationsPage extends Component {
     this.setState({ productIdentifier: value, disableOnSubmit: false });
   }
 
-  handleVerify(e) {
+  async handleVerify(e) {
     e.preventDefault();
     var deviceId = null;
-    this.props
+    await this.props
       .dispatch(
         verifyProductIdentifier(
           this.state.productIdentifier.trim(),
           process.env.REACT_APP_DEVICE_TYPE,
           deviceId
         )
-      )
-      .then(() => {
-        this.props.dispatch(sort(this.props.data, this.props.isDescending));
-      });
+      );
+    await this.props.dispatch(sort(this.props.data, this.props.isDescending));
     this.setState({ disableOnSubmit: true });
     this.props.dispatch(setVerificationPerformed(true));
   }
@@ -138,6 +139,9 @@ export class VerificationsPage extends Component {
 
   async handleStatusChange(value) {
     await this.setState({ selectedStatus: value });
+    await this.props.dispatch(
+      updateSelectedDetails(this.state.selectedStatus, this.state.selectedRequestTime)
+    );
     this.applySearch(this.state.selectedStatus, this.state.selectedRequestTime);
   }
 

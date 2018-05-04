@@ -87,20 +87,18 @@ class Dashboard extends Component {
     this.setState({ productIdentifier: value, disableOnSubmit: false });
   }
 
-  handleVerify(e) {
+  async handleVerify(e) {
     e.preventDefault();
     var deviceId = null;
-    this.props
+    await this.props
       .dispatch(
         verifyProductIdentifier(
           this.state.productIdentifier.trim(),
           process.env.REACT_APP_DEVICE_TYPE,
           deviceId
         )
-      )
-      .then(() => {
-        this.props.dispatch(sort(this.props.data, this.props.isDescending));
-      });
+      );
+    await this.props.dispatch(sort(this.props.data, this.props.isDescending));
     this.setState({ disableOnSubmit: true, isVerifyUsed: true });
   }
 
