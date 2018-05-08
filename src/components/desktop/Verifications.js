@@ -17,6 +17,7 @@ import moment from 'moment';
 import ExportData from './ExportData.js';
 
 import PIVerificationModal from '../../components/common/PIVerificationModal';
+import Pagination from '../../containers/desktop/Pagination';
 
 import access_time from '../../assets/images/access_time.png';
 import check_circle from '../../assets/images/check_circle.png';
@@ -90,6 +91,9 @@ const Verifications = ({
   handleExportData,
   handlePostExportData,
   isModalVisible,
+  items,
+  onChangePage,
+  pageOfItems
 }) => {
   const renderStatusText = status => {
     if (status === VERIFIED) {
@@ -223,7 +227,6 @@ const Verifications = ({
   });
 
   var currentDateFormat = moment().format('YYYY-MM-DD HH:mm:ss');
-
   return (
     <div className="DesktopVerifications">
       <div className="DesktopVerifications__inner">
@@ -332,83 +335,91 @@ const Verifications = ({
           <MDSpinner size={50} singleColor="#00b8d4" />
         </div>
       ) : (
-        <Card className="DesktopVerifications__card">
-          <DataTable className="DesktopVerifications__table" plain>
-            <TableHeader>
-              <TableRow className="DesktopVerifications__table--header">
-                {VERIFICATIONS_HEADER.map(header => (
-                  <TableColumn
-                    key={header}
-                    className="DesktopVerifications__table--header-data"
-                  >
-                    {renderHeaderAndSortable(header, isDescending)}
-                  </TableColumn>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.length !== 0 ? (
-                data.map((verification, index) => (
-                  <TableRow
-                    key={index}
-                    className={`DesktopVerifications__table--row ${renderOnHoverClassName(
-                      verification.status
-                    )}`}
-                    onClick={() => {
-                      handleVerificationDetails(
-                        verification.gtin,
-                        verification.srn,
-                        selectedRequestTime
-                      );
-                    }}
-                  >
-                    <TableColumn className="DesktopVerifications__table--column">
-                      <font className="DesktopVerifications__sni">
-                        {verification.gtin}
-                        {verification.srn}
-                      </font>
+          <Card className="DesktopVerifications__card">
+            <DataTable className="DesktopVerifications__table" plain>
+              <TableHeader>
+                <TableRow className="DesktopVerifications__table--header">
+                  {VERIFICATIONS_HEADER.map(header => (
+                    <TableColumn
+                      key={header}
+                      className="DesktopVerifications__table--header-data"
+                    >
+                      {renderHeaderAndSortable(header, isDescending)}
                     </TableColumn>
-                    <TableColumn className="DesktopVerifications__table--column">
-                      {renderStatusIcon(verification.status)}
-                      <span className={renderClassName(verification.status)}>
-                        <font className="DesktopVerifications__status">
-                          {renderStatusText(verification.status)}
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {pageOfItems.length !== 0 ? (
+                  pageOfItems.map((verification, index) => (
+                    <TableRow
+                      key={index}
+                      className={`DesktopVerifications__table--row ${renderOnHoverClassName(
+                        verification.status
+                      )}`}
+                      onClick={() => {
+                        handleVerificationDetails(
+                          verification.gtin,
+                          verification.srn,
+                          selectedRequestTime
+                        );
+                      }}
+                    >
+                      <TableColumn className="DesktopVerifications__table--column">
+                        <font className="DesktopVerifications__sni">
+                          {verification.gtin}
+                          {verification.srn}
                         </font>
-                      </span>
-                    </TableColumn>
-                    <TableColumn className="md-table-column--plain DesktopVerifications__table--column">
-                      <font className="DesktopVerifications__requested">
-                        {transactionEventDateFormat(
-                          verification.requestSentTime
-                        )}
-                      </font>
-                    </TableColumn>
-                    <TableColumn className="DesktopVerifications__table--column">
-                      <font className="DesktopVerifications__user">
-                        {verification.firstName} {verification.lastName}
-                      </font>
-                    </TableColumn>
-                    <TableColumn className="DesktopVerifications__table--column">
-                      <font className="DesktopVerifications__returned-by">
-                        {verification.returnedBy}
-                      </font>
-                    </TableColumn>
-                    <TableColumn className="DesktopVerifications__table--column">
-                      <font className="DesktopVerifications__shipped-by">
-                        {verification.shippedBy}
-                      </font>
-                    </TableColumn>
-                  </TableRow>
-                ))
-              ) : (
-                <span className="DesktopVerifications__no-data-found">
-                  No Verifications Data Found
+                      </TableColumn>
+                      <TableColumn className="DesktopVerifications__table--column">
+                        {renderStatusIcon(verification.status)}
+                        <span className={renderClassName(verification.status)}>
+                          <font className="DesktopVerifications__status">
+                            {renderStatusText(verification.status)}
+                          </font>
+                        </span>
+                      </TableColumn>
+                      <TableColumn className="md-table-column--plain DesktopVerifications__table--column">
+                        <font className="DesktopVerifications__requested">
+                          {transactionEventDateFormat(
+                            verification.requestSentTime
+                          )}
+                        </font>
+                      </TableColumn>
+                      <TableColumn className="DesktopVerifications__table--column">
+                        <font className="DesktopVerifications__user">
+                          {verification.firstName} {verification.lastName}
+                        </font>
+                      </TableColumn>
+                      <TableColumn className="DesktopVerifications__table--column">
+                        <font className="DesktopVerifications__returned-by">
+                          {verification.returnedBy}
+                        </font>
+                      </TableColumn>
+                      <TableColumn className="DesktopVerifications__table--column">
+                        <font className="DesktopVerifications__shipped-by">
+                          {verification.shippedBy}
+                        </font>
+                      </TableColumn>
+                    </TableRow>
+                  ))
+                ) : (
+                    <span className="DesktopVerifications__no-data-found">
+                      No Verifications Data Found
                 </span>
-              )}
-            </TableBody>
-          </DataTable>
-        </Card>
-      )}
+                  )}
+              </TableBody>
+            </DataTable>
+            {/* {pageOfItems.map(item =>
+              <div key={item.id}>{item.name}</div>
+            )} */}
+            {console.log("items in verification => "+JSON.stringify(items))}
+            <Pagination 
+            items={items} 
+            onChangePage={onChangePage} 
+            />
+          </Card>
+        )}
       <br />
     </div>
   );

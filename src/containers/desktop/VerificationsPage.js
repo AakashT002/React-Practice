@@ -28,6 +28,8 @@ import DateFormat from '../../utils/dateFormat';
 export class VerificationsPage extends Component {
   constructor(props) {
     super(props);
+    // var exampleItems = [...Array(150).keys()].map(i => ({ id: (i + 1), name: 'Item ' + (i + 1) }));
+
     this.state = {
       productIdentifier: null,
       isPIVerificationModalVisible: false,
@@ -37,6 +39,8 @@ export class VerificationsPage extends Component {
       selectedStatus: this.props.selectedStatus,
       selectedRequestTime: this.props.selectedRequestTime,
       isModalVisible: false,
+      exampleItems: [],
+      pageOfItems: []
     };
     this.handleVerificationDetails = this.handleVerificationDetails.bind(this);
     this.handleBackToVerifications = this.handleBackToVerifications.bind(this);
@@ -49,6 +53,7 @@ export class VerificationsPage extends Component {
     this.handleBackToDashboard = this.handleBackToDashboard.bind(this);
     this.handleExportData = this.handleExportData.bind(this);
     this.handlePostExportData = this.handlePostExportData.bind(this);
+    this.onChangePage = this.onChangePage.bind(this);
   }
 
   async componentWillMount() {
@@ -58,7 +63,7 @@ export class VerificationsPage extends Component {
         this.state.selectedRequestTime
       )
     );
-    this.setState({ verificationList: this.props.data });
+    this.setState({ verificationList: this.props.data, exampleItems: this.props.data });
   }
 
   handleSort(isDescending) {
@@ -167,6 +172,11 @@ export class VerificationsPage extends Component {
     this.setState({ isModalVisible: false });
   }
 
+  onChangePage(pageOfItems) {
+    // update state with new page of items
+    this.setState({ pageOfItems: pageOfItems });
+  }
+
   render() {
     let componentToRender = null;
 
@@ -219,6 +229,9 @@ export class VerificationsPage extends Component {
             handleExportData={this.handleExportData}
             handlePostExportData={this.handlePostExportData}
             isModalVisible={this.state.isModalVisible}
+            items={this.props.data}
+            onChangePage={this.onChangePage}
+            pageOfItems={this.state.pageOfItems}
           />
         );
       } else {
