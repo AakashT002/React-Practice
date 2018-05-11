@@ -410,9 +410,6 @@ const Verifications = ({
                   )}
               </TableBody>
             </DataTable>
-            {/* {pageOfItems.map(item =>
-              <div key={item.id}>{item.name}</div>
-            )} */}
             {console.log("items in verification => "+JSON.stringify(items))}
             <Pagination 
             items={items} 

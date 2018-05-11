@@ -67,7 +67,7 @@ export class VerificationsPage extends Component {
   }
 
   handleSort(isDescending) {
-    this.props.dispatch(sort(this.props.data, !isDescending));
+    this.props.dispatch(sort(this.state.pageOfItems, !isDescending));
   }
 
   async handleCancel() {

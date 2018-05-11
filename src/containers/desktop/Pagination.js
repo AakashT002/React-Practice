@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import '../../assets/stylesheets/Pagination.css';
+
 const propTypes = {
     items: PropTypes.array.isRequired,
     onChangePage: PropTypes.func.isRequired,
@@ -21,8 +23,6 @@ class Pagination extends React.Component {
 
     componentWillMount() {
         // set page if items array isn't empty
-        console.log("items => "+this.props.items);
-        console.log("initialPage => "+this.props.initialPage);
 
         if (this.props.items && this.props.items.length) {
             this.setPage(this.props.initialPage);
